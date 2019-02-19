@@ -71,4 +71,23 @@ class GameOfLifeCellTest {
         var actual = c0.myNextState;
         assertEquals(expected, actual);
     }
+
+    @Test
+    void cellEquals(){
+        c0 = new GameOfLifeCell(1, 1, 1);
+        Cell c1 = new GameOfLifeCell(1, 1, 1);
+        //var res = c0.equals(c1);
+        var expected = true;
+        var actual = c0.equals(c1);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void cellDoesNotEqual(){
+        c0 = new GameOfLifeCell(1, 1, 1);
+        Cell c1 = new GameOfLifeCell(1, 2, 0);
+        var expected = false;
+        var actual = c0.equals(c1);
+        assertEquals(expected, actual);
+    }
 }

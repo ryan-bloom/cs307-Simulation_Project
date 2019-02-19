@@ -9,20 +9,29 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PercolationCellTest {
-    Cell c0;
+    Cell blockedCell;
+    Cell openCell;
+    Cell percolatingCell;
     List<Cell> neighbors;
 
     @BeforeEach
     void setUp() {
+        blockedCell = new PercolationCell(1,1, 0);
+        openCell = new PercolationCell(1, 1, 1);
+        percolatingCell = new PercolationCell(1, 1, 2);
         neighbors = new ArrayList<>();
+
         Cell temp;
         for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
-                if(i==0 || j==2){ //live cells
-                    temp = new GameOfLifeCell(i, j, 1);
+                if(i==0){ //blocked cells
+                    temp = new PercolationCell(i, j, 0);
                 }
-                else{
-                    temp = new GameOfLifeCell(i, j, 0);
+                else if(i==1){ //open cells
+                    temp = new PercolationCell(i, j, 1);
+                }
+                else{ //percolating cells
+                    temp = new PercolationCell(i, j, 2);
                 }
                 neighbors.add(temp);
             }
@@ -30,6 +39,51 @@ class PercolationCellTest {
     }
 
     @Test
-    void updateCell() {
+    void updateOpenCellToPercolating() {
+        List<Cell> neighs = neighbors.subList(4,7); //2 open, 1 percolating
+        openCell.updateCell(neighs);
+        var expected = 2;
+        var actual = openCell.myNextState;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void updateOpenCellToOpen(){
+        List<Cell> neighs = neighbors.subList(0,6); //3 blocked, 3 open cells
+        openCell.updateCell(neighs);
+        var expected = 1;
+        var actual = openCell.myNextState;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void updateBlockedCell(){
+        blockedCell.updateCell(neighbors);
+        var expected = 0;
+        var actual = blockedCell.myNextState;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void updatePercolatingCell(){
+        percolatingCell.updateCell(neighbors);
+        var expected = 2;
+        var actual = percolatingCell.myNextState;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void percolatingEquals(){
+        Cell temp = new PercolationCell(1, 1, 0);
+        var expected = true;
+        var actual = temp.equals(blockedCell);
+        assertEquals(expected,actual);
+    }
+
+    @Test
+    void percolatingDoesNotEqual(){
+        var expected = false;
+        var actual = openCell.equals(percolatingCell);
+        assertEquals(expected,actual);
     }
 }
