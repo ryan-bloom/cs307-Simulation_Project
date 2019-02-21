@@ -19,7 +19,9 @@ public class PercolationCell extends Cell {
             for(Cell n : neighbors){
                 if(n.myCurrentState == 2){
                     this.myNextState = 2;
-                    break;
+                    System.out.println(this.myNextState);
+                    updateColor();
+                    return;
                 }
             }
         }
