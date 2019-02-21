@@ -18,13 +18,14 @@ public class Main extends Application {
     public static final String SIMULATION_CONFIGURATION = "Percolation_Config_1.csv";
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
+
     public static final int FRAMES_PER_SECOND = 2;
+
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.WHITE;
 
     private Cell[][] cellGrid;
     private Group myGroup;
-    private Animation myAnimation;
 
     public static void main (String[] args) {
         launch(args);
@@ -33,7 +34,6 @@ public class Main extends Application {
     public void start(Stage stage) {
         Data d = new Data(SIMULATION_CONFIGURATION);
         cellGrid = new Cell[d.getHeight()][d.getWidth()];
-        //displayGrid = new Rectangle[d.getHeight()][d.getWidth()];
         myGroup = new Group();
         var scene = new Scene(myGroup, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
         double cellHeight = WINDOW_HEIGHT/d.getHeight();
@@ -52,7 +52,6 @@ public class Main extends Application {
         var animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
-        myAnimation = animation;
         animation.play();
     }
 
