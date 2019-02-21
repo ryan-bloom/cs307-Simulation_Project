@@ -25,7 +25,6 @@ public class PercolationCell extends Cell {
                 }
             }
         }
-        //this.myNextState = this.myCurrentState;
     }
 
     @Override
