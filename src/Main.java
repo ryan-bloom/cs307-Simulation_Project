@@ -1,30 +1,24 @@
 import Cells.Cell;
-import Cells.GameOfLifeCell;
+import Cells.PercolationCell;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.util.ArrayList;
 
 public class Main extends Application {
-    public static final String SIMULATION_CONFIGURATION = "GameOfLife_Config_2.csv";
+    //public static final String SIMULATION_CONFIGURATION = "GameOfLife_Config_2.csv";
+    public static final String SIMULATION_CONFIGURATION = "Percolation_Config_1.csv";
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
-    public static final int FRAMES_PER_SECOND = 60;
+    public static final int FRAMES_PER_SECOND = 2;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.WHITE;
 
@@ -46,7 +40,8 @@ public class Main extends Application {
         double cellWidth = WINDOW_WIDTH/d.getWidth();
         for (int i = 0; i < d.getWidth(); i++) {
             for (int j = 0; j < d.getHeight(); j++) {
-                cellGrid[i][j] = new GameOfLifeCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                //cellGrid[i][j] = new GameOfLifeCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                cellGrid[i][j] = new PercolationCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
                 myGroup.getChildren().add(cellGrid[i][j].getShape());
             }
         }

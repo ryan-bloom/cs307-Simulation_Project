@@ -16,22 +16,22 @@ class PercolationCellTest {
 
     @BeforeEach
     void setUp() {
-        blockedCell = new PercolationCell(1,1, 0);
-        openCell = new PercolationCell(1, 1, 1);
-        percolatingCell = new PercolationCell(1, 1, 2);
+        blockedCell = new PercolationCell(1,1, 0, 1, 1);
+        openCell = new PercolationCell(1, 1, 1, 1, 1);
+        percolatingCell = new PercolationCell(1, 1, 2, 1, 1);
         neighbors = new ArrayList<>();
 
         Cell temp;
         for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
                 if(i==0){ //blocked cells
-                    temp = new PercolationCell(i, j, 0);
+                    temp = new PercolationCell(i, j, 0, 1, 1);
                 }
                 else if(i==1){ //open cells
-                    temp = new PercolationCell(i, j, 1);
+                    temp = new PercolationCell(i, j, 1, 1, 1);
                 }
                 else{ //percolating cells
-                    temp = new PercolationCell(i, j, 2);
+                    temp = new PercolationCell(i, j, 2, 1, 1);
                 }
                 neighbors.add(temp);
             }
@@ -74,7 +74,7 @@ class PercolationCellTest {
 
     @Test
     void percolatingEquals(){
-        Cell temp = new PercolationCell(1, 1, 0);
+        Cell temp = new PercolationCell(1, 1, 0, 1, 1);
         var expected = true;
         var actual = temp.equals(blockedCell);
         assertEquals(expected,actual);
