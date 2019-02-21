@@ -11,7 +11,7 @@ abstract public class Cell {
     protected int myCol;
     protected Rectangle myRectangle;
 
-    public Cell(int row, int col, int state, double width, double height){
+    public Cell(int row, int col, int state, double width, double height) {
         myRow = row;
         myCol = col;
         myCurrentState = state;
@@ -45,4 +45,4 @@ abstract public class Cell {
     }
 
     abstract public void updateColor();
-
+}
