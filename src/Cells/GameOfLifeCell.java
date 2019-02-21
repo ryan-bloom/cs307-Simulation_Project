@@ -24,12 +24,11 @@ public class GameOfLifeCell extends Cell {
             }
         }
         if (this.myCurrentState == 1){ //this is live
-            if(liveCount < 2){ this.myNextState = 0; }
-            else if (liveCount < 4){
-                this.myNextState = 1;
-            }
-            else {
+            if(liveCount < 2 || liveCount >= 4){
                 this.myNextState = 0;
+            }
+            else{
+                this.myNextState = 1;
             }
         }
         else if (liveCount == 3){ //this is dead
