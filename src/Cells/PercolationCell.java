@@ -19,10 +19,11 @@ public class PercolationCell extends Cell {
             for(Cell n : neighbors){
                 if(n.myCurrentState == 2){
                     this.myNextState = 2;
-                    break;
+                    return;
                 }
             }
         }
+        this.myNextState = this.myCurrentState;
     }
 
     @Override
