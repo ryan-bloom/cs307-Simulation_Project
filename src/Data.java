@@ -17,7 +17,7 @@ public class Data {
         states = new int[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (scanner.hasNext()) states[i][j] = Integer.parseInt(scanner.next().trim());
+                if (scanner.hasNext()) states[j][i] = Integer.parseInt(scanner.next().trim());
             }
         }
     }
