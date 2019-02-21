@@ -14,8 +14,9 @@ abstract public class Cell {
         myRow = row;
         myCol = col;
         myCurrentState = state;
-        myNextState = -1;
+        myNextState = state;
         myRectangle = new Rectangle(row * width, col * height, width, height);
+        this.updateColor();
     }
 
     public Rectangle getShape() {
