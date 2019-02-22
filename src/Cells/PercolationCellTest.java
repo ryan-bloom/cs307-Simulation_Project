@@ -75,16 +75,14 @@ class PercolationCellTest {
     @Test
     void percolatingEquals(){
         Cell temp = new PercolationCell(1, 1, 0, 1, 1);
-        var expected = true;
         var actual = temp.equals(blockedCell);
-        assertEquals(expected,actual);
+        assertTrue(actual);
     }
 
     @Test
     void percolatingDoesNotEqual(){
-        var expected = false;
         var actual = openCell.equals(percolatingCell);
-        assertEquals(expected,actual);
+        assertFalse(actual);
     }
 
     @Test
