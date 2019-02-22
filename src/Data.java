@@ -11,9 +11,9 @@ public class Data {
 
     public Data(String fileName) {
         Scanner scanner = initializeScanner(fileName);
-        simulation = scanner.next();
-        height = Integer.parseInt(scanner.next().trim()); //nextInt() throws an error for me because of \r\n Windows set up
-        width = Integer.parseInt(scanner.next().trim()); //trim() gets rid of \r character
+        if(scanner.hasNext())simulation = scanner.next().trim();
+        if(scanner.hasNext())height = Integer.parseInt(scanner.next().trim()); //nextInt() throws an error for me because of \r\n Windows set up
+        if(scanner.hasNext())width = Integer.parseInt(scanner.next().trim()); //trim() gets rid of \r character
         states = new int[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
