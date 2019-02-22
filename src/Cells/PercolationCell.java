@@ -16,10 +16,9 @@ public class PercolationCell extends Cell {
     @Override
     public void updateCell(List<Cell> neighbors) {
         if (this.myCurrentState == 1){
-            for(Cell n : neighbors){
+            for (Cell n : neighbors){
                 if(n.myCurrentState == 2){
                     this.myNextState = 2;
-                    System.out.println(this.myNextState);
                     updateColor();
                     return;
                 }

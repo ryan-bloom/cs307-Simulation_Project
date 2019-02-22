@@ -1,7 +1,6 @@
 import Cells.Cell;
-import Cells.PercolationCell;
 import Cells.GameOfLifeCell;
-import javafx.animation.Animation;
+import Cells.PercolationCell;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -15,8 +14,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class Main extends Application {
-    public static final String SIMULATION_CONFIGURATION = "GameOfLife_Config_2.csv";
-    //public static final String SIMULATION_CONFIGURATION = "Percolation_Config_1.csv";
+    public static final String SIMULATION_CONFIGURATION = "PercolationTest3.csv";
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
 
@@ -41,8 +39,8 @@ public class Main extends Application {
         double cellWidth = WINDOW_WIDTH/d.getWidth();
         for (int i = 0; i < d.getWidth(); i++) {
             for (int j = 0; j < d.getHeight(); j++) {
-                cellGrid[i][j] = new GameOfLifeCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
-                //cellGrid[i][j] = new PercolationCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                //cellGrid[i][j] = new GameOfLifeCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                cellGrid[i][j] = new PercolationCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
                 myGroup.getChildren().add(cellGrid[i][j].getShape());
             }
         }
