@@ -1,4 +1,4 @@
-package Cells;
+package Model;
 import java.util.List;
 import javafx.scene.paint.Color;
 
