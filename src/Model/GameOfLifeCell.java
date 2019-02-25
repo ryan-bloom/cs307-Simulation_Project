@@ -4,12 +4,15 @@ import javafx.scene.paint.Color;
 
 
 public class GameOfLifeCell extends Cell {
+    private static final Color[] COLORS = {Color.WHITE, Color.RED};
 
     /**
-     * States: 0 = dead; 1 = alive
+     *
      * @param row
      * @param col
      * @param state
+     * @param width
+     * @param height
      */
     public GameOfLifeCell(int row, int col, int state, double width, double height){
         super(row, col, state, width, height);
@@ -38,11 +41,7 @@ public class GameOfLifeCell extends Cell {
     }
 
     public void updateColor() {
-        if (myNextState == 1) {
-            myRectangle.setFill(Color.RED);
-        }
-        else if (myNextState == 0) {
-            myRectangle.setFill(Color.WHITE);
-        }
+        int dex = this.myNextState;
+        myRectangle.setFill(COLORS[dex]);
     }
 }

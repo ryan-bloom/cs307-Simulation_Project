@@ -1,9 +1,6 @@
 package View;
 
-import Model.Cell;
-import Model.Data;
-import Model.GameOfLifeCell;
-import Model.PercolationCell;
+import Model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -17,7 +14,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class Main extends Application {
-    public static final String SIMULATION_CONFIGURATION = "GameOfLifeBlinkerTest.csv";
+    public static final String SIMULATION_CONFIGURATION = "Fire_Config_1.csv";
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
 
@@ -42,8 +39,10 @@ public class Main extends Application {
         double cellWidth = WINDOW_WIDTH/d.getWidth();
         for (int i = 0; i < d.getWidth(); i++) {
             for (int j = 0; j < d.getHeight(); j++) {
-                cellGrid[i][j] = new GameOfLifeCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                //cellGrid[i][j] = new GameOfLifeCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
                 //cellGrid[i][j] = new PercolationCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                //cellGrid[i][j] = new RPSCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                cellGrid[i][j] = new FireCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
                 myGroup.getChildren().add(cellGrid[i][j].getShape());
             }
         }
