@@ -33,6 +33,7 @@ public class RPSCell extends Cell{
                 //Assumption --> first enemy neighbor checked >= THRESHOLD wins
                 if(temp >= THRESHOLD){
                     myNextState = tempState;
+                    updateColor();
                     return;
                 }
             }

@@ -28,12 +28,14 @@ public class FireCell extends Cell {
                 //Only direct neighbors
                 if((c.myCol == myCol || c.myRow == myRow) && c.myCurrentState == 2){
                     myNextState = 2;
+                    break;
                 }
             }
         }
-        else{myNextState = 0;}
-
-
+        else{
+            myNextState = 0;
+        }
+        updateColor();
     }
 
     @Override

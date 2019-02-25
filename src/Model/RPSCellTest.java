@@ -52,4 +52,47 @@ class RPSCellTest {
         var actual = paperCell.myNextState;
         assertEquals(expected, actual);
     }
+
+    @Test
+    void scissorToRockTie(){
+        for(int i=0; i<4; i++){
+            //Order matters here
+            neighbors.add(rockCell);
+            neighbors.add(paperCell);
+        }
+        scissorCell.updateCell(neighbors);
+
+        var expected =0;
+        var actual = scissorCell.myNextState;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void scissorToPaperTie(){
+        for(int i=0; i<4; i++){
+            //Order matters here
+            neighbors.add(paperCell);
+            neighbors.add(rockCell);
+        }
+        scissorCell.updateCell(neighbors);
+
+        var expected = 1;
+        var actual = scissorCell.myNextState;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void noStateChange(){
+        //No number of neighbors reaches threshold
+        for(int i=0; i<2; i++){
+            neighbors.add(rockCell);
+            neighbors.add(paperCell);
+            neighbors.add(scissorCell);
+        }
+        rockCell.updateCell(neighbors);
+
+        var expected = 0;
+        var actual = rockCell.myNextState;
+        assertEquals(expected, actual);
+    }
 }
