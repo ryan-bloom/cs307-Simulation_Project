@@ -1,4 +1,4 @@
-package Cells;
+package Model;
 
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
