@@ -18,9 +18,7 @@ public class Main extends Application {
     public static final String SIMULATION_CONFIGURATION = "Percolation_Config_1.csv";
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
-
     public static final int FRAMES_PER_SECOND = 2;
-
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.WHITE;
 
