@@ -1,7 +1,9 @@
 package Model;
 
+import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,5 +64,33 @@ class FireCellTest {
         var expected = 0;
         var actual = emptyCell.myNextState;
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void greenToRed(){
+        neighbors.add(burningCell);
+        var expected1 = Color.GREEN;
+        var actual1 = treeCell.myRectangle.getFill();
+        assertEquals(expected1, actual1);
+
+        treeCell.updateCell(neighbors);
+
+        var expected2 = Color.RED;
+        var actual2 = treeCell.myRectangle.getFill();
+        assertEquals(expected2, actual2);
+    }
+
+    @Test
+    void redToYellow(){
+        neighbors.add(emptyCell);
+        var expected1 = Color.RED;
+        var actual1 = burningCell.myRectangle.getFill();
+        assertEquals(expected1, actual1);
+
+        burningCell.updateCell(neighbors);
+
+        var expected2 = Color.YELLOW;
+        var actual2 = burningCell.myRectangle.getFill();
+        assertEquals(expected2, actual2);
     }
 }
