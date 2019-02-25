@@ -20,15 +20,12 @@ abstract public class Cell {
         updateColor();
     }
 
-    public Rectangle getShape() {
-        return myRectangle;
-    }
-
-    public void resetState() {
-        myCurrentState = myNextState;
-    }
+    public Rectangle getShape() { return myRectangle; }
+    public void resetState() { myCurrentState = myNextState; }
 
     abstract public void updateCell(List<Cell> neighbors);
+
+    abstract public void updateColor();
 
     @Override
     public boolean equals(Object o) {
@@ -44,6 +41,4 @@ abstract public class Cell {
     public int hashCode() {
         return Objects.hash(myCurrentState, myRow, myCol);
     }
-
-    abstract public void updateColor();
 }

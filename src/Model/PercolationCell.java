@@ -3,11 +3,15 @@ import java.util.List;
 import javafx.scene.paint.Color;
 
 public class PercolationCell extends Cell {
+    private static final Color[] COLORS = {Color.BLACK, Color.WHITE, Color.BLUE};
+
     /**
-     * States: 0 = blocked, 1 = open, 2 = percolated
+     *
      * @param row
      * @param col
      * @param state
+     * @param width
+     * @param height
      */
     public PercolationCell(int row, int col, int state, double width, double height){
         super(row, col, state, width, height);
@@ -28,14 +32,7 @@ public class PercolationCell extends Cell {
 
     @Override
     public void updateColor() {
-        if (myNextState == 0) {
-            myRectangle.setFill(Color.BLACK);
-        }
-        else if (myNextState == 1) {
-            myRectangle.setFill(Color.WHITE);
-        }
-        else if (myNextState == 2) {
-            myRectangle.setFill(Color.BLUE);
-        }
+        int dex = this.myNextState;
+        myRectangle.setFill(COLORS[dex]);
     }
 }
