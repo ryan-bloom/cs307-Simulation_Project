@@ -23,10 +23,44 @@ class FireCellTest {
     }
 
     @Test
-    void updateCell() {
+    void treeToBurning() {
+        for(int i=0; i<2; i++){
+            neighbors.add(treeCell);
+        }
+        neighbors.add(burningCell);
+        treeCell.updateCell(neighbors);
+
+        var expected = 2;
+        var actual = treeCell.myNextState;
+        assertEquals(expected,actual);
+
     }
 
     @Test
-    void updateColor() {
+    void burningToEmpty() {
+        for(int i=0; i<4; i++){
+            neighbors.add(treeCell);
+        }
+        neighbors.add(burningCell);
+        neighbors.add(emptyCell);
+        burningCell.updateCell(neighbors);
+
+        var expected = 0;
+        var actual = burningCell.myNextState;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void emptyToEmpty(){
+        for(int i=0; i<3; i++){
+            neighbors.add(treeCell);
+            neighbors.add(burningCell);
+            neighbors.add(emptyCell);
+        }
+        emptyCell.updateCell(neighbors);
+
+        var expected = 0;
+        var actual = emptyCell.myNextState;
+        assertEquals(expected, actual);
     }
 }
