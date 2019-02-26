@@ -97,7 +97,7 @@ class RPSCellTest {
         assertEquals(expected, actual);
     }
 
-    @Test
+/*    @Test
     void redToGreen(){
         for(int i=0; i<5; i++){
             neighbors.add(paperCell);
@@ -127,5 +127,5 @@ class RPSCellTest {
         var expected2 = Color.RED;
         var actual2 = scissorCell.myRectangle.getFill();
         assertEquals(expected2, actual2);
-    }
+    }*/
 }

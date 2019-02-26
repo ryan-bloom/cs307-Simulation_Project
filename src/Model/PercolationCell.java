@@ -1,12 +1,9 @@
 package Model;
 import java.util.List;
-import javafx.scene.paint.Color;
 
 public class PercolationCell extends Cell {
-    private static final Color[] COLORS = {Color.BLACK, Color.WHITE, Color.BLUE};
-
     /**
-     *
+     * 0 = blocked; 1 = open; 2 = percolating
      * @param row
      * @param col
      * @param state
@@ -23,16 +20,9 @@ public class PercolationCell extends Cell {
             for (Cell n : neighbors){
                 if(n.myCurrentState == 2){
                     this.myNextState = 2;
-                    updateColor();
                     return;
                 }
             }
         }
-    }
-
-    @Override
-    public void updateColor() {
-        int dex = this.myNextState;
-        myRectangle.setFill(COLORS[dex]);
     }
 }
