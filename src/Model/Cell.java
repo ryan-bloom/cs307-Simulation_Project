@@ -2,30 +2,25 @@ package Model;
 
 import java.util.List;
 import java.util.Objects;
-import javafx.scene.shape.Rectangle;
 
 abstract public class Cell {
     protected int myCurrentState;
     protected int myNextState;
     protected int myRow;
     protected int myCol;
-    protected Rectangle myRectangle;
 
     public Cell(int row, int col, int state, double width, double height) {
         myRow = row;
         myCol = col;
         myCurrentState = state;
         myNextState = state;
-        myRectangle = new Rectangle(row * width, col * height, width, height);
-        updateColor();
     }
 
-    public Rectangle getShape() { return myRectangle; }
     public void resetState() { myCurrentState = myNextState; }
+    public int getMyCurrentState(){return myCurrentState;}
 
     abstract public void updateCell(List<Cell> neighbors);
 
-    abstract public void updateColor();
 
     @Override
     public boolean equals(Object o) {

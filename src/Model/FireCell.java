@@ -1,12 +1,8 @@
 package Model;
 
-import javafx.scene.paint.Color;
-
 import java.util.List;
 
 public class FireCell extends Cell {
-    private static final Color[] COLORS = {Color.YELLOW, Color.GREEN, Color.RED};
-
     //Neighbors only directly top/bottom and left/right
     /**
      * 0 = empty; 1 = tree; 2 = burning
@@ -35,12 +31,5 @@ public class FireCell extends Cell {
         else{
             myNextState = 0;
         }
-        updateColor();
-    }
-
-    @Override
-    public void updateColor() {
-        int dex = myNextState;
-        myRectangle.setFill(COLORS[dex]);
     }
 }
