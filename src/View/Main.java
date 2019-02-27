@@ -29,13 +29,14 @@ public class Main extends Application {
     public static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
 
     public static final Paint BACKGROUND = Color.WHITE;
-    public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
+    public static final String DEFAULT_RESOURCE_PACKAGE = "Resources";
 
     //private Cell[][] cellGrid;
     private Grid myGrid;
     private Group myGroup;
     private Animation myAnimation;
     private ResourceBundle myResources;
+    private Data mySeed;
 
     //private Map<String, List<Color>> colorsMap; ---- MIGHT USE THIS IF MAP OF GAME - COLORS FOR SAID GAME
     private List<Color> colorsList;
@@ -48,26 +49,8 @@ public class Main extends Application {
     }
 
     public void start(Stage stage) {
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
-        Data d = new Data(myResources.getString("File"));
-        fillColorsList(d.getSimulation().toUpperCase());
-
-        myGrid = new Grid(d);
-        cellHeight = WINDOW_HEIGHT/d.getHeight();
-        cellWidth = WINDOW_WIDTH/d.getWidth();
-        myGrid.fillCellGrid();
-        myGroup = new Group();
-        var scene = new Scene(myGroup, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
-
-        for (int i = 0; i < d.getWidth(); i++) {
-            for (int j = 0; j < d.getHeight(); j++) {
-                Node view = updateCellView(i, j, myGrid.getCellState(i, j));//cellGrid[i][j].getMyCurrentState());
-                myGroup.getChildren().add(view);
-            }
-        }
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        stage.setScene(scene);
-        stage.setTitle(d.getSimulation());
+        stage.setScene(setupSeed(0));
+        //stage.setTitle(d.getSimulation());
         stage.show();
         var frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step());
         var animation = new Timeline();
@@ -75,6 +58,26 @@ public class Main extends Application {
         animation.getKeyFrames().add(frame);
         myAnimation = animation;
         animation.play();
+    }
+
+    public Scene setupSeed(int config) {
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + ".Matt" + SIMULATION);
+        Data d = new Data(myResources.getString("File").split(",")[config]);
+        fillColorsList(d.getSimulation().toUpperCase());
+        myGrid = new Grid(d);
+        cellHeight = WINDOW_HEIGHT/d.getHeight();
+        cellWidth = WINDOW_WIDTH/d.getWidth();
+        myGrid.fillCellGrid();
+        myGroup = new Group();
+        Scene seed = new Scene(myGroup, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
+        for (int i = 0; i < d.getWidth(); i++) {
+            for (int j = 0; j < d.getHeight(); j++) {
+                Node view = updateCellView(i, j, myGrid.getCellState(i, j));//cellGrid[i][j].getMyCurrentState());
+                myGroup.getChildren().add(view);
+            }
+        }
+        seed.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        return seed;
     }
 
     //SHOULD JUST READ IN COLORS FROM SEPARATE DATA FILE
@@ -167,26 +170,9 @@ public class Main extends Application {
         }
 
         //Load various initial configs
-        if (code == KeyCode.DIGIT1) {
-            
-        }
-
-        if (code == KeyCode.DIGIT2) {
-
-        }
-        if (code == KeyCode.DIGIT3) {
-
-        }
-
-        if (code == KeyCode.DIGIT4) {
-
-        }
-        if (code == KeyCode.DIGIT5) {
-
-        }
-
-        if (code == KeyCode.DIGIT6) {
-
+        if (code.isDigitKey()) {
+            myAnimation.pause();
+            setupSeed(Integer.parseInt(code.getName()));
         }
     }
 }
