@@ -15,13 +15,15 @@ class FireCellTest {
     private Cell treeCell;
     private Cell burningCell;
     private List<Cell> neighbors;
+    private Cell[][] cellGrid;
 
     @BeforeEach
     void setUp() {
-        emptyCell = new FireCell(1, 1, 0, 1, 1);
-        treeCell = new FireCell(1, 1, 1, 1, 1);
-        burningCell = new FireCell(1, 1, 2, 1, 1);
+        emptyCell = new FireCell(1, 1, 0);
+        treeCell = new FireCell(1, 1, 1);
+        burningCell = new FireCell(1, 1, 2);
         neighbors = new ArrayList<>();
+        cellGrid = new Cell[5][5];
     }
 
     @Test
@@ -30,7 +32,7 @@ class FireCellTest {
             neighbors.add(treeCell);
         }
         neighbors.add(burningCell);
-        treeCell.updateCell(neighbors);
+        treeCell.updateCell(neighbors, cellGrid);
 
         var expected = 2;
         var actual = treeCell.myNextState;
@@ -45,7 +47,7 @@ class FireCellTest {
         }
         neighbors.add(burningCell);
         neighbors.add(emptyCell);
-        burningCell.updateCell(neighbors);
+        burningCell.updateCell(neighbors, cellGrid);
 
         var expected = 0;
         var actual = burningCell.myNextState;
@@ -59,7 +61,7 @@ class FireCellTest {
             neighbors.add(burningCell);
             neighbors.add(emptyCell);
         }
-        emptyCell.updateCell(neighbors);
+        emptyCell.updateCell(neighbors, cellGrid);
 
         var expected = 0;
         var actual = emptyCell.myNextState;
