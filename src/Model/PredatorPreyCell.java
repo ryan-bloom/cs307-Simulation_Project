@@ -27,54 +27,47 @@ public class PredatorPreyCell extends Cell {
     @Override
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
         if(this.myCurrentState == 1){
-            cellGrid = fishUpdate(neighbors, cellGrid);
-            return cellGrid;
+            return fishUpdate(neighbors, cellGrid);
         }
         else if(this.myCurrentState == 2){
-            cellGrid = sharkUpdate(neighbors, cellGrid);
+            return sharkUpdate(neighbors, cellGrid);
         }
         return cellGrid;
     }
 
     public Cell[][] fishUpdate(List<Cell> neighbors, Cell[][] cellGrid){
         myReproductionTime += 1;
-        List<Cell> possNext = new ArrayList<>();
-        for(Cell c:neighbors){
-            if((c.myRow == this.myRow || c.myCol == this.myCol) && c.myCurrentState == 0){
-                System.out.println(c.myRow + " " + c.myCol);
-                possNext.add(c);
-            }
-        }
-        if(possNext.isEmpty()){
-            return cellGrid;
-        }
-        else{
+        List<Cell> possNext = fillSubNeighbors(neighbors, 0);
+        if(!possNext.isEmpty()){
             Cell nextLoc = randDirection(possNext);
-            System.out.println("RANDOM PICK: " + nextLoc.myRow + " " + nextLoc.myCol);
             cellGrid = moveCell(nextLoc, cellGrid);
         }
         return cellGrid;
+
+       /* if(possNext.isEmpty()){
+            return cellGrid;
+        }
+        //Randomly pick where to move to... move there and set previous location as required
+        else{
+            Cell nextLoc = randDirection(possNext);
+            cellGrid = moveCell(nextLoc, cellGrid);
+        }
+        return cellGrid;*/
     }
 
     public Cell[][] sharkUpdate(List<Cell> neighbors, Cell[][] cellGrid){
         myReproductionTime++;
-        List<Cell> fishNear = new ArrayList<>();
-        List<Cell> emptyNear = new ArrayList<>();
+        List<Cell> fishNear = fillSubNeighbors(neighbors, 1);
+        List<Cell> emptyNear = fillSubNeighbors(neighbors, 0);
 
-        for(Cell c : neighbors){
-            if((c.myRow == myRow || c.myCol == myCol) && c.myCurrentState != 2){
-                if(c.myCurrentState == 0){
-                    emptyNear.add(c);
-                }
-                else{ fishNear.add(c); }
-            }
-        }
         if(!fishNear.isEmpty()){
             Cell nextLoc = randDirection(fishNear);
             myEnergyLeft += FISH_ENERGY;
             cellGrid = moveCell(nextLoc, cellGrid);
+            return cellGrid;
         }
         else{
+            //Lose energy if no fish to eat
             myEnergyLeft--;
             if(myEnergyLeft <= 0){
                 cellGrid[myRow][myCol].myNextState = 0;
@@ -88,14 +81,6 @@ public class PredatorPreyCell extends Cell {
         }
         return cellGrid;
     }
-
-    public Cell randDirection(List<Cell> potentials){
-        Random rand = new Random();
-        int dir = rand.nextInt(potentials.size());
-        return potentials.get(dir);
-    }
-
-    public void resetReproductionTime(){myReproductionTime = 0;}
 
     public Cell[][] moveCell(Cell nextLocationCell, Cell[][] cellGrid){
         Cell temp;
@@ -116,8 +101,26 @@ public class PredatorPreyCell extends Cell {
         return cellGrid;
     }
 
+    public Cell randDirection(List<Cell> potentials){
+        Random rand = new Random();
+        int dir = rand.nextInt(potentials.size());
+        return potentials.get(dir);
+    }
+
     public void newLocation(int r, int c){
         this.myRow = r;
         this.myCol = c;
+    }
+
+    public void resetReproductionTime(){myReproductionTime = 0;}
+
+    public List<Cell> fillSubNeighbors(List<Cell> neighbors, int state){
+        List<Cell> res = new ArrayList<>();
+        for(Cell c:neighbors){
+            if((c.myRow == myRow || c.myCol == myCol) && c.myCurrentState == state){
+                res.add(c);
+            }
+        }
+        return res;
     }
 }
