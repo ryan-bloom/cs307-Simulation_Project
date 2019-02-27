@@ -1,7 +1,5 @@
 package Model;
 
-import javafx.scene.Node;
-
 import java.util.ArrayList;
 
 public class Grid {
@@ -23,20 +21,19 @@ public class Grid {
                 //myCellGrid[i][j] = new GameOfLifeCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new PercolationCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new RPSCell(i, j, myData.getStates()[i][j]);
-                myCellGrid[i][j] = new FireCell(i, j, myData.getStates()[i][j]);
-                //myCellGrid[i][j] = new SegregationCell(i, j, myData.getStates()[i][j]);
+                //myCellGrid[i][j] = new FireCell(i, j, myData.getStates()[i][j]);
+                myCellGrid[i][j] = new SegregationCell(i, j, myData.getStates()[i][j]);
             }
         }
-        //return myCellGrid;
     }
 
     public void resetCell(int row, int col){
         myCellGrid[row][col].resetState();
     }
 
-    public int updateGridCell(int row, int col){
+    public void updateGridCell(int row, int col){
         myCellGrid = myCellGrid[row][col].updateCell(findNeighbors(row, col), myCellGrid);
-        return myCellGrid[row][col].getMyNextState();
+        //return myCellGrid[row][col].getMyNextState();
     }
 
     public ArrayList<Cell> findNeighbors(int i, int j) {
@@ -84,5 +81,4 @@ public class Grid {
     public Cell[][] getCellGrid(){ return myCellGrid; }
     public int getMyRows(){return myRows;}
     public int getMyCols(){return myCols;}
-    public void setGrid(Cell[][] newGrid){myCellGrid = newGrid;}
 }

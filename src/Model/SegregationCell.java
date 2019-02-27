@@ -1,6 +1,5 @@
 package Model;
 
-import javafx.scene.paint.Color;
 import java.util.List;
 
 public class SegregationCell extends Cell {
@@ -19,26 +18,32 @@ public class SegregationCell extends Cell {
 
     @Override
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
-        double percSame = findPercentageSame(neighbors);
-        if(percSame <= THRESHOLD){//this cell is unsatisfied -- moves
-            var emptyLocation = findEmptyCell(cellGrid);
-            var tempCell = cellGrid[emptyLocation[0]][emptyLocation[1]];
-            tempCell.myNextState = this.myCurrentState;
-            cellGrid[emptyLocation[0]][emptyLocation[1]] = tempCell;
-            cellGrid[myRow][myCol].myNextState = 0;
-            //this.myNextState = 0;
+        if(this.myCurrentState != 0){
+            double percSame = findPercentageSame(neighbors);
+            System.out.println(myRow + " " + myCol + " " + percSame);
+            if(percSame < THRESHOLD){//this cell is unsatisfied -- moves
+                var emptyLocation = findEmptyCell(cellGrid);
+                cellGrid[emptyLocation[0]][emptyLocation[1]].myNextState = this.myCurrentState;
+                cellGrid[emptyLocation[0]][emptyLocation[1]].myCurrentState = this.myCurrentState;
+                cellGrid[myRow][myCol].myCurrentState = 0;
+                cellGrid[myRow][myCol].myNextState = 0;
+            }
         }
         return cellGrid;
     }
 
     public double findPercentageSame(List<Cell> neighbors){
-        int diff = 0;
-        for(Cell c: neighbors){
-            if(c.myCurrentState != 0 && c.myCurrentState == myCurrentState){
-                diff++;
+        int same = 0;
+        double total = 0;
+        for(Cell c: neighbors) {
+            if (c.myCurrentState != 0) {
+                total++;
+                if (c.myCurrentState == this.myCurrentState) {
+                    same++;
+                }
             }
         }
-        return diff/8.0;
+        return same/total;
     }
 
    public int[] findEmptyCell(Cell[][] cellGrid){

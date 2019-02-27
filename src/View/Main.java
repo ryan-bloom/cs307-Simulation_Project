@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Main extends Application {
-    public static final String SIMULATION_CONFIGURATION = "Fire_Config_1.csv";
+    public static final String SIMULATION_CONFIGURATION = "Segregation_Config_1.csv";
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
 
@@ -105,23 +105,19 @@ public class Main extends Application {
         return res;
     }
 
+
     private void step(double elapsedTime) {
         // updates colors and states of all cells
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
-                //int nxtState = myGrid.updateGridCell(i, j);
                 myGrid.updateGridCell(i, j);
-                //myGroup.getChildren().add(updateCellView(i, j, nxtState));
             }
         }
         // resets state of all cells so next update will function correctly
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
-                //cellGrid[i][j].resetState();
-                myGrid.resetCell(i, j);
                 myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
-                //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
-                //myGrid.resetCell(i, j);
+                myGrid.resetCell(i, j);
             }
         }
     }
