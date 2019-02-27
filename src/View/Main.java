@@ -20,7 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
-    public static final String SIMULATION_CONFIGURATION = "PercolationTest3.csv";
+
+    public static final String SIMULATION_TITLE = "Percolation";
+    public static final String CONFIG_NUMBER = "1";
+
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
 
@@ -43,7 +46,7 @@ public class Main extends Application {
     }
 
     public void start(Stage stage) {
-        Data d = new Data(SIMULATION_CONFIGURATION);
+        Data d = new Data(SIMULATION_TITLE + "_" + "CONFIG" + "_" + CONFIG_NUMBER + ".csv");
         fillColorsList(d.getSimulation().toUpperCase());
         cellGrid = new Cell[d.getHeight()][d.getWidth()];
         myGroup = new Group();
@@ -205,6 +208,24 @@ public class Main extends Application {
         //Load various initial configs
         if (code == KeyCode.DIGIT1) {
             
+        }
+
+        if (code == KeyCode.DIGIT2) {
+
+        }
+        if (code == KeyCode.DIGIT3) {
+
+        }
+
+        if (code == KeyCode.DIGIT4) {
+
+        }
+        if (code == KeyCode.DIGIT5) {
+
+        }
+
+        if (code == KeyCode.DIGIT6) {
+
         }
     }
 }
