@@ -12,20 +12,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.util.ArrayList;
-<<<<<<< HEAD
 import java.util.ResourceBundle;
-
-public class Main extends Application {
-    //public static final String SIMULATION_CONFIGURATION = "Fire_Config_1.csv";
-=======
 import java.util.List;
 import java.util.Map;
 
 public class Main extends Application {
     public static final String SIMULATION_CONFIGURATION = "RPS_Config_1.csv";
->>>>>>> e01ce944923d1fb7668351235233de7c7162b1bc
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
     public static final int FRAMES_PER_SECOND = 2;
@@ -47,13 +40,9 @@ public class Main extends Application {
     }
 
     public void start(Stage stage) {
-<<<<<<< HEAD
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "MattPercolation");
         Data d = new Data(myResources.getString("File"));
-=======
-        Data d = new Data(SIMULATION_CONFIGURATION);
         fillColorsList(d.getSimulation().toUpperCase());
->>>>>>> e01ce944923d1fb7668351235233de7c7162b1bc
         cellGrid = new Cell[d.getHeight()][d.getWidth()];
         myGroup = new Group();
         var scene = new Scene(myGroup, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
@@ -64,19 +53,12 @@ public class Main extends Application {
         for (int i = 0; i < d.getWidth(); i++) {
             for (int j = 0; j < d.getHeight(); j++) {
                 //cellGrid[i][j] = new GameOfLifeCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
-<<<<<<< HEAD
                 cellGrid[i][j] = new PercolationCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
                 //cellGrid[i][j] = new RPSCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
-                //cellGrid[i][j] = new FireCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
-                myGroup.getChildren().add(cellGrid[i][j].getShape());
-=======
-                //cellGrid[i][j] = new PercolationCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
-                cellGrid[i][j] = new RPSCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
                 //cellGrid[i][j] = new FireCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
                 Node view = updateCellView(i, j, cellGrid[i][j].getMyCurrentState());
                 //myGroup.getChildren().add(cellGrid[i][j].getShape());
                 myGroup.getChildren().add(view);
->>>>>>> e01ce944923d1fb7668351235233de7c7162b1bc
             }
         }
         stage.setScene(scene);
