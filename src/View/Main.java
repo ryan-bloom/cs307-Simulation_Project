@@ -1,12 +1,15 @@
 package View;
 
 import Model.*;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -15,25 +18,25 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Main extends Application {
-    public static final String SIMULATION_CONFIGURATION = "RPS_Config_1.csv";
+    public static final String SIMULATION_CONFIGURATION = "PercolationTest3.csv";
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
 
-    public static final int FRAMES_PER_SECOND = 2;
-
-    public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+    public static int FRAMES_PER_SECOND = 6;
+    public static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.WHITE;
 
     private Cell[][] cellGrid;
     private Group myGroup;
+    private Animation myAnimation;
 
     //private Map<String, List<Color>> colorsMap; ---- MIGHT USE THIS IF MAP OF GAME - COLORS FOR SAID GAME
     private List<Color> colorsList;
     private double cellWidth;
     private double cellHeight;
+    private boolean isRunning = true;
 
     public static void main (String[] args) {
         launch(args);
@@ -45,28 +48,28 @@ public class Main extends Application {
         cellGrid = new Cell[d.getHeight()][d.getWidth()];
         myGroup = new Group();
         var scene = new Scene(myGroup, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
-        //double cellHeight = WINDOW_HEIGHT/d.getHeight();
-        //double cellWidth = WINDOW_WIDTH/d.getWidth();
         cellHeight = WINDOW_HEIGHT/d.getHeight();
         cellWidth = WINDOW_WIDTH/d.getWidth();
         for (int i = 0; i < d.getWidth(); i++) {
             for (int j = 0; j < d.getHeight(); j++) {
                 //cellGrid[i][j] = new GameOfLifeCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
-                //cellGrid[i][j] = new PercolationCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
-                cellGrid[i][j] = new RPSCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                cellGrid[i][j] = new PercolationCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                //cellGrid[i][j] = new RPSCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
                 //cellGrid[i][j] = new FireCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+
                 Node view = updateCellView(i, j, cellGrid[i][j].getMyCurrentState());
-                //myGroup.getChildren().add(cellGrid[i][j].getShape());
                 myGroup.getChildren().add(view);
             }
         }
+        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         stage.setScene(scene);
         stage.setTitle(d.getSimulation());
         stage.show();
-        var frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY));
+        var frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step());
         var animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
+        myAnimation = animation;
         animation.play();
     }
 
@@ -147,7 +150,7 @@ public class Main extends Application {
         return res;
     }
 
-    private void step(double elapsedTime) {
+    private void step() {
         // updates colors and states of all cells
         for (int i = 0; i < cellGrid.length; i++) {
             for (int j = 0; j < cellGrid[0].length; j++) {
@@ -160,6 +163,48 @@ public class Main extends Application {
             for (int j = 0; j < cellGrid[0].length; j++) {
                 cellGrid[i][j].resetState();
             }
+        }
+    }
+
+    private void handleKeyInput(KeyCode code) {
+        //Pause and Resume
+        if (code == KeyCode.SPACE) {
+            if (isRunning) {
+                myAnimation.pause();
+                isRunning = false;
+            }
+            else {
+                myAnimation.play();
+                isRunning = true;
+            }
+        }
+
+        //Increase or decrease animation rate
+        if (code == KeyCode.UP) {
+            myAnimation.pause();
+            System.out.println(myAnimation.getRate());
+            myAnimation.setRate(myAnimation.getRate() + 1.0);
+            System.out.println(myAnimation.getRate());
+            System.out.println("Pressing up!");
+            myAnimation.play();
+        }
+        if (code == KeyCode.DOWN) {
+            myAnimation.pause();
+            System.out.println(myAnimation.getRate());
+            myAnimation.setRate(myAnimation.getRate() - 1.0);
+            System.out.println(myAnimation.getRate());
+            System.out.println("Pressing up!");
+            myAnimation.play();
+        }
+
+        //Step through simulation
+        if (code == KeyCode.RIGHT && !(isRunning)) {
+            step();
+        }
+
+        //Load various initial configs
+        if (code == KeyCode.DIGIT1) {
+            
         }
     }
 }
