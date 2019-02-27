@@ -12,8 +12,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.util.List;
 import java.util.Map;
 
@@ -21,15 +21,15 @@ public class Main extends Application {
     public static final String SIMULATION_CONFIGURATION = "Segregation_Config_1.csv";
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
-
     public static final int FRAMES_PER_SECOND = 2;
-
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.WHITE;
+    public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
 
     //private Cell[][] cellGrid;
     private Grid myGrid;
     private Group myGroup;
+    private ResourceBundle myResources;
 
     //private Map<String, List<Color>> colorsMap; ---- MIGHT USE THIS IF MAP OF GAME - COLORS FOR SAID GAME
     private List<Color> colorsList;
@@ -41,7 +41,8 @@ public class Main extends Application {
     }
 
     public void start(Stage stage) {
-        Data d = new Data(SIMULATION_CONFIGURATION);
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "MattPercolation");
+        Data d = new Data(myResources.getString("File"));
         fillColorsList(d.getSimulation().toUpperCase());
 
         myGrid = new Grid(d);
