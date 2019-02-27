@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 public class PredatorPreyCell extends Cell {
-    private static final int GESTATION_PERIOD = 2;
-    private static final int ENERGY = 3;
+    private static final int GESTATION_PERIOD = 6;
+    private static final int ENERGY = 4;
     private static final int FISH_ENERGY = 1;
 
     private int myReproductionTime;
@@ -28,6 +28,7 @@ public class PredatorPreyCell extends Cell {
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
         if(this.myCurrentState == 1){
             cellGrid = fishUpdate(neighbors, cellGrid);
+            return cellGrid;
         }
         else if(this.myCurrentState == 2){
             cellGrid = sharkUpdate(neighbors, cellGrid);
@@ -36,10 +37,11 @@ public class PredatorPreyCell extends Cell {
     }
 
     public Cell[][] fishUpdate(List<Cell> neighbors, Cell[][] cellGrid){
-        myReproductionTime++;
+        myReproductionTime += 1;
         List<Cell> possNext = new ArrayList<>();
         for(Cell c:neighbors){
-            if((c.myRow == myRow || c.myCol == myCol) && c.myCurrentState == 0){
+            if((c.myRow == this.myRow || c.myCol == this.myCol) && c.myCurrentState == 0){
+                System.out.println(c.myRow + " " + c.myCol);
                 possNext.add(c);
             }
         }
@@ -48,6 +50,7 @@ public class PredatorPreyCell extends Cell {
         }
         else{
             Cell nextLoc = randDirection(possNext);
+            System.out.println("RANDOM PICK: " + nextLoc.myRow + " " + nextLoc.myCol);
             cellGrid = moveCell(nextLoc, cellGrid);
         }
         return cellGrid;
@@ -75,6 +78,7 @@ public class PredatorPreyCell extends Cell {
             myEnergyLeft--;
             if(myEnergyLeft <= 0){
                 cellGrid[myRow][myCol].myNextState = 0;
+                cellGrid[myRow][myCol].myCurrentState = 0;
                 return cellGrid;
             }
             else if(!emptyNear.isEmpty()){
@@ -94,17 +98,21 @@ public class PredatorPreyCell extends Cell {
     public void resetReproductionTime(){myReproductionTime = 0;}
 
     public Cell[][] moveCell(Cell nextLocationCell, Cell[][] cellGrid){
-        int newRow = nextLocationCell.myRow;
-        int newCol = nextLocationCell.myCol;
-        if(myReproductionTime >= GESTATION_PERIOD){
+        Cell temp;
+        int prevRow = this.myRow;
+        int prevCol = this.myCol;
+        int nxtRow = nextLocationCell.myRow;
+        int nxtCol = nextLocationCell.myCol;
+        if(this.myReproductionTime >= GESTATION_PERIOD){
             this.resetReproductionTime();
-            cellGrid[myRow][myCol] = new PredatorPreyCell(myRow, myCol, this.myCurrentState);
+            temp = new PredatorPreyCell(prevRow, prevCol, this.myCurrentState);
         }
         else{
-            cellGrid[myRow][myCol].myNextState = 0;
+            temp = new PredatorPreyCell(prevRow, prevCol, 0);
         }
-        this.newLocation(newRow, newCol);
-        cellGrid[newRow][newCol] = this;
+        this.newLocation(nxtRow, nxtCol);
+        cellGrid[nxtRow][nxtCol] = this;
+        cellGrid[prevRow][prevCol] = temp;
         return cellGrid;
     }
 
