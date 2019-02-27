@@ -15,12 +15,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-<<<<<<< src/View/Main.java
 
 import java.util.*;
 
 public class Main extends Application {
-=======
+
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.List;
