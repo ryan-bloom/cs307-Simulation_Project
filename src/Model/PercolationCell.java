@@ -13,14 +13,15 @@ public class PercolationCell extends Cell {
     }
 
     @Override
-    public void updateCell(List<Cell> neighbors) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
         if (this.myCurrentState == 1){
             for (Cell n : neighbors){
                 if(n.myCurrentState == 2){
                     this.myNextState = 2;
-                    return;
+                    cellGrid[myRow][myCol] = this;
                 }
             }
         }
+        return cellGrid;
     }
 }

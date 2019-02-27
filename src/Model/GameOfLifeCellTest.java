@@ -12,12 +12,14 @@ class GameOfLifeCellTest {
     private Cell deadCell;
     private Cell liveCell;
     private List<Cell> neighbors;
+    private Cell[][] cellGrid;
 
     @BeforeEach
     void setUp() {
         deadCell = new GameOfLifeCell(1, 1, 0);
         liveCell = new GameOfLifeCell(1, 1, 1);
         neighbors = new ArrayList<>();
+        cellGrid = new Cell[5][5];
         Cell temp;
         for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
@@ -35,7 +37,7 @@ class GameOfLifeCellTest {
     @Test
     void updateCellDeadToAlive() {
         List<Cell> neighs = neighbors.subList(0,4); //3 live, 1 dead
-        deadCell.updateCell(neighs);
+        deadCell.updateCell(neighs, cellGrid);
 
         var expected = 1;
         var actual = deadCell.myNextState;
@@ -44,7 +46,7 @@ class GameOfLifeCellTest {
 
     @Test
     void updateCellDiesOverpopulation(){
-        liveCell.updateCell(neighbors);//Too many live neighbors (5)
+        liveCell.updateCell(neighbors, cellGrid);//Too many live neighbors (5)
 
         var expected = 0;
         var actual = liveCell.myNextState;
@@ -54,7 +56,7 @@ class GameOfLifeCellTest {
     @Test
     void updateCellDiesUnderpopulation(){
         List<Cell> neighs = neighbors.subList(3,8); // 4 dead; 1 live
-        liveCell.updateCell(neighs);
+        liveCell.updateCell(neighs, cellGrid);
 
         var expected = 0;
         var actual = liveCell.myNextState;
@@ -64,7 +66,7 @@ class GameOfLifeCellTest {
     @Test
     void updateCellSurvives(){
         List<Cell> neighs = neighbors.subList(1,5); // 2 live; 2 dead
-        liveCell.updateCell(neighs);
+        liveCell.updateCell(neighs, cellGrid);
 
         var expected = 1;
         var actual = liveCell.myNextState;

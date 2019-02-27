@@ -15,7 +15,7 @@ public class FireCell extends Cell {
     }
 
     @Override
-    public void updateCell(List<Cell> neighbors) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
         //Empty stays empty burning goes to empty
         if(myCurrentState == 1){
             for(Cell c: neighbors){
@@ -29,5 +29,7 @@ public class FireCell extends Cell {
         else{
             myNextState = 0;
         }
+        cellGrid[myRow][myCol] = this;
+        return cellGrid;
     }
 }

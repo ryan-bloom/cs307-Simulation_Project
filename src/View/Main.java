@@ -90,6 +90,11 @@ public class Main extends Application {
             colorsList.add(Color.GREEN);
             colorsList.add(Color.RED);
         }
+        else if(simulation.equals("SEGREGATION")){
+            colorsList.add(Color.WHITE);
+            colorsList.add(Color.BLUE);
+            colorsList.add(Color.RED);
+        }
     }
 
 //GOING TO HAVE TO HANDLE RECTANGLES AND IMAGE VIEWS EVENTUALLY
@@ -104,8 +109,9 @@ public class Main extends Application {
         // updates colors and states of all cells
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
-                int nxtState = myGrid.updateGridCell(i, j);
-                myGroup.getChildren().add(updateCellView(i, j, nxtState));
+                //int nxtState = myGrid.updateGridCell(i, j);
+                myGrid.updateGridCell(i, j);
+                //myGroup.getChildren().add(updateCellView(i, j, nxtState));
             }
         }
         // resets state of all cells so next update will function correctly
@@ -113,6 +119,9 @@ public class Main extends Application {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
                 //cellGrid[i][j].resetState();
                 myGrid.resetCell(i, j);
+                myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
+                //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
+                //myGrid.resetCell(i, j);
             }
         }
     }

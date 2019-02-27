@@ -20,7 +20,8 @@ abstract public class Cell{
     public int getMyCurrentState(){return myCurrentState;}
     public int getMyNextState(){return myNextState;}
 
-    abstract public void updateCell(List<Cell> neighbors);
+    //abstract public void updateCell(List<Cell> neighbors, Cell[][] cellGrid);
+    abstract public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid);
 
 
     @Override

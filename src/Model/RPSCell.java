@@ -16,7 +16,7 @@ public class RPSCell extends Cell{
     }
 
     @Override
-    public void updateCell(List<Cell> neighbors) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
         //rock = index 0; paper = index 1; scissor = index 2
         int[] nCounts = {0, 0, 0};
         for(Cell c: neighbors){
@@ -28,9 +28,10 @@ public class RPSCell extends Cell{
                 //Assumption --> first enemy neighbor checked >= THRESHOLD wins
                 if(temp >= THRESHOLD){
                     myNextState = tempState;
-                    return;
+                    cellGrid[myRow][myCol] = this;
                 }
             }
         }
+        return cellGrid;
     }
 }

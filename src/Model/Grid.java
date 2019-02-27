@@ -24,6 +24,7 @@ public class Grid {
                 //myCellGrid[i][j] = new PercolationCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new RPSCell(i, j, myData.getStates()[i][j]);
                 myCellGrid[i][j] = new FireCell(i, j, myData.getStates()[i][j]);
+                //myCellGrid[i][j] = new SegregationCell(i, j, myData.getStates()[i][j]);
             }
         }
         //return myCellGrid;
@@ -34,7 +35,7 @@ public class Grid {
     }
 
     public int updateGridCell(int row, int col){
-        myCellGrid[row][col].updateCell(findNeighbors(row, col));
+        myCellGrid = myCellGrid[row][col].updateCell(findNeighbors(row, col), myCellGrid);
         return myCellGrid[row][col].getMyNextState();
     }
 

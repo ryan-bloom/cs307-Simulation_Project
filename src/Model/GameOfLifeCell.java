@@ -14,7 +14,7 @@ public class GameOfLifeCell extends Cell {
     }
 
     @Override
-    public void updateCell(List<Cell> neighbors) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
         int liveCount = 0;
         for(Cell n : neighbors){
             if(n.myCurrentState == 1){
@@ -32,5 +32,7 @@ public class GameOfLifeCell extends Cell {
         else if (liveCount == 3){ //this is dead
             this.myNextState = 1;
         }
+        cellGrid[myRow][myCol] = this;
+        return cellGrid;
     }
 }
