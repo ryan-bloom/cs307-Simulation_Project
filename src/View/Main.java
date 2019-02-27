@@ -12,13 +12,10 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 public class Main extends Application {
-    public static final String SIMULATION_CONFIGURATION = "RPS_Config_1.csv";
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
     public static final int FRAMES_PER_SECOND = 2;
@@ -31,7 +28,7 @@ public class Main extends Application {
     private ResourceBundle myResources;
 
     //private Map<String, List<Color>> colorsMap; ---- MIGHT USE THIS IF MAP OF GAME - COLORS FOR SAID GAME
-    private List<Color> colorsList;
+    private HashMap<Integer, Color> colors = new HashMap<>();
     private double cellWidth;
     private double cellHeight;
 
@@ -40,9 +37,10 @@ public class Main extends Application {
     }
 
     public void start(Stage stage) {
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "MattPercolation");
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "MattFire");
         Data d = new Data(myResources.getString("File"));
-        fillColorsList(d.getSimulation().toUpperCase());
+        fillColorsList();
+        System.out.println(d.getSimulation());
         cellGrid = new Cell[d.getHeight()][d.getWidth()];
         myGroup = new Group();
         var scene = new Scene(myGroup, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
@@ -53,9 +51,9 @@ public class Main extends Application {
         for (int i = 0; i < d.getWidth(); i++) {
             for (int j = 0; j < d.getHeight(); j++) {
                 //cellGrid[i][j] = new GameOfLifeCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
-                cellGrid[i][j] = new PercolationCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                //cellGrid[i][j] = new PercolationCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
                 //cellGrid[i][j] = new RPSCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
-                //cellGrid[i][j] = new FireCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
+                cellGrid[i][j] = new FireCell(i, j, d.getStates()[i][j], cellWidth, cellHeight);
                 Node view = updateCellView(i, j, cellGrid[i][j].getMyCurrentState());
                 //myGroup.getChildren().add(cellGrid[i][j].getShape());
                 myGroup.getChildren().add(view);
@@ -72,26 +70,13 @@ public class Main extends Application {
     }
 
     //SHOULD JUST READ IN COLORS FROM SEPARATE DATA FILE
-    public void fillColorsList(String simulation){
-        colorsList = new ArrayList<>();
-        if(simulation.equals("GAMEOFLIFE")){
-           colorsList.add(Color.WHITE);
-           colorsList.add(Color.RED);
-        }
-        else if(simulation.equals("PERCOLATION")){
-            colorsList.add(Color.BLACK);
-            colorsList.add(Color.WHITE);
-            colorsList.add(Color.BLUE);
-        }
-        else if(simulation.equals("RPS")){
-            colorsList.add(Color.RED);
-            colorsList.add(Color.GREEN);
-            colorsList.add(Color.BLUE);
-        }
-        else if(simulation.equals("FIRE")){
-            colorsList.add(Color.YELLOW);
-            colorsList.add(Color.GREEN);
-            colorsList.add(Color.RED);
+    public void fillColorsList(){
+        for(String s: myResources.keySet()){
+            String value = myResources.getString(s);
+            if(s.contains("Color")) {
+                String[] color = value.split(",");
+                colors.put(Integer.parseInt(color[0]), Color.valueOf(color[1]));
+            }
         }
     }
 
@@ -143,7 +128,7 @@ public class Main extends Application {
 //GOING TO HAVE TO HANDLE RECTANGLES AND IMAGE VIEWS EVENTUALLY
     public Node updateCellView(int row, int col, int state){
         var res = new Rectangle(row * cellWidth, col * cellHeight, cellWidth, cellHeight);
-        var color = colorsList.get(state);
+        var color = colors.get(state);
         res.setFill(color);
         return res;
     }
