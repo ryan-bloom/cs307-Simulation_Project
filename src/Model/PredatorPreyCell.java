@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class PredatorPreyCell extends Cell {
     private static final int GESTATION_PERIOD = 6;
-    private static final int ENERGY = 4;
+    private static final int ENERGY = 2;
     private static final int FISH_ENERGY = 1;
 
     private int myReproductionTime;
@@ -43,16 +43,6 @@ public class PredatorPreyCell extends Cell {
             cellGrid = moveCell(nextLoc, cellGrid);
         }
         return cellGrid;
-
-       /* if(possNext.isEmpty()){
-            return cellGrid;
-        }
-        //Randomly pick where to move to... move there and set previous location as required
-        else{
-            Cell nextLoc = randDirection(possNext);
-            cellGrid = moveCell(nextLoc, cellGrid);
-        }
-        return cellGrid;*/
     }
 
     public Cell[][] sharkUpdate(List<Cell> neighbors, Cell[][] cellGrid){
@@ -123,4 +113,7 @@ public class PredatorPreyCell extends Cell {
         }
         return res;
     }
+
+    public int getMyReproductionTime(){return myReproductionTime;}
+    public int getMyEnergyLeft(){return myEnergyLeft;}
 }

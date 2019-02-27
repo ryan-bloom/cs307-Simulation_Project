@@ -13,7 +13,7 @@ class SegregationCellTest {
     SegregationCell type1Cell;
     SegregationCell type2Cell;
     List<Cell> neighbors;
-    Cell[][] cellGrid;
+    SegregationCell[][] cellGrid;
 
     @BeforeEach
     void setUp() {
@@ -110,5 +110,38 @@ class SegregationCellTest {
         int newC = newLoc[1];
         //In created cellGrid -- 1,1 is a type1 cell (not empty)
         assertTrue(!(newR == 1 && newC == 1));
+    }
+
+    @Test
+    void updateUnhappyType1(){
+        happyType2andEmptysetUp();
+        SegregationCell temp = cellGrid[1][1];
+
+        var expected1 = 1;
+        var actual1 = temp.myCurrentState;
+        assertEquals(expected1, actual1);
+
+        temp.updateCell(neighbors, cellGrid);
+
+        var expected2 = 0;
+        var actual2 = cellGrid[1][1].myCurrentState;
+        assertEquals(expected2, actual2);
+    }
+
+    @Test
+    void updateHappyType2(){
+        happyType2andEmptysetUp();
+        SegregationCell temp = cellGrid[0][1];
+
+        var expected1 = 2;
+        var actual1 = temp.myCurrentState;
+        assertEquals(expected1, actual1);
+
+        temp.updateCell(neighbors, cellGrid);
+
+        var expected2 = 2;
+        var actual2 = cellGrid[0][1].myCurrentState;
+        assertEquals(expected2, actual2);
+
     }
 }
