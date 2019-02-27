@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Random;
 
 public class PredatorPreyCell extends Cell {
-    private static final int GESTATION_PERIOD = 3;
+    private static final int GESTATION_PERIOD = 2;
     private static final int ENERGY = 3;
     private static final int FISH_ENERGY = 1;
 
     private int myReproductionTime;
-    private int myEnergyUnits;
+    private int myEnergyLeft;
 
     /**
      * 0 = empty; 1 = fish; 2 = shark
@@ -21,7 +21,7 @@ public class PredatorPreyCell extends Cell {
     public PredatorPreyCell(int row, int col, int state){
         super(row, col, state);
         myReproductionTime = 0;
-        myEnergyUnits = ENERGY;
+        myEnergyLeft = ENERGY;
     }
 
     @Override
@@ -68,12 +68,12 @@ public class PredatorPreyCell extends Cell {
         }
         if(!fishNear.isEmpty()){
             Cell nextLoc = randDirection(fishNear);
-            myEnergyUnits += FISH_ENERGY;
+            myEnergyLeft += FISH_ENERGY;
             cellGrid = moveCell(nextLoc, cellGrid);
         }
         else{
-            myEnergyUnits--;
-            if(myEnergyUnits <= 0){
+            myEnergyLeft--;
+            if(myEnergyLeft <= 0){
                 cellGrid[myRow][myCol].myNextState = 0;
                 return cellGrid;
             }
@@ -103,7 +103,13 @@ public class PredatorPreyCell extends Cell {
         else{
             cellGrid[myRow][myCol].myNextState = 0;
         }
+        this.newLocation(newRow, newCol);
         cellGrid[newRow][newCol] = this;
         return cellGrid;
+    }
+
+    public void newLocation(int r, int c){
+        this.myRow = r;
+        this.myCol = c;
     }
 }
