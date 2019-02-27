@@ -14,14 +14,16 @@ class RPSCellTest {
     private Cell paperCell;
     private Cell scissorCell;
     private List<Cell> neighbors;
+    private Cell[][] cellGrid;
 
 
     @BeforeEach
     void setUp() {
-        rockCell = new RPSCell(1, 1, 0, 1, 1);
-        paperCell = new RPSCell(1, 1, 1, 1, 1);
-        scissorCell = new RPSCell(1, 1, 2, 1, 1);
+        rockCell = new RPSCell(1, 1, 0);
+        paperCell = new RPSCell(1, 1, 1);
+        scissorCell = new RPSCell(1, 1, 2);
         neighbors = new ArrayList<>();
+        cellGrid = new Cell[5][5];
     }
 
     @Test
@@ -31,7 +33,7 @@ class RPSCellTest {
         }
         neighbors.add(rockCell);
         neighbors.add(scissorCell);
-        rockCell.updateCell(neighbors);
+        rockCell.updateCell(neighbors, cellGrid);
 
         var expected = 1;
         var actual = rockCell.myNextState;
@@ -47,7 +49,7 @@ class RPSCellTest {
             neighbors.add(paperCell);
         }
         neighbors.add(rockCell);
-        paperCell.updateCell(neighbors);
+        paperCell.updateCell(neighbors, cellGrid);
 
         var expected = 2;
         var actual = paperCell.myNextState;
@@ -61,7 +63,7 @@ class RPSCellTest {
             neighbors.add(rockCell);
             neighbors.add(paperCell);
         }
-        scissorCell.updateCell(neighbors);
+        scissorCell.updateCell(neighbors, cellGrid);
 
         var expected =0;
         var actual = scissorCell.myNextState;
@@ -75,7 +77,7 @@ class RPSCellTest {
             neighbors.add(paperCell);
             neighbors.add(rockCell);
         }
-        scissorCell.updateCell(neighbors);
+        scissorCell.updateCell(neighbors, cellGrid);
 
         var expected = 1;
         var actual = scissorCell.myNextState;
@@ -90,7 +92,7 @@ class RPSCellTest {
             neighbors.add(paperCell);
             neighbors.add(scissorCell);
         }
-        rockCell.updateCell(neighbors);
+        rockCell.updateCell(neighbors, cellGrid);
 
         var expected = 0;
         var actual = rockCell.myNextState;

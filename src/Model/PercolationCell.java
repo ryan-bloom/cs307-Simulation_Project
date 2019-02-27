@@ -7,22 +7,21 @@ public class PercolationCell extends Cell {
      * @param row
      * @param col
      * @param state
-     * @param width
-     * @param height
      */
-    public PercolationCell(int row, int col, int state, double width, double height){
-        super(row, col, state, width, height);
+    public PercolationCell(int row, int col, int state){
+        super(row, col, state);
     }
 
     @Override
-    public void updateCell(List<Cell> neighbors) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
         if (this.myCurrentState == 1){
             for (Cell n : neighbors){
                 if(n.myCurrentState == 2){
                     this.myNextState = 2;
-                    return;
+                    cellGrid[myRow][myCol] = this;
                 }
             }
         }
+        return cellGrid;
     }
 }

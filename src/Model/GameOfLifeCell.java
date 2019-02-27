@@ -8,15 +8,13 @@ public class GameOfLifeCell extends Cell {
      * @param row
      * @param col
      * @param state
-     * @param width
-     * @param height
      */
-    public GameOfLifeCell(int row, int col, int state, double width, double height){
-        super(row, col, state, width, height);
+    public GameOfLifeCell(int row, int col, int state){
+        super(row, col, state);
     }
 
     @Override
-    public void updateCell(List<Cell> neighbors) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
         int liveCount = 0;
         for(Cell n : neighbors){
             if(n.myCurrentState == 1){
@@ -34,5 +32,7 @@ public class GameOfLifeCell extends Cell {
         else if (liveCount == 3){ //this is dead
             this.myNextState = 1;
         }
+        cellGrid[myRow][myCol] = this;
+        return cellGrid;
     }
 }
