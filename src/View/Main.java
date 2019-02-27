@@ -15,6 +15,12 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+<<<<<<< src/View/Main.java
+
+import java.util.*;
+
+public class Main extends Application {
+=======
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.List;
@@ -38,7 +44,7 @@ public class Main extends Application {
     private ResourceBundle myResources;
 
     //private Map<String, List<Color>> colorsMap; ---- MIGHT USE THIS IF MAP OF GAME - COLORS FOR SAID GAME
-    private List<Color> colorsList;
+    private HashMap<Integer, Color> colors = new HashMap<>();
     private double cellWidth;
     private double cellHeight;
     private boolean isRunning = true;
@@ -48,10 +54,12 @@ public class Main extends Application {
     }
 
     public void start(Stage stage) {
+
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
         Data d = new Data(myResources.getString("File"));
-        fillColorsList(d.getSimulation().toUpperCase());
-
+        fillColorsList();
+        myGroup = new Group();
+        var scene = new Scene(myGroup, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
         myGrid = new Grid(d);
         cellHeight = WINDOW_HEIGHT/d.getHeight();
         cellWidth = WINDOW_WIDTH/d.getWidth();
@@ -78,38 +86,20 @@ public class Main extends Application {
     }
 
     //SHOULD JUST READ IN COLORS FROM SEPARATE DATA FILE
-    public void fillColorsList(String simulation){
-        colorsList = new ArrayList<>();
-        if(simulation.equals("GAMEOFLIFE")){
-           colorsList.add(Color.WHITE);
-           colorsList.add(Color.RED);
-        }
-        else if(simulation.equals("PERCOLATION")){
-            colorsList.add(Color.BLACK);
-            colorsList.add(Color.WHITE);
-            colorsList.add(Color.BLUE);
-        }
-        else if(simulation.equals("RPS")){
-            colorsList.add(Color.RED);
-            colorsList.add(Color.GREEN);
-            colorsList.add(Color.BLUE);
-        }
-        else if(simulation.equals("FIRE")){
-            colorsList.add(Color.YELLOW);
-            colorsList.add(Color.GREEN);
-            colorsList.add(Color.RED);
-        }
-        else if(simulation.equals("SEGREGATION")){
-            colorsList.add(Color.WHITE);
-            colorsList.add(Color.BLUE);
-            colorsList.add(Color.RED);
+    public void fillColorsList(){
+        for(String s: myResources.keySet()){
+            String value = myResources.getString(s);
+            if(s.contains("Color")) {
+                String[] color = value.split(",");
+                colors.put(Integer.parseInt(color[0]), Color.valueOf(color[1]));
+            }
         }
     }
 
 //GOING TO HAVE TO HANDLE RECTANGLES AND IMAGE VIEWS EVENTUALLY
     public Node updateCellView(int row, int col, int state){
         var res = new Rectangle(row * cellWidth, col * cellHeight, cellWidth, cellHeight);
-        var color = colorsList.get(state);
+        var color = colors.get(state);
         res.setFill(color);
         return res;
     }
