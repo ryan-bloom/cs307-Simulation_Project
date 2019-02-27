@@ -109,7 +109,7 @@ public class Main extends Application {
         }
     }
 
-//GOING TO HAVE TO HANDLE RECTANGLES AND IMAGE VIEWS EVENTUALLY
+    //GOING TO HAVE TO HANDLE RECTANGLES AND IMAGE VIEWS EVENTUALLY
     public Node updateCellView(int row, int col, int state){
         var res = new Rectangle(row * cellWidth, col * cellHeight, cellWidth, cellHeight);
         var color = colorsList.get(state);
@@ -134,45 +134,33 @@ public class Main extends Application {
     }
 
     private void handleKeyInput(KeyCode code) {
-        //Pause and Resume
         if (code == KeyCode.SPACE) {
             if (isRunning) {
                 myAnimation.pause();
-                isRunning = false;
             }
             else {
                 myAnimation.play();
-                isRunning = true;
             }
+            isRunning = !(isRunning);
         }
 
-        //Increase or decrease animation rate
+        // Increase & decrease simulation speed
         if (code == KeyCode.UP) {
-            myAnimation.pause();
-            System.out.println(myAnimation.getRate());
             myAnimation.setRate(myAnimation.getRate() + 1.0);
-            System.out.println(myAnimation.getRate());
-            System.out.println("Pressing up!");
-            myAnimation.play();
         }
         if (code == KeyCode.DOWN) {
-            myAnimation.pause();
-            System.out.println(myAnimation.getRate());
             myAnimation.setRate(myAnimation.getRate() - 1.0);
-            System.out.println(myAnimation.getRate());
-            System.out.println("Pressing up!");
-            myAnimation.play();
         }
 
-        //Step through simulation
+        // Individual steps
         if (code == KeyCode.RIGHT && !(isRunning)) {
             step();
         }
 
-        //Load various initial configs
-        if (code.isDigitKey()) {
-            myAnimation.pause();
-            setupSeed(Integer.parseInt(code.getName()));
-        }
+        // Override load initial config
+//        if (code.isDigitKey()) {
+//            myAnimation.pause();
+//            setupSeed(Integer.parseInt(code.getName()));
+//        }
     }
 }
