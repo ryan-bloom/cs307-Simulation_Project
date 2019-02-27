@@ -9,11 +9,9 @@ public class FireCell extends Cell {
      * @param row
      * @param col
      * @param state
-     * @param width
-     * @param height
      */
-    public FireCell(int row, int col, int state, double width, double height){
-        super(row, col, state, width, height);
+    public FireCell(int row, int col, int state){
+        super(row, col, state);
     }
 
     @Override

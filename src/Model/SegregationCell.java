@@ -12,21 +12,21 @@ public class SegregationCell extends Cell {
      * @param row
      * @param col
      * @param state
-     * @param width
-     * @param height
      */
-    public SegregationCell(int row, int col, int state, double width, double height){
-        super(row, col, state, width, height);
+    public SegregationCell(int row, int col, int state){
+        super(row, col, state);
     }
 
     @Override
     public void updateCell(List<Cell> neighbors) {
         double percSame = findPercentageSame(neighbors);
+
         //Cell[][] cGrid = Grid.getCellGrid();
-/*        if(percSame <= THRESHOLD){//this cell is unsatisfied -- moves
-            //Next state is going to be empty;
-            //Some empty cell state turns into this.myCurrentState
-        }*/
+        if(percSame <= THRESHOLD){//this cell is unsatisfied -- moves
+            /*var emptyLocation = findEmptyCell(cellGrid);
+            cellGrid[emptyLocation[0]][emptyLocation[1]].myNextState = this.myCurrentState;*/
+            this.myNextState = 0;
+        }
 
     }
 
@@ -40,16 +40,18 @@ public class SegregationCell extends Cell {
         return diff/8.0;
     }
 
-   /* public int[] findEmptyCell(Cell[][] cellGrid){
+   public int[] findEmptyCell(Cell[][] cellGrid){
+        int[] res = new int[2];
         for (int i = 0; i < cellGrid.length; i++) {
             for (int j = 0; j < cellGrid[0].length; j++) {
-
+                if(cellGrid[i][j].getMyCurrentState() == 0){
+                    res[0] = i;
+                    res[1] = j;
+                    System.out.println(res);
+                    return res;
+                }
             }
         }
-    }*/
-
-/*    @Override
-    public void updateColor() {
-
-    }*/
+        return res;
+    }
 }

@@ -10,11 +10,9 @@ public class RPSCell extends Cell{
      * @param row
      * @param col
      * @param state
-     * @param width
-     * @param height
      */
-    public RPSCell(int row, int col, int state, double width, double height){
-        super(row, col, state, width, height);
+    public RPSCell(int row, int col, int state){
+        super(row, col, state);
     }
 
     @Override

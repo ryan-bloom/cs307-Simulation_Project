@@ -18,9 +18,9 @@ class RPSCellTest {
 
     @BeforeEach
     void setUp() {
-        rockCell = new RPSCell(1, 1, 0, 1, 1);
-        paperCell = new RPSCell(1, 1, 1, 1, 1);
-        scissorCell = new RPSCell(1, 1, 2, 1, 1);
+        rockCell = new RPSCell(1, 1, 0);
+        paperCell = new RPSCell(1, 1, 1);
+        scissorCell = new RPSCell(1, 1, 2);
         neighbors = new ArrayList<>();
     }
 
