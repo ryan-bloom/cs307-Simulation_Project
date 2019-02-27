@@ -3,13 +3,13 @@ package Model;
 import java.util.List;
 import java.util.Objects;
 
-abstract public class Cell {
+abstract public class Cell{
     protected int myCurrentState;
     protected int myNextState;
     protected int myRow;
     protected int myCol;
 
-    public Cell(int row, int col, int state, double width, double height) {
+    public Cell(int row, int col, int state) {
         myRow = row;
         myCol = col;
         myCurrentState = state;
@@ -18,8 +18,10 @@ abstract public class Cell {
 
     public void resetState() { myCurrentState = myNextState; }
     public int getMyCurrentState(){return myCurrentState;}
+    public int getMyNextState(){return myNextState;}
 
-    abstract public void updateCell(List<Cell> neighbors);
+    //abstract public void updateCell(List<Cell> neighbors, Cell[][] cellGrid);
+    abstract public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid);
 
 
     @Override
