@@ -15,16 +15,10 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.util.*;
 
 public class Main extends Application {
 
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import java.util.List;
-
-public class Main extends Application {
 
     public static final String SIMULATION = "Percolation";
     public static final int WINDOW_HEIGHT = 700;
@@ -57,8 +51,6 @@ public class Main extends Application {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
         Data d = new Data(myResources.getString("File"));
         fillColorsList();
-        myGroup = new Group();
-        var scene = new Scene(myGroup, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
         myGrid = new Grid(d);
         cellHeight = WINDOW_HEIGHT/d.getHeight();
         cellWidth = WINDOW_WIDTH/d.getWidth();
