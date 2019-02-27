@@ -16,6 +16,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Main extends Application {
     public static final String SIMULATION_CONFIGURATION = "Segregation_Config_1.csv";
@@ -104,7 +105,6 @@ public class Main extends Application {
         res.setFill(color);
         return res;
     }
-
 
     private void step(double elapsedTime) {
         // updates colors and states of all cells
