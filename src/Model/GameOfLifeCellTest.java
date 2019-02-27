@@ -1,4 +1,4 @@
-package Cells;
+package Model;
 
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,21 +74,18 @@ class GameOfLifeCellTest {
     @Test
     void cellEquals(){
         Cell c1 = new GameOfLifeCell(1, 1, 1, 1, 1);
-
-        var expected = true;
         var actual = liveCell.equals(c1);
-        assertEquals(expected, actual);
+        assertTrue(actual);
     }
 
     @Test
     void cellDoesNotEqual(){
         Cell c1 = new GameOfLifeCell(1, 2, 0, 1, 1);
-        var expected = false;
         var actual = liveCell.equals(c1);
-        assertEquals(expected, actual);
+        assertFalse(actual);
     }
 
-    @Test
+/*    @Test
     void redColorCheck(){
         List<Cell> neighs = neighbors.subList(1,5); // 2 live; 2 dead
         liveCell.updateCell(neighs);
@@ -106,5 +103,5 @@ class GameOfLifeCellTest {
         var expected = Color.WHITE;
         var actual = liveCell.myRectangle.getFill();
         assertEquals(expected, actual);
-    }
+    }*/
 }

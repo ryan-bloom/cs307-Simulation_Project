@@ -1,64 +1,61 @@
+import Model.Data;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class DataTest {
-    private final String TEST_FILE = "Test_Configuration_1.csv";
-    private final String EMPTY_FILE = "Test_Configuration_2.csv";
-    private Data d,e;
+
+    private final String TESTFILE = "Test_Config_1.csv";
+    private final String EMPTYFILE = "Test_Config_2.csv";
+    Data d, e;
 
     @BeforeEach
-    void setUp(){
-        d = new Data(TEST_FILE);
-        e = new Data(EMPTY_FILE);
+    public void setUp(){
+        d = new Data(TESTFILE);
+        e = new Data(EMPTYFILE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     void getSimulation() {
         assertEquals("Test", d.getSimulation());
     }
-
-    @Test
-    void getSimulationWithEmptyFile() {
+    @org.junit.jupiter.api.Test
+    void getSimulationWithEmptyFile(){
         assertEquals(null, e.getSimulation());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     void getHeight() {
         assertEquals(5, d.getHeight());
     }
 
-    @Test
-    void getHeightWithEmptyFile(){
+    @org.junit.jupiter.api.Test
+    void getHeightWithEmptyFile() {
         assertEquals(0, e.getHeight());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     void getWidth() {
         assertEquals(5, d.getWidth());
     }
 
-    @Test
-    void getWidthWithEmptyFile(){
+    @org.junit.jupiter.api.Test
+    void getWidthWithEmptyFile() {
         assertEquals(0, e.getWidth());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     void getStates() {
-        int[][] arr = new int[5][5];
-        for(int i = 0; i<5; i++){
-            for(int j = 0; j<5; j++){
-                if(i==j) arr[j][i] = 1;
-                else arr[j][i] = 0;
-            }
+        int[][] expected = new int[5][5];
+        for(int i=0; i<5; i++){
+            expected[i][i] = 1;
         }
-        assertArrayEquals(arr, d.getStates());
+        assertArrayEquals(expected,d.getStates());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     void getStatesWithEmptyFile(){
-        int[][] arr = new int[0][0];
-        assertArrayEquals(arr, e.getStates());
+        int[][] expected = new int[0][0];
+        assertArrayEquals(expected, e.getStates());
     }
+
 }
