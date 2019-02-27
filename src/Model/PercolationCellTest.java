@@ -85,7 +85,7 @@ class PercolationCellTest {
         assertFalse(actual);
     }
 
-    @Test
+/*    @Test
     void blackColorTest(){
         blockedCell.updateCell(neighbors);
         var expected = Color.BLACK;
@@ -104,5 +104,5 @@ class PercolationCellTest {
         var expected = Color.BLUE;
         var actual = openCell.myRectangle.getFill();
         assertEquals(expected, actual);
-    }
+    }*/
 }

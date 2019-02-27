@@ -1,7 +1,6 @@
 package Model;
 
 import javafx.scene.paint.Color;
-
 import java.util.List;
 
 public class SegregationCell extends Cell {
@@ -22,22 +21,35 @@ public class SegregationCell extends Cell {
 
     @Override
     public void updateCell(List<Cell> neighbors) {
-        double perc = findPercentage(neighbors);
+        double percSame = findPercentageSame(neighbors);
+        //Cell[][] cGrid = Grid.getCellGrid();
+/*        if(percSame <= THRESHOLD){//this cell is unsatisfied -- moves
+            //Next state is going to be empty;
+            //Some empty cell state turns into this.myCurrentState
+        }*/
 
     }
 
-    public double findPercentage(List<Cell> neighbors){
+    public double findPercentageSame(List<Cell> neighbors){
         int diff = 0;
         for(Cell c: neighbors){
-            if(c.myCurrentState != 0 && c.myCurrentState != myCurrentState){
+            if(c.myCurrentState != 0 && c.myCurrentState == myCurrentState){
                 diff++;
             }
         }
         return diff/8.0;
     }
 
-    @Override
+   /* public int[] findEmptyCell(Cell[][] cellGrid){
+        for (int i = 0; i < cellGrid.length; i++) {
+            for (int j = 0; j < cellGrid[0].length; j++) {
+
+            }
+        }
+    }*/
+
+/*    @Override
     public void updateColor() {
 
-    }
+    }*/
 }

@@ -1,12 +1,9 @@
 package Model;
 
-import javafx.scene.paint.Color;
-
 import java.util.List;
 
 public class RPSCell extends Cell{
     private static final int THRESHOLD = 3;
-    private static final Color[] COLORS = {Color.RED, Color.GREEN, Color.BLUE};
 
     /**
      * 0 = rock; 1 = paper; 2 = scissor
@@ -33,16 +30,9 @@ public class RPSCell extends Cell{
                 //Assumption --> first enemy neighbor checked >= THRESHOLD wins
                 if(temp >= THRESHOLD){
                     myNextState = tempState;
-                    updateColor();
                     return;
                 }
             }
         }
-    }
-
-    @Override
-    public void updateColor() {
-        int dex = myNextState;
-        myRectangle.setFill(COLORS[dex]);
     }
 }
