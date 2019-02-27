@@ -1,4 +1,4 @@
-package Cells;
+package Model;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,18 +17,15 @@ abstract public class Cell {
         myCurrentState = state;
         myNextState = state;
         myRectangle = new Rectangle(row * width, col * height, width, height);
-        this.updateColor();
+        updateColor();
     }
 
-    public Rectangle getShape() {
-        return myRectangle;
-    }
-
-    public void resetState() {
-        myCurrentState = myNextState;
-    }
+    public Rectangle getShape() { return myRectangle; }
+    public void resetState() { myCurrentState = myNextState; }
 
     abstract public void updateCell(List<Cell> neighbors);
+
+    abstract public void updateColor();
 
     @Override
     public boolean equals(Object o) {
@@ -44,6 +41,4 @@ abstract public class Cell {
     public int hashCode() {
         return Objects.hash(myCurrentState, myRow, myCol);
     }
-
-    abstract public void updateColor();
 }

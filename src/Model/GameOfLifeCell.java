@@ -1,15 +1,18 @@
-package Cells;
+package Model;
 import java.util.List;
 import javafx.scene.paint.Color;
 
 
 public class GameOfLifeCell extends Cell {
+    private static final Color[] COLORS = {Color.WHITE, Color.RED};
 
     /**
-     * States: 0 = dead; 1 = alive
+     *
      * @param row
      * @param col
      * @param state
+     * @param width
+     * @param height
      */
     public GameOfLifeCell(int row, int col, int state, double width, double height){
         super(row, col, state, width, height);
@@ -24,12 +27,11 @@ public class GameOfLifeCell extends Cell {
             }
         }
         if (this.myCurrentState == 1){ //this is live
-            if(liveCount < 2){ this.myNextState = 0; }
-            else if (liveCount < 4){
-                this.myNextState = 1;
-            }
-            else {
+            if(liveCount < 2 || liveCount >= 4){
                 this.myNextState = 0;
+            }
+            else{
+                this.myNextState = 1;
             }
         }
         else if (liveCount == 3){ //this is dead
@@ -39,11 +41,7 @@ public class GameOfLifeCell extends Cell {
     }
 
     public void updateColor() {
-        if (myNextState == 1) {
-            myRectangle.setFill(Color.RED);
-        }
-        else if (myNextState == 0) {
-            myRectangle.setFill(Color.WHITE);
-        }
+        int dex = this.myNextState;
+        myRectangle.setFill(COLORS[dex]);
     }
 }

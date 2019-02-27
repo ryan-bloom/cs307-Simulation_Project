@@ -1,3 +1,4 @@
+import Model.Data;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,10 +47,7 @@ class DataTest {
     void getStates() {
         int[][] expected = new int[5][5];
         for(int i=0; i<5; i++){
-            for (int j=0;j<5;j++){
-                if(i==j)expected[i][j] = 1;
-                else expected[i][j] = 0;
-            }
+            expected[i][i] = 1;
         }
         assertArrayEquals(expected,d.getStates());
     }
