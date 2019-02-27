@@ -20,7 +20,6 @@ public class SegregationCell extends Cell {
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
         if(this.myCurrentState != 0){
             double percSame = findPercentageSame(neighbors);
-            System.out.println(myRow + " " + myCol + " " + percSame);
             if(percSame < THRESHOLD){//this cell is unsatisfied -- moves
                 var emptyLocation = findEmptyCell(cellGrid);
                 cellGrid[emptyLocation[0]][emptyLocation[1]].myNextState = this.myCurrentState;
