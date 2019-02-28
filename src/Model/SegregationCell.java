@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class SegregationCell extends Cell {
     //private static final Color[] COLORS = {Color.WHITE, Color.RED, Color.BLUE};
-    private static final double THRESHOLD = 0.3; //30% for satisfaction
+    private static final double THRESHOLD = 0.7; //30% for satisfaction
 
     /**
      * 0 = empty; 1 = red; 2 = blue
