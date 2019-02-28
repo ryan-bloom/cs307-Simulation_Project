@@ -19,7 +19,6 @@ public class FireCell extends Cell {
         //Empty stays empty burning goes to empty
         if(myCurrentState == 1){
             for(Cell c: neighbors){
-                //Only direct neighbors
                 if((c.myCol == myCol || c.myRow == myRow) && c.myCurrentState == 2){
                     myNextState = 2;
                     break;
