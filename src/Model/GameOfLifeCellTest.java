@@ -1,6 +1,5 @@
 package Model;
 
-import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -86,24 +85,4 @@ class GameOfLifeCellTest {
         var actual = liveCell.equals(c1);
         assertFalse(actual);
     }
-
-/*    @Test
-    void redColorCheck(){
-        List<Cell> neighs = neighbors.subList(1,5); // 2 live; 2 dead
-        liveCell.updateCell(neighs);
-
-        var expected = Color.RED;
-        var actual = liveCell.myRectangle.getFill();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void whiteColorCheck(){
-        List<Cell> neighs = neighbors.subList(3,8); // 4 dead; 1 live
-        liveCell.updateCell(neighs);
-
-        var expected = Color.WHITE;
-        var actual = liveCell.myRectangle.getFill();
-        assertEquals(expected, actual);
-    }*/
 }
