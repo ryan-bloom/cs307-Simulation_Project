@@ -1,5 +1,6 @@
 package View;
 
+import Controller.CsvFileWriter;
 import Model.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -44,7 +45,8 @@ public class Main extends Application {
     public static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
 
     public static final Paint BACKGROUND = Color.WHITE;
-    public static final String DEFAULT_RESOURCE_PACKAGE = "Resources";
+    public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
+    public static final String DATA_EXTENSION = "data\\";
 
     private Grid myGrid;
     private Data mySeed;
@@ -163,13 +165,15 @@ public class Main extends Application {
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
                 myGrid.updateGridCell(i, j);
+                //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
             }
         }
         // resets state of all cells so next update will function correctly
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
-                myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
+                //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
                 myGrid.resetCell(i, j);
+                myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
             }
         }
     }

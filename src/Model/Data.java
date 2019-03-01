@@ -7,14 +7,12 @@ import java.util.Scanner;
 
 public class Data {
 
-    private String simulation;
     private int height, width;
     private int[][] states;
 
     public Data(String fileName) {
         try (Scanner scanner = new Scanner(new File(this.getClass().getClassLoader().getResource(fileName).toURI()))){
             scanner.useDelimiter(",|\\n");
-            if(scanner.hasNext()) simulation = scanner.next().trim();
             if(scanner.hasNext()) height = Integer.parseInt(scanner.next().trim()); //nextInt() throws an error for me because of \r\n Windows set up
             if(scanner.hasNext()) width = Integer.parseInt(scanner.next().trim()); //trim() gets rid of \r character
             states = new int[height][width];
@@ -30,9 +28,6 @@ public class Data {
         }
     }
 
-    public String getSimulation(){
-        return simulation;
-    }
     public int getHeight(){
         return height;
     }
@@ -42,5 +37,4 @@ public class Data {
     public int[][] getStates(){
         return states;
     }
-
 }

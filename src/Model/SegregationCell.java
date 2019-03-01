@@ -1,10 +1,12 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class SegregationCell extends Cell {
     //private static final Color[] COLORS = {Color.WHITE, Color.RED, Color.BLUE};
-    private static final double THRESHOLD = 0.3; //30% for satisfaction
+    private static final double THRESHOLD = 0.7; //30% for satisfaction
 
     /**
      * 0 = empty; 1 = red; 2 = blue
@@ -20,11 +22,10 @@ public class SegregationCell extends Cell {
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
         if(this.myCurrentState != 0){
             double percSame = findPercentageSame(neighbors);
-            System.out.println(myRow + " " + myCol + " " + percSame);
             if(percSame < THRESHOLD){//this cell is unsatisfied -- moves
-                var emptyLocation = findEmptyCell(cellGrid);
-                cellGrid[emptyLocation[0]][emptyLocation[1]].myNextState = this.myCurrentState;
-                cellGrid[emptyLocation[0]][emptyLocation[1]].myCurrentState = this.myCurrentState;
+                var newLoc = randomEmptyLocation(findEmptyCells(cellGrid));
+                cellGrid[newLoc[0]][newLoc[1]].myNextState = this.myCurrentState;
+                cellGrid[newLoc[0]][newLoc[1]].myCurrentState = this.myCurrentState;
                 cellGrid[myRow][myCol].myCurrentState = 0;
                 cellGrid[myRow][myCol].myNextState = 0;
             }
@@ -46,18 +47,24 @@ public class SegregationCell extends Cell {
         return same/total;
     }
 
-   public int[] findEmptyCell(Cell[][] cellGrid){
-        int[] res = new int[2];
-        for (int i = 0; i < cellGrid.length; i++) {
-            for (int j = 0; j < cellGrid[0].length; j++) {
+    public List<Cell> findEmptyCells(Cell[][] cellGrid){
+        List<Cell> res = new ArrayList<>();
+        for(int i=0; i<cellGrid.length; i++){
+            for(int j=0; j<cellGrid.length; j++){
                 if(cellGrid[i][j].getMyCurrentState() == 0){
-                    res[0] = i;
-                    res[1] = j;
-                    //System.out.println(res[0] + " " + res[1]);
-                    return res;
+                    res.add(cellGrid[i][j]);
                 }
             }
         }
         return res;
     }
+
+    public int[] randomEmptyLocation(List<Cell> possibleCells){
+        int[] res = new int[2];
+        Random rand = new Random();
+        int dex = rand.nextInt(possibleCells.size());
+        res[0] = possibleCells.get(dex).myRow;
+        res[1] = possibleCells.get(dex).myCol;
+        return res;
+     }
 }
