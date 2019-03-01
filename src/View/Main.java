@@ -1,5 +1,6 @@
 package View;
 
+import Controller.CsvFileWriter;
 import Model.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -29,6 +30,7 @@ public class Main extends Application {
 
     public static final Paint BACKGROUND = Color.WHITE;
     public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
+    public static final String DATA_EXTENSION = "data\\";
 
     //private Cell[][] cellGrid;
     private Grid myGrid;
@@ -66,13 +68,17 @@ public class Main extends Application {
         }
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         stage.setScene(scene);
-        stage.setTitle(d.getSimulation());
+        stage.setTitle(myResources.getString("Simulation"));
         stage.show();
         var frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step());
         var animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         myAnimation = animation;
+
+        //THIS SHOULD GO IN THE APPROPRIATE PLACE IN HANDLE KEY INPUT
+        CsvFileWriter.writeCsvFile(DATA_EXTENSION + "Configuration_File_Tester.csv", myGrid);
+
         animation.play();
     }
 
