@@ -18,7 +18,7 @@ import javafx.util.Duration;
 import java.util.*;
 
 public class Main extends Application {
-    
+
     public static final String SIMULATION = "Percolation";
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;

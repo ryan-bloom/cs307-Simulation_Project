@@ -30,6 +30,8 @@ public class Data {
         }
     }
 
+    
+
     public String getSimulation(){
         return simulation;
     }
