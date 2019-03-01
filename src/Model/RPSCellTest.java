@@ -98,36 +98,4 @@ class RPSCellTest {
         var actual = rockCell.myNextState;
         assertEquals(expected, actual);
     }
-
-/*    @Test
-    void redToGreen(){
-        for(int i=0; i<5; i++){
-            neighbors.add(paperCell);
-        }
-        var expected1 = Color.RED;
-        var actual1 = rockCell.myRectangle.getFill();
-        assertEquals(expected1, actual1);
-
-        rockCell.updateCell(neighbors);
-
-        var expected2 = Color.GREEN;
-        var actual2 = rockCell.myRectangle.getFill();
-        assertEquals(expected2, actual2);
-    }
-
-    @Test
-    void blueToRed(){
-        for(int i=0; i<4; i++){
-            neighbors.add(rockCell);
-        }
-        var expected1 = Color.BLUE;
-        var actual1 = scissorCell.myRectangle.getFill();
-        assertEquals(expected1, actual1);
-
-        scissorCell.updateCell(neighbors);
-
-        var expected2 = Color.RED;
-        var actual2 = scissorCell.myRectangle.getFill();
-        assertEquals(expected2, actual2);
-    }*/
 }

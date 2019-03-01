@@ -18,8 +18,13 @@ import javafx.util.Duration;
 import java.util.*;
 
 public class Main extends Application {
+<<<<<<< HEAD
 
     public static final String SIMULATION = "Percolation";
+=======
+    
+    public static final String SIMULATION = "GameOfLife";
+>>>>>>> 7dd51f222a0dc3ad169a25bf01b7be6241628f0e
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
 
@@ -99,13 +104,15 @@ public class Main extends Application {
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
                 myGrid.updateGridCell(i, j);
+                //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
             }
         }
         // resets state of all cells so next update will function correctly
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
-                myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
+                //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
                 myGrid.resetCell(i, j);
+                myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
             }
         }
     }

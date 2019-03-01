@@ -18,8 +18,8 @@ public class Grid {
         myCellGrid = new Cell[myRows][myCols];
         for (int i = 0; i < myRows; i++) {
             for (int j = 0; j < myCols; j++) {
-                //myCellGrid[i][j] = new GameOfLifeCell(i, j, myData.getStates()[i][j]);
-                myCellGrid[i][j] = new PercolationCell(i, j, myData.getStates()[i][j]);
+                myCellGrid[i][j] = new GameOfLifeCell(i, j, myData.getStates()[i][j]);
+                //myCellGrid[i][j] = new PercolationCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new RPSCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new FireCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new SegregationCell(i, j, myData.getStates()[i][j]);
