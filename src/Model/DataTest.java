@@ -6,24 +6,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DataTest {
-    private final String TEST_FILE = "Test_Configuration_1.csv";
-    private final String EMPTY_FILE = "Test_Configuration_2.csv";
+    private final String TEST_FILE = "DataTest_Config_1.csv";
+    private final String EMPTY_FILE = "DataTest_Config_2.csv";
     private Data d,e;
 
     @BeforeEach
     void setUp(){
         d = new Data(TEST_FILE);
         e = new Data(EMPTY_FILE);
-    }
-
-    @Test
-    void getSimulation() {
-        assertEquals("Test", d.getSimulation());
-    }
-
-    @Test
-    void getSimulationWithEmptyFile() {
-        assertEquals(null, e.getSimulation());
     }
 
     @Test
@@ -50,10 +40,7 @@ class DataTest {
     void getStates() {
         int[][] arr = new int[5][5];
         for(int i = 0; i<5; i++){
-            for(int j = 0; j<5; j++){
-                if(i==j) arr[j][i] = 1;
-                else arr[j][i] = 0;
-            }
+            arr[i][i] = 1;
         }
         assertArrayEquals(arr, d.getStates());
     }
