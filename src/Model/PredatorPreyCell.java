@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class PredatorPreyCell extends Cell {
     private static final int GESTATION_PERIOD = 6;
-    private static final int ENERGY = 5;
+    private static final int ENERGY = 2;
     private static final int FISH_ENERGY = 1;
 
     private int myReproductionTime;
@@ -26,11 +26,10 @@ public class PredatorPreyCell extends Cell {
 
     @Override
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
-        //System.out.println("HERE FIRST");
-        if(this.myCurrentState == 1){
+        if(myCurrentState == 1){
             return fishUpdate(neighbors, cellGrid);
         }
-        else if(this.myCurrentState == 2){
+        else if(myCurrentState == 2){
             return sharkUpdate(neighbors, cellGrid);
         }
         return cellGrid;
@@ -80,8 +79,6 @@ public class PredatorPreyCell extends Cell {
         int prevCol = this.myCol;
         int nxtRow = nextLocationCell.myRow;
         int nxtCol = nextLocationCell.myCol;
-        //System.out.println("OLD LOCATION: " + prevRow + ", " + prevCol);
-        //System.out.println("NEW LOCATION: " + nxtRow + ", " + nxtCol);
         if(this.myReproductionTime >= GESTATION_PERIOD){
             this.resetReproductionTime();
             temp = new PredatorPreyCell(prevRow, prevCol, this.myCurrentState);
