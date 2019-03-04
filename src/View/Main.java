@@ -35,7 +35,7 @@ import javafx.scene.text.*;
 
 public class Main extends Application {
 
-    public static final String SIMULATION = "Percolation";
+    public static final String SIMULATION = "Fire";
     public static final int ACTUAL_WINDOW_WIDTH = 1000;
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
@@ -69,7 +69,7 @@ public class Main extends Application {
         myStage = stage;
         myGroup = new Group();
         myStage.setScene(setupSeed(1));
-        myStage.setTitle(mySeed.getSimulation());
+        myStage.setTitle(myResources.getString("Simulation"));
         RadioButton cellChoiceImage = new RadioButton("Image");
         cellChoiceImage.relocate(700, 500);
         myGroup.getChildren().add(cellChoiceImage);
@@ -103,7 +103,7 @@ public class Main extends Application {
     }
 
     public Scene setupSeed(int config) {
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + ".Matt" + SIMULATION);
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
         mySeed = new Data(myResources.getString("File").split(",")[config - 1]);
         fillColorsList();
         myGrid = new Grid(mySeed);

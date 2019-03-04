@@ -21,9 +21,9 @@ public class Grid {
                 //myCellGrid[i][j] = new GameOfLifeCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new PercolationCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new RPSCell(i, j, myData.getStates()[i][j]);
-                //myCellGrid[i][j] = new FireCell(i, j, myData.getStates()[i][j]);
+                myCellGrid[i][j] = new FireCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new SegregationCell(i, j, myData.getStates()[i][j]);
-                myCellGrid[i][j] = new PredatorPreyCell(i, j, myData.getStates()[i][j]);
+                //myCellGrid[i][j] = new PredatorPreyCell(i, j, myData.getStates()[i][j]);
             }
         }
     }
