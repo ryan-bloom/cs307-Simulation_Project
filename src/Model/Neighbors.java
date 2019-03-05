@@ -7,40 +7,42 @@ public abstract class Neighbors {
     protected List<Cell> myNeighbors;
     protected int myX;
     protected int myY;
-    protected String myEdgeType;
-    protected String myShape;
+    protected EdgeType myEdgeType;
+    protected CellShape myCellShape;
+    //protected String myEdgeType;
+    //protected String myShape;
 
-    public Neighbors(int x, int y, Cell[][] myGrid, String cellShape, String edgeType){
+    public Neighbors(int x, int y, Cell[][] myGrid, CellShape cellShape, EdgeType edgeType){
         myX = x;
         myY = y;
         myEdgeType = edgeType;
-        myShape = cellShape;
+        myCellShape = cellShape;
         myNeighbors = findNeighbors(myGrid);
     }
 
     public List<Cell> findNeighbors(Cell[][] cellGrid){
-        if (myShape.toUpperCase().equals("SQUARE")) {
-            return squareNeighbors(cellGrid, myEdgeType);
+        if (myCellShape == CellShape.SQUARE) {
+            return squareNeighbors(cellGrid);
         }
-        else if (myShape.toUpperCase().equals("HEXAGON")) {
-            return hexNeighbors(cellGrid, myEdgeType);
+        else if (myCellShape == CellShape.HEXAGON) {
+            return hexNeighbors(cellGrid);
         }
         else{ //TRIANGLE
-            return triNeighbors(cellGrid, myEdgeType);
+            return triNeighbors(cellGrid);
         }
     }
 
-    public abstract List<Cell> squareNeighbors(Cell[][] cellGrid, String edgeType);
-    public abstract List<Cell> triNeighbors(Cell[][] cellGrid, String edgeType);
+    public abstract List<Cell> squareNeighbors(Cell[][] cellGrid);
+    public abstract List<Cell> triNeighbors(Cell[][] cellGrid);
     //Same for all neighbor types (Complete, Cardinal, Corner)
-    public List<Cell> hexNeighbors(Cell[][] cellGrid, String edgeType){
+    public List<Cell> hexNeighbors(Cell[][] cellGrid){
         List<Cell> neighbors = new ArrayList<>();
 
         //Even r-horizontal layout (shoves even rows right)
         for (int i = myX - 1; i < myX + 2; i++) {
             for (int j = myY - 1; j < myY + 2; j++) {
                 if ((i != myX || j != myY) && goodHex(i, j)) {
-                    Cell temp = edgeCheck(cellGrid, edgeType, i, j);
+                    Cell temp = edgeCheck(cellGrid, i, j);
                     if (temp != null) {
                         neighbors.add(temp);
                     }
@@ -74,18 +76,18 @@ public abstract class Neighbors {
     }
 
     //Called by each shapeNeighbors method on each cell to check for edge cases
-    public Cell edgeCheck(Cell[][] cellGrid, String edgeType, int x, int y){
+    public Cell edgeCheck(Cell[][] cellGrid, int x, int y){
         int tempX;
         int tempY;
 
         //toroidal
-        if(edgeType.toUpperCase().equals("TOROIDAL")){
+        if(myEdgeType == EdgeType.TOROIDAL){
             tempX = toroidal(x, cellGrid.length);
             tempY = toroidal(y, cellGrid[0].length);
             return cellGrid[tempX][tempY];
         }
         //finite
-        else if(edgeType.toUpperCase().equals("FINITE") && finite(x, cellGrid.length) && finite(y, cellGrid[0].length)){
+        else if(myEdgeType == EdgeType.FINITE && finite(x, cellGrid.length) && finite(y, cellGrid[0].length)){
             return cellGrid[x][y];
         }
         return null;
