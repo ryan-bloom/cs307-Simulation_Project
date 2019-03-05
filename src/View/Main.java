@@ -35,7 +35,7 @@ import javafx.scene.text.*;
 
 public class Main extends Application {
 
-    public static final String SIMULATION = "Segregation";
+    public static final String SIMULATION = "Percolation";
     public static final int ACTUAL_WINDOW_WIDTH = 1000;
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
