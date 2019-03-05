@@ -32,7 +32,7 @@ public class Grid {
         myCellGrid[row][col].resetState();
     }
 
-    public void updateGridCell(int row, int col, String shape, int edgeType){
+    public void updateGridCell(int row, int col, String shape, String edgeType){
         var neighbors = new CompleteNeighbors(row, col, myCellGrid, shape, edgeType);
         //var neighbors = new CardinalNeighbors(row, col, myCellGrid, shape, edgeType);
         //var neighbors = new CornerNeighbors(row, col, myCellGrid, shape, edgeType);

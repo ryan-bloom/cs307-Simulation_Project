@@ -48,8 +48,10 @@ public class Main extends Application {
     public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
     public static final String DATA_EXTENSION = "data\\";
 
-    private static final String CELL_SHAPE = "SQUARE";
-    private static final int EDGE_TYPE = 0; //0 = toroida; 1 = finite
+    //private static final String CELL_SHAPE = "SQUARE"; //"SQUARE", "HEXAGON", "TRIANGLE"
+    private static final CellShape CELL_SHAPE = CellShape.SQUARE;
+    //private static final String EDGE_TYPE = "FINITE"; //TOROIDAL, FINITE
+    private static final EdgeType EDGE_TYPE = EdgeType.FINITE;
 
     private Grid myGrid;
     private Data mySeed;
@@ -168,7 +170,7 @@ public class Main extends Application {
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
                 //myGrid.updateGridCell(i, j);
-                myGrid.updateGridCell(i, j, CELL_SHAPE, EDGE_TYPE);
+                myGrid.updateGridCell(i, j, CELL_SHAPE.toString(), EDGE_TYPE.toString());
                 //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
             }
         }
