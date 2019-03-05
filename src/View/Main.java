@@ -35,7 +35,7 @@ import javafx.scene.text.*;
 
 public class Main extends Application {
 
-    public static final String SIMULATION = "Fire";
+    public static final String SIMULATION = "Segregation";
     public static final int ACTUAL_WINDOW_WIDTH = 1000;
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
@@ -47,6 +47,9 @@ public class Main extends Application {
     public static final Paint BACKGROUND = Color.WHITE;
     public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
     public static final String DATA_EXTENSION = "data\\";
+
+    private static final String CELL_SHAPE = "SQUARE";
+    private static final int EDGE_TYPE = 0; //0 = toroida; 1 = finite
 
     private Grid myGrid;
     private Data mySeed;
@@ -164,7 +167,8 @@ public class Main extends Application {
         // updates colors and states of all cells
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
-                myGrid.updateGridCell(i, j);
+                //myGrid.updateGridCell(i, j);
+                myGrid.updateGridCell(i, j, CELL_SHAPE, EDGE_TYPE);
                 //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
             }
         }
