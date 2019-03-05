@@ -26,14 +26,14 @@ public abstract class Neighbors {
             return hexNeighbors(cellGrid, myEdges);
         }
         else{
-            return null;
-            //return triNeighbors(cellGrid, edges);
+            return triNeighbors(cellGrid, myEdges);
         }
     }
 
     public abstract List<Cell> squareNeighbors(Cell[][] cellGrid, int edges);
     public abstract List<Cell> triNeighbors(Cell[][] cellGrid, int edges);
 
+    //Same for all neighbor types (Complete, Cardinal, Corner)
     public List<Cell> hexNeighbors(Cell[][] cellGrid, int edges){
         List<Cell> neighbors = new ArrayList<>();
 
@@ -63,8 +63,17 @@ public abstract class Neighbors {
         return(loc>=0 && loc<max);
     }
 
+    //Used for hex shaped cells
     public boolean goodHex(int r, int c){
         return((r!=myX+1) || (c != myY-1 && c!=myY+1));
+    }
+
+    //Used for triangle shaped cells
+    public boolean doubleEven(){
+        return(myX%2 == 0 && myY%2 == 0);
+    }
+    public boolean doubleOdd(){
+        return(myX%2 != 0 && myY%2 != 0);
     }
 
     public Cell edgeCheck(Cell[][] cellGrid, int edges, int x, int y){

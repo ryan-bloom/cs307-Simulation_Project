@@ -1,7 +1,5 @@
 package Model;
 
-import java.lang.invoke.MethodType;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +39,9 @@ public class CompleteNeighbors extends Neighbors {
     public List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int edges){
         List<Cell> neighbors = new ArrayList<>();
 
-        for(int i=myX-2; i<myX+3; i++){
-            for(int j=myY-1; j<myY+2; j++){
-                if((i!=myX || j!=myY) && (j!=myY+1 || (i!=myX-2 && i!=myX+2))){
+        for(int i=myX-1; i<myX+2; i++){
+            for(int j=myY-2; j<myY+3; j++){
+                if((i!=myX || j!=myY) && (i!=myX+1 || (j!=myY-2 && j!=myY+2))){
                     Cell temp = edgeCheck(cellGrid, edges, i, j);
                     if(temp!=null){
                         neighbors.add(temp);
@@ -51,15 +49,16 @@ public class CompleteNeighbors extends Neighbors {
                 }
             }
         }
+
         return neighbors;
     }
 
     public List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int edges){
         List<Cell> neighbors = new ArrayList<>();
 
-        for(int i=myX-2; i<myX+3; i++){
-            for(int j=myY-1; j<myY+2; j++){
-                if((i!=myX || j!=myY) && (j!=myY-1 ||(i!=myX-2 && i!=myX+2))){
+        for(int i=myX-1; i<myX+2; i++){
+            for(int j=myY-2; j<myY+3; j++){
+                if((i!=myX || j!=myY) && (i!=myX-1 ||(j!=myY-2 && j!=myY+2))){
                     Cell temp = edgeCheck(cellGrid, edges, i, j);
                     if(temp!=null){
                         neighbors.add(temp);
@@ -68,12 +67,5 @@ public class CompleteNeighbors extends Neighbors {
             }
         }
         return neighbors;
-    }
-
-    public boolean doubleEven(){
-        return(myX%2 == 0 && myY%2 == 0);
-    }
-    public boolean doubleOdd(){
-        return(myX%2 != 0 && myY%2 != 0);
     }
 }
