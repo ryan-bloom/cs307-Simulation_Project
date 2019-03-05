@@ -1,23 +1,57 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Neighbors {
     protected List<Cell> myNeighbors;
     protected int myX;
     protected int myY;
+    protected int myEdges;
+    protected String myShape;
 
     public Neighbors(int x, int y, Cell[][] myGrid, String cellShape, int edges){
         myX = x;
         myY = y;
-        myNeighbors = findNeighbors(myGrid, cellShape, edges);
+        myEdges = edges;
+        myShape = cellShape;
+        myNeighbors = findNeighbors(myGrid);
     }
 
-    public abstract List<Cell> findNeighbors(Cell[][] cellGrid, String shape, int edges);
+    public List<Cell> findNeighbors(Cell[][] cellGrid){
+        if (myShape.toUpperCase().equals("SQUARE")) {
+            return squareNeighbors(cellGrid, myEdges);
+        }
+        else if (myShape.toUpperCase().equals("HEXAGON")) {
+            return hexNeighbors(cellGrid, myEdges);
+        }
+        else{
+            return null;
+            //return triNeighbors(cellGrid, edges);
+        }
+    }
+
+    public abstract List<Cell> squareNeighbors(Cell[][] cellGrid, int edges);
+    public abstract List<Cell> triNeighbors(Cell[][] cellGrid, int edges);
+
+    public List<Cell> hexNeighbors(Cell[][] cellGrid, int edges){
+        List<Cell> neighbors = new ArrayList<>();
+
+        //Even r-horizontal layout (shoves even rows right)
+        for (int i = myX - 1; i < myX + 2; i++) {
+            for (int j = myY - 1; j < myY + 2; j++) {
+                if ((i != myX || j != myY) && goodHex(i, j)) {
+                    Cell temp = edgeCheck(cellGrid, edges, i, j);
+                    if (temp != null) {
+                        neighbors.add(temp);
+                    }
+                }
+            }
+        }
+        return neighbors;
+    }
 
     public List<Cell> getMyNeighbors(){return myNeighbors;}
-
-
 
     public int toroidal(int curr, int max){
         if(curr >= max){ return 0; }

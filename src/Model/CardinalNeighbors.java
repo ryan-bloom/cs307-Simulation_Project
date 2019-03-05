@@ -8,7 +8,7 @@ public class CardinalNeighbors extends Neighbors {
         super(x, y, grid, shape, edgeType);
     }
 
-    @Override
+/*    @Override
     public List<Cell> findNeighbors(Cell[][] cellGrid, String shape, int edges) {
         List<Cell> neighbors = new ArrayList<>();
         if(shape.toUpperCase().equals("SQUARE")){
@@ -19,8 +19,9 @@ public class CardinalNeighbors extends Neighbors {
             return hexNeighbors(cellGrid, edges);
         }
         return neighbors;
-    }
+    }*/
 
+    @Override
     public List<Cell> squareNeighbors(Cell[][] cellGrid, int edgeType){
         List<Cell> neighbors = new ArrayList<>();
         for (int i = myX - 1; i < myX + 2; i++) {
@@ -36,7 +37,7 @@ public class CardinalNeighbors extends Neighbors {
         return neighbors;
     }
 
-    public List<Cell> hexNeighbors(Cell[][] cellGrid, int edgeType){
+/*    public List<Cell> hexNeighbors(Cell[][] cellGrid, int edgeType){
         List<Cell> neighbors = new ArrayList<>();
 
         //Even r-horizontal layout (shoves even rows right)
@@ -51,5 +52,5 @@ public class CardinalNeighbors extends Neighbors {
             }
         }
         return neighbors;
-    }
+    }*/
 }
