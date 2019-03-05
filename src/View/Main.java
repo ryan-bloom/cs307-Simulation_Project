@@ -35,7 +35,7 @@ import javafx.scene.text.*;
 
 public class Main extends Application {
 
-    public static final String SIMULATION = "Fire";
+    public static final String SIMULATION = "Percolation";
     public static final int ACTUAL_WINDOW_WIDTH = 1000;
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
@@ -47,6 +47,11 @@ public class Main extends Application {
     public static final Paint BACKGROUND = Color.WHITE;
     public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
     public static final String DATA_EXTENSION = "data\\";
+
+    //private static final String CELL_SHAPE = "SQUARE"; //"SQUARE", "HEXAGON", "TRIANGLE"
+    //private static final String EDGE_TYPE = "FINITE"; //TOROIDAL, FINITE
+    private static final CellShape CELL_SHAPE = CellShape.SQUARE;
+    private static final EdgeType EDGE_TYPE = EdgeType.FINITE;
 
     private Grid myGrid;
     private Data mySeed;
@@ -164,7 +169,8 @@ public class Main extends Application {
         // updates colors and states of all cells
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
-                myGrid.updateGridCell(i, j);
+                //myGrid.updateGridCell(i, j);
+                myGrid.updateGridCell(i, j, CELL_SHAPE, EDGE_TYPE);
                 //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
             }
         }
