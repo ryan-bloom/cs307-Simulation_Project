@@ -3,6 +3,7 @@ package View;
 import Controller.CellShape;
 import Controller.EdgeType;
 import Controller.Grid;
+import Controller.NeighborhoodType;
 import Model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -29,21 +30,22 @@ import java.util.List;
 
 public class Main extends Application {
 
-    public static final String SIMULATION = "Percolation";
-    public static final int ACTUAL_WINDOW_WIDTH = 1000;
-    public static final int WINDOW_HEIGHT = 700;
-    public static final int WINDOW_WIDTH = 700;
+    private static final String SIMULATION = "fire";
+    private static final int ACTUAL_WINDOW_WIDTH = 1000;
+    private static final int WINDOW_HEIGHT = 700;
+    private static final int WINDOW_WIDTH = 700;
     //public static final String STYLESHEET = "styles.css";
 
-    public static int FRAMES_PER_SECOND = 6;
-    public static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
+    private static int FRAMES_PER_SECOND = 6;
+    private static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
 
-    public static final Paint BACKGROUND = Color.WHITE;
-    public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
-    public static final String DATA_EXTENSION = "data\\";
+    private static final Paint BACKGROUND = Color.WHITE;
+    private static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
 
+    //NeighborhoodType
     private static final CellShape CELL_SHAPE = CellShape.SQUARE;
-    private static final EdgeType EDGE_TYPE = EdgeType.SEMITOROIDAL;
+    private static final EdgeType EDGE_TYPE = EdgeType.TOROIDAL;
+    private static final NeighborhoodType NEIGHBORHOOD_TYPE = NeighborhoodType.COMPLETE;
 
     private Grid myGrid;
     private Data mySeed;
@@ -116,13 +118,14 @@ public class Main extends Application {
     public Scene setupSeed(int config) {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
 
-        mySeed = new Data(new double[]{0.4,0.55, 0.05}, 5, 5);
-        //mySeed = new Data(myResources.getString("File").split(",")[config - 1]);
+        //mySeed = new Data(new double[]{0.4,0.55, 0.05}, 5, 5);
+        mySeed = new Data(myResources.getString("File").split(",")[config - 1]);
         fillColorsList();
         myGrid = new Grid(mySeed);
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
         cellWidth = WINDOW_WIDTH/mySeed.getWidth();
-        myGrid.fillCellGrid();
+
+        myGrid.fillCellGrid(SIMULATION);
         Scene initial = new Scene(myGroup, ACTUAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
 
         for (Integer i : cellColors.keySet()) {
@@ -183,7 +186,7 @@ public class Main extends Application {
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
                 //myGrid.updateGridCell(i, j);
-                myGrid.updateGridCell(i, j, CELL_SHAPE, EDGE_TYPE);
+                myGrid.updateGridCell(i, j, CELL_SHAPE, EDGE_TYPE, NEIGHBORHOOD_TYPE);
                 //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
             }
         }

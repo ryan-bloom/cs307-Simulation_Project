@@ -19,18 +19,18 @@ public class FireCell extends Cell {
     @Override
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
         //Empty stays empty burning goes to empty
-        if(myCurrentState == 1){
+        if(getMyCurrentState() == 1){
             for(Cell c: neighbors){
-                if((c.myCol == myCol || c.myRow == myRow) && c.myCurrentState == 2){
-                    myNextState = 2;
+                if(c.getMyCurrentState() == 2){
+                    setMyNextState(2);
                     break;
                 }
             }
         }
         else{
-            myNextState = 0;
+            setMyNextState(0);
         }
-        cellGrid[myRow][myCol] = this;
+        cellGrid[getMyRow()][getMyCol()] = this;
         return cellGrid;
     }
 }

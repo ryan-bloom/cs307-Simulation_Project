@@ -22,14 +22,14 @@ public class SegregationCell extends Cell {
 
     @Override
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
-        if(this.myCurrentState != 0){
+        if(this.getMyCurrentState() != 0){
             double percSame = findPercentageSame(neighbors);
             if(percSame < THRESHOLD){//this cell is unsatisfied -- moves
                 var newLoc = randomEmptyLocation(findEmptyCells(cellGrid));
-                cellGrid[newLoc[0]][newLoc[1]].myNextState = this.myCurrentState;
-                cellGrid[newLoc[0]][newLoc[1]].myCurrentState = this.myCurrentState;
-                cellGrid[myRow][myCol].myCurrentState = 0;
-                cellGrid[myRow][myCol].myNextState = 0;
+                cellGrid[newLoc[0]][newLoc[1]].setMyNextState(this.getMyCurrentState());
+                cellGrid[newLoc[0]][newLoc[1]].setMyCurrentState(this.getMyCurrentState());
+                cellGrid[getMyRow()][getMyCol()].setMyCurrentState(0);
+                cellGrid[getMyRow()][getMyCol()].setMyNextState(0);
             }
         }
         return cellGrid;
@@ -39,9 +39,9 @@ public class SegregationCell extends Cell {
         int same = 0;
         double total = 0;
         for(Cell c: neighbors) {
-            if (c.myCurrentState != 0) {
+            if (c.getMyCurrentState() != 0) {
                 total++;
-                if (c.myCurrentState == this.myCurrentState) {
+                if (c.getMyCurrentState() == this.getMyCurrentState()) {
                     same++;
                 }
             }
@@ -65,8 +65,8 @@ public class SegregationCell extends Cell {
         int[] res = new int[2];
         Random rand = new Random();
         int dex = rand.nextInt(possibleCells.size());
-        res[0] = possibleCells.get(dex).myRow;
-        res[1] = possibleCells.get(dex).myCol;
+        res[0] = possibleCells.get(dex).getMyRow();
+        res[1] = possibleCells.get(dex).getMyCol();
         return res;
      }
 }

@@ -16,11 +16,11 @@ public class PercolationCell extends Cell {
 
     @Override
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
-        if (this.myCurrentState == 1){
+        if (this.getMyCurrentState() == 1){
             for (Cell n : neighbors){
-                if(n.myCurrentState == 2){
-                    this.myNextState = 2;
-                    cellGrid[myRow][myCol] = this;
+                if(n.getMyCurrentState() == 2){
+                    this.setMyNextState(2);
+                    cellGrid[getMyRow()][getMyCol()] = this;
                 }
             }
         }
