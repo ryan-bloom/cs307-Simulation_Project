@@ -1,0 +1,195 @@
+package Model;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PredatorPreyCellTest {
+    PredatorPreyCell emptyCell;
+    PredatorPreyCell fishCell;
+    PredatorPreyCell sharkCell;
+    List<Cell> neighbors;
+    PredatorPreyCell[][] cellGrid;
+
+    @BeforeEach
+    void setUp() {
+        emptyCell = new PredatorPreyCell(0, 0, 0);
+        fishCell = new PredatorPreyCell(0, 1, 1);
+        sharkCell = new PredatorPreyCell(0, 2, 2);
+        neighbors = new ArrayList<>();
+        cellGrid = new PredatorPreyCell[5][5];
+    }
+
+    void fishSurroundSharkSetup(){
+        for(int i=0; i<5; i++){
+            for(int j=0; j<5; j++){
+                if(i==0 || j==0 || i==4 || j==4){
+                    cellGrid[i][j] = new PredatorPreyCell(i, j, 2);
+                }
+                else if(i==1 && j==1){
+                    cellGrid[i][j] = new PredatorPreyCell(i, j, 1);
+                }
+                else{
+                    cellGrid[i][j] = new PredatorPreyCell(i, j, 0);
+                }
+            }
+        }
+        for(int i=0; i<3; i++){
+            for(int j=0; j<3; j++){
+                if(i!=1 || j!= 1){
+                    //neighbors array has only shark cells;
+                    //specifically neighbors or cellType1 in location 1,1
+                    neighbors.add(cellGrid[i][j]);
+                }
+            }
+        }
+    }
+
+    void oneFishSetup(){
+        for(int i=0; i<5; i++){
+            for(int j=0; j<5; j++){
+                if(i==2 && j==2){
+                    cellGrid[i][j] = new PredatorPreyCell(i, j, 1);
+                }
+                else{
+                    cellGrid[i][j] = new PredatorPreyCell(i, j, 0);
+                }
+            }
+        }
+        for(int i=1; i<4; i++){
+            for(int j=1; j<4; j++){
+                if(i!=2 || j!= 2){
+                    //neighbors array has only empty cells to start;
+                    //specifically neighbors or cellType1 in location 1,1
+                    neighbors.add(cellGrid[i][j]);
+                }
+            }
+        }
+    }
+
+    void oneSharkSetup(){
+        for(int i=0; i<5; i++){
+            for(int j=0; j<5; j++){
+                if(i==2 && j==2){
+                    cellGrid[i][j] = new PredatorPreyCell(i, j, 2);
+                }
+                else{
+                    cellGrid[i][j] = new PredatorPreyCell(i, j, 0);
+                }
+            }
+        }
+        for(int i=1; i<4; i++){
+            for(int j=1; j<4; j++){
+                if(i!=2 || j!= 2){
+                    //neighbors array has only empty cells to start;
+                    //specifically neighbors or cellType1 in location 1,1
+                    neighbors.add(cellGrid[i][j]);
+                }
+            }
+        }
+    }
+
+    void sharkEatFishSetup(){
+        for(int i=0; i<5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (i == 2 && j == 2) {
+                    cellGrid[i][j] = new PredatorPreyCell(i, j, 2);
+                } else if (i == 1) {
+                    cellGrid[i][j] = new PredatorPreyCell(i, j, 1);
+                } else {
+                    cellGrid[i][j] = new PredatorPreyCell(i, j, 0);
+                }
+            }
+        }
+        for(int i=1; i<4; i++){
+            for(int j=1; j<4; j++){
+                if(i!=2 || j!= 2){
+                    //neighbors array has empty cells and line of fish above to start;
+                    //specifically neighbors or cellType1 in location 1,1
+                    neighbors.add(cellGrid[i][j]);
+                }
+            }
+        }
+    }
+
+
+    @Test
+    void resetReproductionFish() {
+        fishSurroundSharkSetup();
+        fishCell.updateCell(neighbors, cellGrid);
+
+        var expected1 = 1;
+        var actual1 = fishCell.getMyReproductionTime();
+        assertEquals(expected1, actual1);
+
+        fishCell.resetReproductionTime();
+        var expected2 = 0;
+        var actual2 = fishCell.getMyReproductionTime();
+        assertEquals(expected2, actual2);
+    }
+
+    @Test
+    void fishReproduce() {
+        oneFishSetup();
+        PredatorPreyCell temp = cellGrid[2][2];
+        temp.updateCell(neighbors, cellGrid);
+        temp.updateCell(neighbors, cellGrid);
+        temp.updateCell(neighbors, cellGrid);
+        temp.updateCell(neighbors, cellGrid);
+        temp.updateCell(neighbors, cellGrid);
+
+        //System.out.println(temp.myRow + " " + temp.myCol);
+        //This is where the new fish will be left
+        int[] prev = {temp.myRow, temp.myCol};
+        temp.updateCell(neighbors, cellGrid);
+
+        var expected = 1;
+        var actual = cellGrid[prev[0]][prev[1]].getMyCurrentState();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void sharkDiesUpdate() {
+        oneSharkSetup();
+        PredatorPreyCell temp = cellGrid[2][2];
+
+        var expected1 = 2;
+        var actual1 = temp.getMyEnergyLeft();
+        assertEquals(expected1, actual1);
+
+        temp.updateCell(neighbors, cellGrid);
+        temp.updateCell(neighbors, cellGrid);
+
+        var expected2 = 0;
+        var actual2 = temp.getMyEnergyLeft();
+        assertEquals(expected2, actual2);
+    }
+
+    @Test
+    void sharkEatsFish(){
+        sharkEatFishSetup();
+        PredatorPreyCell tempShark = cellGrid[2][2];
+
+        var expected1 = 2;
+        var actual1 = tempShark.getMyEnergyLeft();
+        assertEquals(expected1, actual1);
+
+        tempShark.updateCell(neighbors, cellGrid);
+        var expected2 = 3;
+        var actual2 = tempShark.getMyEnergyLeft();
+        assertEquals(expected2, actual2);
+    }
+
+    @Test void sharkMovesToFishOverEmpty(){
+        sharkEatFishSetup();
+        PredatorPreyCell tempShark = cellGrid[2][2];
+        tempShark.updateCell(neighbors, cellGrid);
+        var expected = 1;
+        var actual = tempShark.myRow;
+        assertEquals(expected, actual);
+    }
+}

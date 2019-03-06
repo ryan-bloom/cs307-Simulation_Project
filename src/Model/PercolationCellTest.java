@@ -1,6 +1,5 @@
 package Model;
 
-import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -86,25 +85,4 @@ class PercolationCellTest {
         var actual = openCell.equals(percolatingCell);
         assertFalse(actual);
     }
-
-/*    @Test
-    void blackColorTest(){
-        blockedCell.updateCell(neighbors);
-        var expected = Color.BLACK;
-        var actual = blockedCell.myRectangle.getFill();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void whiteToBlueColorTest(){
-        var expected1 = Color.WHITE;
-        var actual1 = openCell.myRectangle.getFill();
-        assertEquals(expected1, actual1);
-
-        List<Cell> neighs = neighbors.subList(4,7); //2 open, 1 percolating
-        openCell.updateCell(neighs);
-        var expected = Color.BLUE;
-        var actual = openCell.myRectangle.getFill();
-        assertEquals(expected, actual);
-    }*/
 }
