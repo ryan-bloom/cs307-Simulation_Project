@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Cell;
 import Model.Data;
+import Model.FireCell;
 import Model.PercolationCell;
 
 public class Grid {
@@ -30,10 +31,6 @@ public class Grid {
         }
     }
 
-    public void resetCell(int row, int col){
-        myCellGrid[row][col].resetState();
-    }
-
     public void updateGridCell(int row, int col, CellShape shape, EdgeType edgeType){
         var neighbors = new CompleteNeighbors(row, col, myCellGrid, shape, edgeType);
         //var neighbors = new CardinalNeighbors(row, col, myCellGrid, shape, edgeType);
@@ -43,6 +40,10 @@ public class Grid {
     }
 
     //public Cell getCellAt(int row, int col){return myCellGrid[row][col];}
+
+    public void resetCell(int row, int col){
+        myCellGrid[row][col].resetState();
+    }
     public int getCellState(int row, int col){ return myCellGrid[row][col].getMyCurrentState(); }
     public Cell[][] getCellGrid(){ return myCellGrid; }
     public int getMyRows(){return myRows;}
