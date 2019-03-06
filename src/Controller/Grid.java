@@ -1,6 +1,8 @@
-package Model;
+package Controller;
 
-import java.util.ArrayList;
+import Model.Cell;
+import Model.Data;
+import Model.PercolationCell;
 
 public class Grid {
     private Data myData;

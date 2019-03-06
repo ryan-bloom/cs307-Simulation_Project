@@ -1,19 +1,23 @@
-package Model;
+package Controller;
+
+import Model.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardinalNeighbors extends Neighbors {
-    public CardinalNeighbors(int x, int y, Cell[][] grid, CellShape shape, EdgeType edgeType){
+public class CompleteNeighbors extends Neighbors {
+
+    public CompleteNeighbors(int x, int y, Cell[][] grid, CellShape shape, EdgeType edgeType) {
         super(x, y, grid, shape, edgeType);
     }
 
     @Override
-    public List<Cell> squareNeighbors(Cell[][] cellGrid){
+    public List<Cell> squareNeighbors(Cell[][] cellGrid) {
         List<Cell> neighbors = new ArrayList<>();
+
         for (int i = myX - 1; i < myX + 2; i++) {
             for (int j = myY - 1; j < myY + 2; j++) {
-                if ((i != myX || j != myY) && (i==myX || j==myY)) {
+                if (i != myX || j != myY) {
                     Cell temp = edgeCheck(cellGrid, i, j);
                     if (temp != null) {
                         neighbors.add(temp);
@@ -27,7 +31,7 @@ public class CardinalNeighbors extends Neighbors {
     //HEX NEIGHBORS SAME FOR COMPLETE CARDINAL AND CORNER THEREFORE METHOD IN ABSTRACT NEIGHBORS CLASS
 
     @Override
-    public List<Cell> triNeighbors(Cell[][] cellGrid) {
+    public List<Cell> triNeighbors(Cell[][] cellGrid){
         if(upsideDown()){//upside down triangle - 5,4,3
             return upsideDownNeighbors(cellGrid);
         }
@@ -39,11 +43,13 @@ public class CardinalNeighbors extends Neighbors {
     public List<Cell> upsideDownNeighbors(Cell[][] cellGrid){
         List<Cell> neighbors = new ArrayList<>();
 
-        for(int i=myX-1; i<myX+1; i++){
-            for(int j=myY-1; j<myY+2; j++){
-                if((i!=myX || j!=myY) && (i!=myX-1 || j==myY)){
+        for(int i=myX-1; i<myX+2; i++){
+            for(int j=myY-2; j<myY+3; j++){
+                if((i!=myX || j!=myY) && (i!=myX+1 || (j!=myY-2 && j!=myY+2))){
                     Cell temp = edgeCheck(cellGrid, i, j);
-                    if(temp!=null){ neighbors.add(temp); }
+                    if(temp!=null){
+                        neighbors.add(temp);
+                    }
                 }
             }
         }
@@ -54,15 +60,16 @@ public class CardinalNeighbors extends Neighbors {
     public List<Cell> rightSideUpNeighbors(Cell[][] cellGrid){
         List<Cell> neighbors = new ArrayList<>();
 
-        for(int i=myX; i<myX+2; i++){
-            for(int j=myY-1; j<myY+2; j++){
-                if((i!=myX || j!=myY) && (i!=myX+1 || j==myY)){
+        for(int i=myX-1; i<myX+2; i++){
+            for(int j=myY-2; j<myY+3; j++){
+                if((i!=myX || j!=myY) && (i!=myX-1 ||(j!=myY-2 && j!=myY+2))){
                     Cell temp = edgeCheck(cellGrid, i, j);
-                    if(temp!=null){ neighbors.add(temp); }
+                    if(temp!=null){
+                        neighbors.add(temp);
+                    }
                 }
             }
         }
-
         return neighbors;
     }
 }

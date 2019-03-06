@@ -1,4 +1,6 @@
-package Model;
+package Controller;
+
+import Model.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,7 @@ public class CornerNeighbors extends Neighbors {
 
         for(int i=myX-1; i<myX+2; i++){
             for(int j=myY-2; j<myY+3; j++){
-                if((i!=myX || j!=myY) && (i!=myX-1 || j!=myY) && (i!=myX || (j!=myY-1 && j!=myY+1))){
+                if(upsideDownHelper(i, j)){
                     Cell temp = edgeCheck(cellGrid, i, j);
                     if(temp!=null){
                         neighbors.add(temp);
@@ -59,7 +61,7 @@ public class CornerNeighbors extends Neighbors {
 
         for(int i=myX-1; i<myX+2; i++){
             for(int j=myY-2; j<myY+3; j++){
-                if((i!=myX || j!=myY) && (i!=myX || (j!=myY-1 && j!=myY+1)) && (i!=myX+1 || j!=myY)){
+                if(righSideUpHelper(i, j)){
                     Cell temp = edgeCheck(cellGrid, i, j);
                     if(temp!=null){
                         neighbors.add(temp);
@@ -69,5 +71,14 @@ public class CornerNeighbors extends Neighbors {
         }
 
         return neighbors;
+    }
+
+    public boolean upsideDownHelper(int i, int j){
+        //Check not this, not cardinal above, not cardinal left/right, not below too left/too right
+        return ((i!=myX || j!=myY) && (i!=myX-1 || j!=myY) && (i!=myX || (j!=myY-1 && j!=myY+1)) && (i!=myX+1 || (j!=myY-2 && j!=myY+2)));
+    }
+
+    public boolean righSideUpHelper(int i, int j){
+        return ((i!=myX || j!=myY) && (i!=myX || (j!=myY-1 && j!=myY+1)) && (i!=myX+1 || j!=myY) && (i!=myX-1 || (j!=myY-2 && j!=myY+2)));
     }
 }

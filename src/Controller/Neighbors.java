@@ -1,4 +1,6 @@
-package Model;
+package Controller;
+
+import Model.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +11,6 @@ public abstract class Neighbors {
     protected int myY;
     protected EdgeType myEdgeType;
     protected CellShape myCellShape;
-    //protected String myEdgeType;
-    //protected String myShape;
 
     public Neighbors(int x, int y, Cell[][] myGrid, CellShape cellShape, EdgeType edgeType){
         myX = x;
@@ -67,10 +67,16 @@ public abstract class Neighbors {
 
     //Used for hex shaped cells (eliminate fake neighbors based on even row shift)
     public boolean goodHex(int r, int c){
-        return((r!=myX+1) || (c != myY-1 && c!=myY+1));
+        if(myX%2 == 0){//Even rows shifted right
+            return((c!=myY-1) || (r != myX-1 && r!=myX+1));
+        }
+        else{//Odd rows shifted left
+            return((c!=myY+1) || (r != myX-1 && r!=myX+1));
+        }
     }
 
     //Used for triangle shaped cells (determine if upsideDown or rightSideUp based on indices)
+    //Must start 0,0 is upside down
     public boolean upsideDown(){
         return ((myX%2==0 && myY%2 == 0) || (myX%2 != 0 && myY%2 != 0));
     }
