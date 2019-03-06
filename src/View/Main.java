@@ -1,28 +1,41 @@
 package View;
 
-import Controller.CsvFileWriter;
+import Controller.CellShape;
+import Controller.EdgeType;
+import Controller.Grid;
 import Model.*;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.RadioButton;
+import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.util.*;
+import javafx.stage.FileChooser;
+import javafx.event.*;
+import javafx.scene.image.ImageView;
+
+import java.util.HashMap;
+import java.util.ResourceBundle;
+import java.io.File;
+import java.util.List;
 
 public class Main extends Application {
-    
-    public static final String SIMULATION = "GameOfLife";
+
+    public static final String SIMULATION = "Percolation";
+    public static final int ACTUAL_WINDOW_WIDTH = 1000;
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
+    //public static final String STYLESHEET = "styles.css";
 
     public static int FRAMES_PER_SECOND = 6;
     public static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
@@ -31,14 +44,18 @@ public class Main extends Application {
     public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
     public static final String DATA_EXTENSION = "data\\";
 
-    //private Cell[][] cellGrid;
-    private Grid myGrid;
-    private Group myGroup;
-    private Animation myAnimation;
-    private ResourceBundle myResources;
+    private static final CellShape CELL_SHAPE = CellShape.SQUARE;
+    private static final EdgeType EDGE_TYPE = EdgeType.FINITE;
 
-    //private Map<String, List<Color>> colorsMap; ---- MIGHT USE THIS IF MAP OF GAME - COLORS FOR SAID GAME
-    private HashMap<Integer, Color> colors = new HashMap<>();
+    private Grid myGrid;
+    private Data mySeed;
+    private Group myGroup;
+    private Timeline myAnimation;
+    private ResourceBundle myResources;
+    private Stage myStage;
+
+    private HashMap<Integer, Color> cellColors = new HashMap<>();
+    private HashMap<Integer, Image> cellImages = new HashMap<>();
     private double cellWidth;
     private double cellHeight;
     private boolean isRunning = true;
@@ -48,38 +65,72 @@ public class Main extends Application {
     }
 
     public void start(Stage stage) {
+        myStage = stage;
+        myGroup = new Group();
+        myStage.setScene(setupSeed(1));
+        myStage.setTitle(myResources.getString("Simulation"));
+        RadioButton cellChoiceImage = new RadioButton("Image");
+        cellChoiceImage.relocate(700, 500);
+        myGroup.getChildren().add(cellChoiceImage);
+        Button toRun = new Button("Run simulation");
+        toRun.setOnAction((ActionEvent event) -> {
+            if (cellChoiceImage.isSelected()) {
+                final FileChooser fileChooser = new FileChooser();
+                fileChooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("All Images", "*.*"),
+                        new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                        new FileChooser.ExtensionFilter("PNG", "*.png")
+                );
+                List<File> imageFiles = fileChooser.showOpenMultipleDialog(stage);
+                if (imageFiles != null) {
+                    for (int i = 0; i < imageFiles.size(); i++) {
+                        Image image = new Image(imageFiles.get(i).toURI().toString());
+                        cellImages.put(i, image);
+                    }
+                }
+            }
+            var frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step());
+            myAnimation = new Timeline();
+            myAnimation.setCycleCount(Timeline.INDEFINITE);
+            myAnimation.getKeyFrames().add(frame);
+            myAnimation.play();
+        });
+        toRun.relocate(700, 200);
+        myGroup.getChildren().add(toRun);
+        myStage.show();
 
+    }
+
+    public Scene setupSeed(int config) {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
         //Data d = new Data(myResources.getString("File"));
         Data d = new Data(new double[]{0.4,0.95, 1.0}, 50, 50);
+        mySeed = new Data(myResources.getString("File").split(",")[config - 1]);
         fillColorsList();
-        myGrid = new Grid(d);
-        cellHeight = WINDOW_HEIGHT/d.getHeight();
-        cellWidth = WINDOW_WIDTH/d.getWidth();
+        myGrid = new Grid(mySeed);
+        cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
+        cellWidth = WINDOW_WIDTH/mySeed.getWidth();
         myGrid.fillCellGrid();
-        myGroup = new Group();
-        var scene = new Scene(myGroup, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
+        Scene seed = new Scene(myGroup, ACTUAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
 
-        for (int i = 0; i < d.getWidth(); i++) {
-            for (int j = 0; j < d.getHeight(); j++) {
+        for (Integer i : cellColors.keySet()) {
+            final ColorPicker colorPicker = new ColorPicker();
+            colorPicker.setOnAction((ActionEvent t) -> {
+                cellColors.put(i, colorPicker.getValue());
+            });
+            colorPicker.relocate(700, 40 * i);
+            myGroup.getChildren().add(colorPicker);
+        }
+
+        for (int i = 0; i < mySeed.getWidth(); i++) {
+            for (int j = 0; j < mySeed.getHeight(); j++) {
                 Node view = updateCellView(i, j, myGrid.getCellState(i, j));//cellGrid[i][j].getMyCurrentState());
                 myGroup.getChildren().add(view);
             }
         }
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        stage.setScene(scene);
-        stage.setTitle(myResources.getString("Simulation"));
-        stage.show();
-        var frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step());
-        var animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        myAnimation = animation;
-
-        //THIS SHOULD GO IN THE APPROPRIATE PLACE IN HANDLE KEY INPUT
-        //CsvFileWriter.writeCsvFile(DATA_EXTENSION + "Configuration_File_Tester.csv", myGrid);
-
-        animation.play();
+        seed.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        //seed.getStylesheets().add(STYLESHEET);
+        return seed;
     }
 
     //SHOULD JUST READ IN COLORS FROM SEPARATE DATA FILE
@@ -88,24 +139,34 @@ public class Main extends Application {
             String value = myResources.getString(s);
             if(s.contains("Color")) {
                 String[] color = value.split(",");
-                colors.put(Integer.parseInt(color[0]), Color.valueOf(color[1]));
+                cellColors.put(Integer.parseInt(color[0]), Color.valueOf(color[1]));
             }
         }
     }
 
-//GOING TO HAVE TO HANDLE RECTANGLES AND IMAGE VIEWS EVENTUALLY
-    public Node updateCellView(int row, int col, int state){
-        var res = new Rectangle(row * cellWidth, col * cellHeight, cellWidth, cellHeight);
-        var color = colors.get(state);
-        res.setFill(color);
-        return res;
+    public Node updateCellView(int row, int col, int state) {
+        if (cellImages.get(state) != null) {
+            var res = new ImageView(cellImages.get(state));
+            res.setFitHeight(cellHeight);
+            res.setFitWidth(cellWidth);
+            res.setX(row * cellWidth);
+            res.setY(col * cellHeight);
+            return res;
+        }
+        else {
+            var res = new Rectangle(row * cellWidth, col * cellHeight, cellWidth, cellHeight);
+            var color = cellColors.get(state);
+            res.setFill(color);
+            return res;
+        }
     }
 
     private void step() {
         // updates colors and states of all cells
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
-                myGrid.updateGridCell(i, j);
+                //myGrid.updateGridCell(i, j);
+                myGrid.updateGridCell(i, j, CELL_SHAPE, EDGE_TYPE);
                 //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
             }
         }
@@ -120,62 +181,35 @@ public class Main extends Application {
     }
 
     private void handleKeyInput(KeyCode code) {
-        //Pause and Resume
         if (code == KeyCode.SPACE) {
             if (isRunning) {
                 myAnimation.pause();
-                isRunning = false;
             }
             else {
                 myAnimation.play();
-                isRunning = true;
             }
+            isRunning = !(isRunning);
         }
 
-        //Increase or decrease animation rate
+        // Increase & decrease simulation speed
         if (code == KeyCode.UP) {
-            myAnimation.pause();
-            System.out.println(myAnimation.getRate());
             myAnimation.setRate(myAnimation.getRate() + 1.0);
-            System.out.println(myAnimation.getRate());
-            System.out.println("Pressing up!");
-            myAnimation.play();
         }
         if (code == KeyCode.DOWN) {
-            myAnimation.pause();
-            System.out.println(myAnimation.getRate());
             myAnimation.setRate(myAnimation.getRate() - 1.0);
-            System.out.println(myAnimation.getRate());
-            System.out.println("Pressing up!");
-            myAnimation.play();
         }
 
-        //Step through simulation
+        // Individual steps
         if (code == KeyCode.RIGHT && !(isRunning)) {
             step();
         }
 
-        //Load various initial configs
-        if (code == KeyCode.DIGIT1) {
-            
-        }
-
-        if (code == KeyCode.DIGIT2) {
-
-        }
-        if (code == KeyCode.DIGIT3) {
-
-        }
-
-        if (code == KeyCode.DIGIT4) {
-
-        }
-        if (code == KeyCode.DIGIT5) {
-
-        }
-
-        if (code == KeyCode.DIGIT6) {
-
+        // Override load initial config
+        if (code.isDigitKey()) {
+            myAnimation.stop();
+            myGroup.getChildren().clear();
+            myStage.setScene(setupSeed(Integer.parseInt(code.getName())));
+            myAnimation.play();
         }
     }
 }
