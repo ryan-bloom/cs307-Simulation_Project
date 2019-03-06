@@ -39,11 +39,12 @@ public class Data {
         states = new int[height][width];
         for(int i = 0; i<height; i++){
             for(int j = 0; j<width; j++){
+                double rand = Math.random();
                 for(int k = 0; k<prob.length; k++){
-                    if(Math.random()<prob[k]) {
+                    if(rand<prob[k] & rand>=0) {
                         states[j][i] = k;
-                        break;
                     }
+                    rand -= prob[k];
                 }
             }
         }

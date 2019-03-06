@@ -103,9 +103,9 @@ public class Main extends Application {
 
     public Scene setupSeed(int config) {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
-        //Data d = new Data(myResources.getString("File"));
-        Data d = new Data(new double[]{0.4,0.95, 1.0}, 50, 50);
-        mySeed = new Data(myResources.getString("File").split(",")[config - 1]);
+
+        mySeed = new Data(new double[]{0.4,0.55, 0.05}, 5, 5);
+        //mySeed = new Data(myResources.getString("File").split(",")[config - 1]);
         fillColorsList();
         myGrid = new Grid(mySeed);
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
