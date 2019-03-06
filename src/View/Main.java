@@ -51,7 +51,8 @@ public class Main extends Application {
     public void start(Stage stage) {
 
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
-        Data d = new Data(myResources.getString("File"));
+        //Data d = new Data(myResources.getString("File"));
+        Data d = new Data(new double[]{0.4,0.95, 1.0}, 50, 50);
         fillColorsList();
         myGrid = new Grid(d);
         cellHeight = WINDOW_HEIGHT/d.getHeight();
@@ -77,7 +78,7 @@ public class Main extends Application {
         myAnimation = animation;
 
         //THIS SHOULD GO IN THE APPROPRIATE PLACE IN HANDLE KEY INPUT
-        CsvFileWriter.writeCsvFile(DATA_EXTENSION + "Configuration_File_Tester.csv", myGrid);
+        //CsvFileWriter.writeCsvFile(DATA_EXTENSION + "Configuration_File_Tester.csv", myGrid);
 
         animation.play();
     }
