@@ -1,6 +1,5 @@
 package Controller;
 
-import Model.Grid;
 import java.io.FileWriter;
 import java.io.IOException;
 

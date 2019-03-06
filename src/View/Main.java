@@ -1,15 +1,15 @@
 package View;
 
-import Controller.CsvFileWriter;
+import Controller.CellShape;
+import Controller.EdgeType;
+import Controller.Grid;
 import Model.*;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -20,18 +20,14 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.geometry.Insets;
-import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.event.*;
 import javafx.scene.image.ImageView;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import javafx.scene.text.*;
 
 public class Main extends Application {
 
@@ -48,8 +44,6 @@ public class Main extends Application {
     public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
     public static final String DATA_EXTENSION = "data\\";
 
-    //private static final String CELL_SHAPE = "SQUARE"; //"SQUARE", "HEXAGON", "TRIANGLE"
-    //private static final String EDGE_TYPE = "FINITE"; //TOROIDAL, FINITE
     private static final CellShape CELL_SHAPE = CellShape.SQUARE;
     private static final EdgeType EDGE_TYPE = EdgeType.FINITE;
 
