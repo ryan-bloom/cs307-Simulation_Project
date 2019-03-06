@@ -41,7 +41,7 @@ class GameOfLifeCellTest {
         deadCell.updateCell(neighs, cellGrid, shape);
 
         var expected = 1;
-        var actual = deadCell.myNextState;
+        var actual = deadCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -50,7 +50,7 @@ class GameOfLifeCellTest {
         liveCell.updateCell(neighbors, cellGrid, shape);//Too many live neighbors (5)
 
         var expected = 0;
-        var actual = liveCell.myNextState;
+        var actual = liveCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -60,7 +60,7 @@ class GameOfLifeCellTest {
         liveCell.updateCell(neighs, cellGrid, shape);
 
         var expected = 0;
-        var actual = liveCell.myNextState;
+        var actual = liveCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -70,7 +70,7 @@ class GameOfLifeCellTest {
         liveCell.updateCell(neighs, cellGrid, shape);
 
         var expected = 1;
-        var actual = liveCell.myNextState;
+        var actual = liveCell.getMyNextState();
         assertEquals(expected, actual);
     }
 

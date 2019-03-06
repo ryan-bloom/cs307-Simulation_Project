@@ -146,7 +146,7 @@ class PredatorPreyCellTest {
 
         //System.out.println(temp.myRow + " " + temp.myCol);
         //This is where the new fish will be left
-        int[] prev = {temp.myRow, temp.myCol};
+        int[] prev = {temp.getMyRow(), temp.getMyCol()};
         temp.updateCell(neighbors, cellGrid, shape);
 
         var expected = 1;
@@ -191,7 +191,7 @@ class PredatorPreyCellTest {
         PredatorPreyCell tempShark = cellGrid[2][2];
         tempShark.updateCell(neighbors, cellGrid, shape);
         var expected = 1;
-        var actual = tempShark.myRow;
+        var actual = tempShark.getMyRow();
         assertEquals(expected, actual);
     }
 }

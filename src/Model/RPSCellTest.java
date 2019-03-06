@@ -38,7 +38,7 @@ class RPSCellTest {
         rockCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 1;
-        var actual = rockCell.myNextState;
+        var actual = rockCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -54,7 +54,7 @@ class RPSCellTest {
         paperCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 2;
-        var actual = paperCell.myNextState;
+        var actual = paperCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -68,7 +68,7 @@ class RPSCellTest {
         scissorCell.updateCell(neighbors, cellGrid, shape);
 
         var expected =0;
-        var actual = scissorCell.myNextState;
+        var actual = scissorCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -82,7 +82,7 @@ class RPSCellTest {
         scissorCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 1;
-        var actual = scissorCell.myNextState;
+        var actual = scissorCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -97,7 +97,7 @@ class RPSCellTest {
         rockCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 0;
-        var actual = rockCell.myNextState;
+        var actual = rockCell.getMyNextState();
         assertEquals(expected, actual);
     }
 }

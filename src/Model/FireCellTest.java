@@ -35,7 +35,7 @@ class FireCellTest {
         treeCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 2;
-        var actual = treeCell.myNextState;
+        var actual = treeCell.getMyNextState();
         assertEquals(expected,actual);
 
     }
@@ -50,7 +50,7 @@ class FireCellTest {
         burningCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 0;
-        var actual = burningCell.myNextState;
+        var actual = burningCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -64,7 +64,7 @@ class FireCellTest {
         emptyCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 0;
-        var actual = emptyCell.myNextState;
+        var actual = emptyCell.getMyNextState();
         assertEquals(expected, actual);
     }
 }

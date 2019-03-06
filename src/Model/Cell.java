@@ -22,7 +22,7 @@ abstract public class Cell{
 
     public void resetState() { myCurrentState = myNextState; }
     public int getMyCurrentState(){return myCurrentState;}
-    //public int getMyNextState(){return myNextState;}
+    public int getMyNextState(){return myNextState;}
     public int getMyRow() { return myRow; }
     public int getMyCol() { return myCol; }
 

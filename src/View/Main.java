@@ -24,6 +24,7 @@ import javafx.event.*;
 import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.io.File;
 import java.util.List;
@@ -54,9 +55,9 @@ public class Main extends Application {
     private ResourceBundle myResources;
     private Stage myStage;
 
-    private HashMap<Integer, Color> cellColors = new HashMap<>();
-    private HashMap<Integer, Color> customColors = new HashMap<>();
-    private HashMap<Integer, Image> cellImages = new HashMap<>();
+    private Map<Integer, Color> cellColors = new HashMap<>();
+    private Map<Integer, Color> customColors = new HashMap<>();
+    private Map<Integer, Image> cellImages = new HashMap<>();
     private double cellWidth;
     private double cellHeight;
     private boolean isRunning = true;
