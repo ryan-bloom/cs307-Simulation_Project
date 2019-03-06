@@ -269,4 +269,65 @@ class NeighborsTest {
         var actual = neighbors.size();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void squareCornerSemiToroidalCompleteNeighbors(){
+        myCompleteNeighbors = new CompleteNeighbors(0,0, myCellGrid, CellShape.SQUARE, EdgeType.SEMITOROIDAL);
+        List<Cell> neighbors = myCompleteNeighbors.findNeighbors(myCellGrid);
+
+        var expected = 7;
+        var actual = neighbors.size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void triUpsideDownCornerSemiToroidalCornerNeighbors(){
+        myCornerNeighbors = new CornerNeighbors(0,0, myCellGrid, CellShape.TRIANGLE, EdgeType.SEMITOROIDAL);
+        List<Cell> neighbors = myCornerNeighbors.findNeighbors(myCellGrid);
+
+        var expected = 7;
+        var actual = neighbors.size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void triRightSideUpTopCornerSemiToroidalCompleteNeighbors(){
+        myCompleteNeighbors = new CompleteNeighbors(0,9, myCellGrid, CellShape.TRIANGLE, EdgeType.SEMITOROIDAL);
+        List<Cell> neighbors = myCompleteNeighbors.findNeighbors(myCellGrid);
+
+        var expected = 11;
+        var actual = neighbors.size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void triRightSideUpBottomCornerSemiToroidalCompleteNeighbors(){
+        myCompleteNeighbors = new CompleteNeighbors(9,0, myCellGrid, CellShape.TRIANGLE, EdgeType.SEMITOROIDAL);
+        List<Cell> neighbors = myCompleteNeighbors.findNeighbors(myCellGrid);
+
+        var expected = 10;
+        var actual = neighbors.size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void hexEvenCornerSemiToroidalCompleteNeighbors(){
+        myCompleteNeighbors = new CompleteNeighbors(0,9, myCellGrid, CellShape.HEXAGON, EdgeType.SEMITOROIDAL);
+        List<Cell> neighbors = myCompleteNeighbors.findNeighbors(myCellGrid);
+
+        var expected = 5;
+        var actual = neighbors.size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void hexOddCornerSemiToroidalCornerNeighbors(){
+        myCornerNeighbors = new CornerNeighbors(9,9, myCellGrid, CellShape.HEXAGON, EdgeType.SEMITOROIDAL);
+        List<Cell> neighbors = myCornerNeighbors.findNeighbors(myCellGrid);
+
+        var expected = 6;
+        var actual = neighbors.size();
+        assertEquals(expected, actual);
+    }
+
 }

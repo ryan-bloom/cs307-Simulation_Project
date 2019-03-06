@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.CellShape;
+
 import java.util.List;
 
 public class FireCell extends Cell {
@@ -15,7 +17,7 @@ public class FireCell extends Cell {
     }
 
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
         //Empty stays empty burning goes to empty
         if(myCurrentState == 1){
             for(Cell c: neighbors){

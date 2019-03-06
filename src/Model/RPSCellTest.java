@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.CellShape;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,7 @@ class RPSCellTest {
     private Cell scissorCell;
     private List<Cell> neighbors;
     private Cell[][] cellGrid;
+    private CellShape shape = CellShape.SQUARE;
 
 
     @BeforeEach
@@ -33,7 +35,7 @@ class RPSCellTest {
         }
         neighbors.add(rockCell);
         neighbors.add(scissorCell);
-        rockCell.updateCell(neighbors, cellGrid);
+        rockCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 1;
         var actual = rockCell.myNextState;
@@ -49,7 +51,7 @@ class RPSCellTest {
             neighbors.add(paperCell);
         }
         neighbors.add(rockCell);
-        paperCell.updateCell(neighbors, cellGrid);
+        paperCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 2;
         var actual = paperCell.myNextState;
@@ -63,7 +65,7 @@ class RPSCellTest {
             neighbors.add(rockCell);
             neighbors.add(paperCell);
         }
-        scissorCell.updateCell(neighbors, cellGrid);
+        scissorCell.updateCell(neighbors, cellGrid, shape);
 
         var expected =0;
         var actual = scissorCell.myNextState;
@@ -77,7 +79,7 @@ class RPSCellTest {
             neighbors.add(paperCell);
             neighbors.add(rockCell);
         }
-        scissorCell.updateCell(neighbors, cellGrid);
+        scissorCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 1;
         var actual = scissorCell.myNextState;
@@ -92,7 +94,7 @@ class RPSCellTest {
             neighbors.add(paperCell);
             neighbors.add(scissorCell);
         }
-        rockCell.updateCell(neighbors, cellGrid);
+        rockCell.updateCell(neighbors, cellGrid, shape);
 
         var expected = 0;
         var actual = rockCell.myNextState;

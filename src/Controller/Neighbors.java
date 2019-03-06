@@ -61,9 +61,11 @@ public abstract class Neighbors {
         else if(curr < 0){ return max - 1; }
         else{ return curr; }
     }
+    //Edge check helper method for finite edges (return true if within span of grid)
     public boolean finite(int loc, int max){
         return(loc>=0 && loc<max);
     }
+
 
     //Used for hex shaped cells (eliminate fake neighbors based on even row shift)
     public boolean goodHex(int r, int c){
@@ -95,6 +97,16 @@ public abstract class Neighbors {
         //finite
         else if(myEdgeType == EdgeType.FINITE && finite(x, cellGrid.length) && finite(y, cellGrid[0].length)){
             return cellGrid[x][y];
+        }
+        //Semi toroidal -- corners don't overflow, only direct cardinal overflow
+        else if(myEdgeType == EdgeType.SEMITOROIDAL){
+            tempX = toroidal(x, cellGrid.length);
+            tempY = toroidal(y, cellGrid[0].length);
+            //Corner flip -- not allowed
+            if(tempX == x || tempY == y){
+                //System.out.println(tempX + " " + tempY);
+                return cellGrid[tempX][tempY];
+            }
         }
         return null;
     }

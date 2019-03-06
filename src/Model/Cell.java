@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.CellShape;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -21,7 +23,7 @@ abstract public class Cell{
     public int getMyNextState(){return myNextState;}
 
     //abstract public void updateCell(List<Cell> neighbors, Cell[][] cellGrid);
-    abstract public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid);
+    abstract public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape);
 
 
     @Override

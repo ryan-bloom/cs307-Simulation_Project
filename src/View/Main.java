@@ -45,7 +45,7 @@ public class Main extends Application {
     public static final String DATA_EXTENSION = "data\\";
 
     private static final CellShape CELL_SHAPE = CellShape.SQUARE;
-    private static final EdgeType EDGE_TYPE = EdgeType.FINITE;
+    private static final EdgeType EDGE_TYPE = EdgeType.SEMITOROIDAL;
 
     private Grid myGrid;
     private Data mySeed;

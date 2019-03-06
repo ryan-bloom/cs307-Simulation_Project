@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.CellShape;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,7 @@ class PredatorPreyCellTest {
     PredatorPreyCell sharkCell;
     List<Cell> neighbors;
     PredatorPreyCell[][] cellGrid;
+    CellShape shape  = CellShape.SQUARE;
 
     @BeforeEach
     void setUp() {
@@ -120,7 +122,7 @@ class PredatorPreyCellTest {
     @Test
     void resetReproductionFish() {
         fishSurroundSharkSetup();
-        fishCell.updateCell(neighbors, cellGrid);
+        fishCell.updateCell(neighbors, cellGrid, shape);
 
         var expected1 = 1;
         var actual1 = fishCell.getMyReproductionTime();
@@ -136,16 +138,16 @@ class PredatorPreyCellTest {
     void fishReproduce() {
         oneFishSetup();
         PredatorPreyCell temp = cellGrid[2][2];
-        temp.updateCell(neighbors, cellGrid);
-        temp.updateCell(neighbors, cellGrid);
-        temp.updateCell(neighbors, cellGrid);
-        temp.updateCell(neighbors, cellGrid);
-        temp.updateCell(neighbors, cellGrid);
+        temp.updateCell(neighbors, cellGrid, shape);
+        temp.updateCell(neighbors, cellGrid, shape);
+        temp.updateCell(neighbors, cellGrid, shape);
+        temp.updateCell(neighbors, cellGrid, shape);
+        temp.updateCell(neighbors, cellGrid, shape);
 
         //System.out.println(temp.myRow + " " + temp.myCol);
         //This is where the new fish will be left
         int[] prev = {temp.myRow, temp.myCol};
-        temp.updateCell(neighbors, cellGrid);
+        temp.updateCell(neighbors, cellGrid, shape);
 
         var expected = 1;
         var actual = cellGrid[prev[0]][prev[1]].getMyCurrentState();
@@ -161,8 +163,8 @@ class PredatorPreyCellTest {
         var actual1 = temp.getMyEnergyLeft();
         assertEquals(expected1, actual1);
 
-        temp.updateCell(neighbors, cellGrid);
-        temp.updateCell(neighbors, cellGrid);
+        temp.updateCell(neighbors, cellGrid, shape);
+        temp.updateCell(neighbors, cellGrid, shape);
 
         var expected2 = 0;
         var actual2 = temp.getMyEnergyLeft();
@@ -178,7 +180,7 @@ class PredatorPreyCellTest {
         var actual1 = tempShark.getMyEnergyLeft();
         assertEquals(expected1, actual1);
 
-        tempShark.updateCell(neighbors, cellGrid);
+        tempShark.updateCell(neighbors, cellGrid, shape);
         var expected2 = 3;
         var actual2 = tempShark.getMyEnergyLeft();
         assertEquals(expected2, actual2);
@@ -187,7 +189,7 @@ class PredatorPreyCellTest {
     @Test void sharkMovesToFishOverEmpty(){
         sharkEatFishSetup();
         PredatorPreyCell tempShark = cellGrid[2][2];
-        tempShark.updateCell(neighbors, cellGrid);
+        tempShark.updateCell(neighbors, cellGrid, shape);
         var expected = 1;
         var actual = tempShark.myRow;
         assertEquals(expected, actual);
