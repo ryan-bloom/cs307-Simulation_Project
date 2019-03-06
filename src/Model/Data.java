@@ -3,6 +3,7 @@ package Model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
+import java.security.InvalidParameterException;
 import java.util.Scanner;
 
 public class Data {
@@ -13,18 +14,39 @@ public class Data {
     public Data(String fileName) {
         try (Scanner scanner = new Scanner(new File(this.getClass().getClassLoader().getResource(fileName).toURI()))){
             scanner.useDelimiter(",|\\n");
-            if(scanner.hasNext()){ height = Integer.parseInt(scanner.next().trim());} //nextInt() throws an error for me because of \r\n Windows set up
-            if(scanner.hasNext()) {width = Integer.parseInt(scanner.next().trim());} //trim() gets rid of \r character
-            states = new int[height][width];
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    if (scanner.hasNext()) states[j][i] = Integer.parseInt(scanner.next().trim());
+            try{
+                height = Integer.parseInt(scanner.next().trim());
+                width = Integer.parseInt(scanner.next().trim());
+                states = new int[height][width];
+                for (int i = 0; i < height; i++) {
+                    for (int j = 0; j < width; j++) {
+                        states[j][i] = Integer.parseInt(scanner.next().trim());
+                    }
                 }
+            }catch (NumberFormatException e){
+                throw new InvalidParameterException("CSV Configuration File is not in correct format");
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
             e.printStackTrace();
+        }
+    }
+
+    public Data (double prob[], int height, int width){
+        this.height = height;
+        this.width = width;
+        states = new int[height][width];
+        for(int i = 0; i<height; i++){
+            for(int j = 0; j<width; j++){
+                double rand = Math.random();
+                for(int k = 0; k<prob.length; k++){
+                    if(rand<prob[k] & rand>=0) {
+                        states[j][i] = k;
+                    }
+                    rand -= prob[k];
+                }
+            }
         }
     }
 
