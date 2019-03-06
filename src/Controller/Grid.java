@@ -29,7 +29,7 @@ public class Grid {
     }
 
 
-    public Cell simCellPicker(String simType, int x, int y){
+    private Cell simCellPicker(String simType, int x, int y){
         if(simType.toUpperCase().equals("GAMEOFLIFE")){
             return new GameOfLifeCell(x, y, myData.getStates()[x][y]);
         }
@@ -51,7 +51,7 @@ public class Grid {
     }
 
 
-    public Neighbors neighborhoodPicker(int x, int y, CellShape shape, EdgeType edgeType, NeighborhoodType neighborhoodType){
+    private Neighbors neighborhoodPicker(int x, int y, CellShape shape, EdgeType edgeType, NeighborhoodType neighborhoodType){
         if(neighborhoodType == NeighborhoodType.COMPLETE){
             return new CompleteNeighbors(x, y, myCellGrid, shape, edgeType);
         }

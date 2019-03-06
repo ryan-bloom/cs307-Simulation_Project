@@ -31,7 +31,7 @@ public class GameOfLifeCell extends Cell {
         return cellGrid;
     }
 
-    public void squareUpdate(int liveCount){
+    private void squareUpdate(int liveCount){
         if(this.getMyCurrentState() == 1){
             if(liveCount < 2 || liveCount >= 4){
                 this.setMyNextState(0);
@@ -45,7 +45,7 @@ public class GameOfLifeCell extends Cell {
         }
     }
 
-    public void hexUpdate(int liveCount){
+    private void hexUpdate(int liveCount){
         if(this.getMyCurrentState() == 1){
             if(liveCount == 3 || liveCount == 5){
                 this.setMyNextState(1);
@@ -57,7 +57,7 @@ public class GameOfLifeCell extends Cell {
         }
     }
 
-    public void triUpdate(int liveCount){
+    private void triUpdate(int liveCount){
         if(this.getMyCurrentState() == 1){
             if(liveCount == 2 || liveCount == 7){
                 this.setMyNextState(1);
@@ -69,7 +69,7 @@ public class GameOfLifeCell extends Cell {
         }
     }
 
-    public int getLiveCount(List<Cell> neighbors){
+    private int getLiveCount(List<Cell> neighbors){
         int liveCount = 0;
         for(Cell n : neighbors){
             if(n.getMyCurrentState() == 1){

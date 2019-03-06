@@ -39,7 +39,7 @@ public class CornerNeighbors extends Neighbors {
         }
     }
 
-    public List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int myX, int myY){
+    private List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
         for(int i=myX-1; i<myX+2; i++){
@@ -56,7 +56,7 @@ public class CornerNeighbors extends Neighbors {
         return neighbors;
     }
 
-    public List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int myX, int myY){
+    private List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
         for(int i=myX-1; i<myX+2; i++){
@@ -73,12 +73,12 @@ public class CornerNeighbors extends Neighbors {
         return neighbors;
     }
 
-    public boolean upsideDownHelper(int i, int j, int myX, int myY){
+    private boolean upsideDownHelper(int i, int j, int myX, int myY){
         //Check not this, not cardinal above, not cardinal left/right, not below too left/too right
         return ((i!=myX || j!=myY) && (i!=myX-1 || j!=myY) && (i!=myX || (j!=myY-1 && j!=myY+1)) && (i!=myX+1 || (j!=myY-2 && j!=myY+2)));
     }
 
-    public boolean righSideUpHelper(int i, int j, int myX, int myY){
+    private boolean righSideUpHelper(int i, int j, int myX, int myY){
         return ((i!=myX || j!=myY) && (i!=myX || (j!=myY-1 && j!=myY+1)) && (i!=myX+1 || j!=myY) && (i!=myX-1 || (j!=myY-2 && j!=myY+2)));
     }
 }
