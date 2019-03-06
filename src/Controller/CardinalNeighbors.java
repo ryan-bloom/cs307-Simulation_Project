@@ -11,7 +11,7 @@ public class CardinalNeighbors extends Neighbors {
     }
 
     @Override
-    public List<Cell> squareNeighbors(Cell[][] cellGrid){
+    public List<Cell> squareNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
         for (int i = myX - 1; i < myX + 2; i++) {
             for (int j = myY - 1; j < myY + 2; j++) {
@@ -29,16 +29,16 @@ public class CardinalNeighbors extends Neighbors {
     //HEX NEIGHBORS SAME FOR COMPLETE CARDINAL AND CORNER THEREFORE METHOD IN ABSTRACT NEIGHBORS CLASS
 
     @Override
-    public List<Cell> triNeighbors(Cell[][] cellGrid) {
+    public List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y) {
         if(upsideDown()){//upside down triangle - 5,4,3
-            return upsideDownNeighbors(cellGrid);
+            return upsideDownNeighbors(cellGrid, x, y);
         }
         else{
-            return rightSideUpNeighbors(cellGrid);
+            return rightSideUpNeighbors(cellGrid, x, y);
         }
     }
 
-    public List<Cell> upsideDownNeighbors(Cell[][] cellGrid){
+    private List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
         for(int i=myX-1; i<myX+1; i++){
@@ -53,7 +53,7 @@ public class CardinalNeighbors extends Neighbors {
         return neighbors;
     }
 
-    public List<Cell> rightSideUpNeighbors(Cell[][] cellGrid){
+    private List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
         for(int i=myX; i<myX+2; i++){

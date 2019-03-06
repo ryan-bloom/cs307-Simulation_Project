@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.CellShape;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -25,17 +27,17 @@ public class PredatorPreyCell extends Cell {
     }
 
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
-        if(myCurrentState == 1){
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
+        if(getMyCurrentState() == 1){
             return fishUpdate(neighbors, cellGrid);
         }
-        else if(myCurrentState == 2){
+        else if(getMyCurrentState() == 2){
             return sharkUpdate(neighbors, cellGrid);
         }
         return cellGrid;
     }
 
-    public Cell[][] fishUpdate(List<Cell> neighbors, Cell[][] cellGrid){
+    private Cell[][] fishUpdate(List<Cell> neighbors, Cell[][] cellGrid){
         myReproductionTime += 1;
         List<Cell> possNext = fillSubNeighbors(neighbors, 0);
         if(!possNext.isEmpty()){
@@ -46,7 +48,7 @@ public class PredatorPreyCell extends Cell {
         return cellGrid;
     }
 
-    public Cell[][] sharkUpdate(List<Cell> neighbors, Cell[][] cellGrid){
+    private Cell[][] sharkUpdate(List<Cell> neighbors, Cell[][] cellGrid){
         myReproductionTime++;
         List<Cell> fishNear = fillSubNeighbors(neighbors, 1);
         List<Cell> emptyNear = fillSubNeighbors(neighbors, 0);
@@ -61,8 +63,8 @@ public class PredatorPreyCell extends Cell {
             //Lose energy if no fish to eat
             myEnergyLeft--;
             if(myEnergyLeft <= 0){
-                cellGrid[myRow][myCol].myNextState = 0;
-                cellGrid[myRow][myCol].myCurrentState = 0;
+                cellGrid[getMyRow()][getMyCol()].setMyNextState(0);
+                cellGrid[getMyRow()][getMyCol()].setMyCurrentState(0);
                 return cellGrid;
             }
             else if(!emptyNear.isEmpty()){
@@ -73,52 +75,48 @@ public class PredatorPreyCell extends Cell {
         return cellGrid;
     }
 
-    public Cell[][] moveCell(Cell nextLocationCell, Cell[][] cellGrid){
+    private Cell[][] moveCell(Cell nextLocationCell, Cell[][] cellGrid){
         Cell temp;
-        int prevRow = this.myRow;
-        int prevCol = this.myCol;
-        int nxtRow = nextLocationCell.myRow;
-        int nxtCol = nextLocationCell.myCol;
+        int prevRow = this.getMyRow();
+        int prevCol = this.getMyCol();
+        int nxtRow = nextLocationCell.getMyRow();
+        int nxtCol = nextLocationCell.getMyCol();
         if(this.myReproductionTime >= GESTATION_PERIOD){
             this.resetReproductionTime();
-            temp = new PredatorPreyCell(prevRow, prevCol, this.myCurrentState);
-            //System.out.println(temp.myRow + " " + temp.myCol);
+            temp = new PredatorPreyCell(prevRow, prevCol, this.getMyCurrentState());
         }
         else{
             temp = new PredatorPreyCell(prevRow, prevCol, 0);
         }
         this.newLocation(nxtRow, nxtCol);
-        //this.myNextState = this.myCurrentState;
         cellGrid[nxtRow][nxtCol] = this;
         cellGrid[prevRow][prevCol] = temp;
         return cellGrid;
     }
 
-    public Cell randDirection(List<Cell> potentials){
+    private Cell randDirection(List<Cell> potentials){
         Random rand = new Random();
         int dir = rand.nextInt(potentials.size());
         return potentials.get(dir);
     }
 
-    public void newLocation(int r, int c){
-        this.myRow = r;
-        this.myCol = c;
+    private void newLocation(int r, int c){
+        this.setMyRow(r);
+        this.setMyCol(c);
     }
 
-    public void resetReproductionTime(){myReproductionTime = 0;}
+    void resetReproductionTime(){myReproductionTime = 0;}
 
-    public List<Cell> fillSubNeighbors(List<Cell> neighbors, int state){
-        //System.out.println("MY LOCATION: " + myRow + " " + myCol);
+    private List<Cell> fillSubNeighbors(List<Cell> neighbors, int state){
         List<Cell> res = new ArrayList<>();
         for(Cell c:neighbors){
-            if((c.myRow == this.myRow || c.myCol == this.myCol) && c.myCurrentState == state){
+            if(c.getMyCurrentState() == state){
                 res.add(c);
-                //System.out.println(c.myRow + " " + c.myCol);
             }
         }
         return res;
     }
 
-    public int getMyReproductionTime(){return myReproductionTime;}
-    public int getMyEnergyLeft(){return myEnergyLeft;}
+    int getMyReproductionTime(){return myReproductionTime;}
+    int getMyEnergyLeft(){return myEnergyLeft;}
 }

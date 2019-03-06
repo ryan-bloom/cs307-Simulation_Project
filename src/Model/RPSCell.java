@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.CellShape;
+
 import java.util.List;
 
 public class RPSCell extends Cell{
@@ -16,19 +18,19 @@ public class RPSCell extends Cell{
     }
 
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
         //rock = index 0; paper = index 1; scissor = index 2
         int[] nCounts = {0, 0, 0};
         for(Cell c: neighbors){
-            int tempState = c.myCurrentState;
-            if(tempState != myCurrentState){
+            int tempState = c.getMyCurrentState();
+            if(tempState != this.getMyCurrentState()){
                 //nCounts[tempState] = nCounts[tempState] + 1;
                 int temp = nCounts[tempState] + 1;
                 nCounts[tempState] = temp;
                 //Assumption --> first enemy neighbor checked >= THRESHOLD wins
                 if(temp >= THRESHOLD){
-                    myNextState = tempState;
-                    cellGrid[myRow][myCol] = this;
+                    this.setMyNextState(tempState);
+                    cellGrid[getMyRow()][getMyCol()] = this;
                 }
             }
         }

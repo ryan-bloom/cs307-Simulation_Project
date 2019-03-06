@@ -1,4 +1,6 @@
 package Model;
+import Controller.CellShape;
+
 import java.util.List;
 
 
@@ -14,31 +16,63 @@ public class GameOfLifeCell extends Cell {
     }
 
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
         int liveCount = getLiveCount(neighbors);
-        if (this.myCurrentState == 1){ //this is live
-            liveUpdate(liveCount);
+        if(shape == CellShape.SQUARE){
+            squareUpdate(liveCount);
         }
-        else if (liveCount == 3){ //this is dead, revive
-            this.myNextState = 1;
+        else if(shape == CellShape.HEXAGON){
+            hexUpdate(liveCount);
         }
-        cellGrid[myRow][myCol] = this;
+        else{
+            triUpdate(liveCount);
+        }
+        cellGrid[getMyRow()][getMyCol()] = this;
         return cellGrid;
     }
 
-    public void liveUpdate(int count){
-        if(count < 2 || count >= 4){
-            this.myNextState = 0;
+    private void squareUpdate(int liveCount){
+        if(this.getMyCurrentState() == 1){
+            if(liveCount < 2 || liveCount >= 4){
+                this.setMyNextState(0);
+            }
+            else{
+                this.setMyNextState(1);
+            }
         }
-        else{
-            this.myNextState = 1;
+        else if(liveCount == 3) {
+            this.setMyNextState(1);
         }
     }
 
-    public int getLiveCount(List<Cell> neighbors){
+    private void hexUpdate(int liveCount){
+        if(this.getMyCurrentState() == 1){
+            if(liveCount == 3 || liveCount == 5){
+                this.setMyNextState(1);
+            }
+            else{ this.setMyNextState(0); }
+        }
+        else if(liveCount == 2){
+            this.setMyNextState(1);
+        }
+    }
+
+    private void triUpdate(int liveCount){
+        if(this.getMyCurrentState() == 1){
+            if(liveCount == 2 || liveCount == 7){
+                this.setMyNextState(1);
+            }
+            else{this.setMyNextState(0);}
+        }
+        else if(liveCount == 3){
+            this.setMyNextState(1);
+        }
+    }
+
+    private int getLiveCount(List<Cell> neighbors){
         int liveCount = 0;
         for(Cell n : neighbors){
-            if(n.myCurrentState == 1){
+            if(n.getMyCurrentState() == 1){
                 liveCount++;
             }
         }
