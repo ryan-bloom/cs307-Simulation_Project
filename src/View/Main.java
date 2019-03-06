@@ -31,7 +31,7 @@ import java.util.List;
 
 public class Main extends Application {
 
-    public static final String SIMULATION = "Percolation";
+    public static final String SIMULATION = "Percolation1";
     public static final int ACTUAL_WINDOW_WIDTH = 1000;
     public static final int WINDOW_HEIGHT = 700;
     public static final int WINDOW_WIDTH = 700;
@@ -42,7 +42,7 @@ public class Main extends Application {
 
     public static final Paint BACKGROUND = Color.WHITE;
     public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
-    public static final String DATA_EXTENSION = "data\\";
+
 
     private static final CellShape CELL_SHAPE = CellShape.SQUARE;
     private static final EdgeType EDGE_TYPE = EdgeType.FINITE;
@@ -65,6 +65,8 @@ public class Main extends Application {
     }
 
     public void start(Stage stage) {
+        Color r = Color.valueOf("#342154");
+        System.out.println("#" + r.toString().substring(2,8).toUpperCase());
         myStage = stage;
         myGroup = new Group();
         myStage.setScene(setupSeed(1));
@@ -102,10 +104,10 @@ public class Main extends Application {
     }
 
     public Scene setupSeed(int config) {
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SIMULATION);
 
-        mySeed = new Data(new double[]{0.4,0.55, 0.05}, 5, 5);
-        //mySeed = new Data(myResources.getString("File").split(",")[config - 1]);
+        //mySeed = new Data(new double[]{0.4,0.55, 0.05}, 5, 5);
+        mySeed = new Data(myResources.getString("File"));
         fillColorsList();
         myGrid = new Grid(mySeed);
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
