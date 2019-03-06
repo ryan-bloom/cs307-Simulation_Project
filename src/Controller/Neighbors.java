@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Neighbors {
-    protected List<Cell> myNeighbors;
-    protected int myX;
-    protected int myY;
-    protected EdgeType myEdgeType;
-    protected CellShape myCellShape;
+    private List<Cell> myNeighbors;
+    private int myX;
+    private int myY;
+    private EdgeType myEdgeType;
+    private CellShape myCellShape;
 
     public Neighbors(int x, int y, Cell[][] myGrid, CellShape cellShape, EdgeType edgeType){
         myX = x;
@@ -22,18 +22,18 @@ public abstract class Neighbors {
 
     public List<Cell> findNeighbors(Cell[][] cellGrid){
         if (myCellShape == CellShape.SQUARE) {
-            return squareNeighbors(cellGrid);
+            return squareNeighbors(cellGrid, myX, myY);
         }
         else if (myCellShape == CellShape.HEXAGON) {
             return hexNeighbors(cellGrid);
         }
         else{ //TRIANGLE
-            return triNeighbors(cellGrid);
+            return triNeighbors(cellGrid, myX, myY);
         }
     }
 
-    public abstract List<Cell> squareNeighbors(Cell[][] cellGrid);
-    public abstract List<Cell> triNeighbors(Cell[][] cellGrid);
+    public abstract List<Cell> squareNeighbors(Cell[][] cellGrid, int x, int y);
+    public abstract List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y);
     //Same for all neighbor types (Complete, Cardinal, Corner)
     public List<Cell> hexNeighbors(Cell[][] cellGrid){
         List<Cell> neighbors = new ArrayList<>();

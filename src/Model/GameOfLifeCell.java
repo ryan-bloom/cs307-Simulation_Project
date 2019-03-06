@@ -27,61 +27,52 @@ public class GameOfLifeCell extends Cell {
         else{
             triUpdate(liveCount);
         }
-        cellGrid[myRow][myCol] = this;
+        cellGrid[getMyRow()][getMyCol()] = this;
         return cellGrid;
     }
 
     public void squareUpdate(int liveCount){
-        if(this.myCurrentState == 1){
+        if(this.getMyCurrentState() == 1){
             if(liveCount < 2 || liveCount >= 4){
-                this.myNextState = 0;
+                this.setMyNextState(0);
             }
             else{
-                this.myNextState = 1;
+                this.setMyNextState(1);
             }
         }
         else if(liveCount == 3) {
-            this.myNextState = 1;
+            this.setMyNextState(1);
         }
     }
 
     public void hexUpdate(int liveCount){
-        if(this.myCurrentState == 1){
+        if(this.getMyCurrentState() == 1){
             if(liveCount == 3 || liveCount == 5){
-                this.myNextState = 1;
+                this.setMyNextState(1);
             }
-            else{ this.myNextState = 0; }
+            else{ this.setMyNextState(0); }
         }
         else if(liveCount == 2){
-            this.myNextState = 1;
+            this.setMyNextState(1);
         }
     }
 
     public void triUpdate(int liveCount){
-        if(this.myCurrentState == 1){
+        if(this.getMyCurrentState() == 1){
             if(liveCount == 2 || liveCount == 7){
-                this.myNextState = 1;
+                this.setMyNextState(1);
             }
-            else{myNextState = 0;}
+            else{this.setMyNextState(0);}
         }
         else if(liveCount == 3){
-            this.myNextState = 1;
+            this.setMyNextState(1);
         }
     }
-
-/*    public void liveUpdate(int count){
-        if(count < 2 || count >= 4){
-            this.myNextState = 0;
-        }
-        else{
-            this.myNextState = 1;
-        }
-    }*/
 
     public int getLiveCount(List<Cell> neighbors){
         int liveCount = 0;
         for(Cell n : neighbors){
-            if(n.myCurrentState == 1){
+            if(n.getMyCurrentState() == 1){
                 liveCount++;
             }
         }
