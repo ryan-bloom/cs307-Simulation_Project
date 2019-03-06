@@ -46,7 +46,7 @@ class PercolationCellTest {
         List<Cell> neighs = neighbors.subList(4,7); //2 open, 1 percolating
         openCell.updateCell(neighs, cellGrid, shape);
         var expected = 2;
-        var actual = openCell.myNextState;
+        var actual = openCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -55,7 +55,7 @@ class PercolationCellTest {
         List<Cell> neighs = neighbors.subList(0,6); //3 blocked, 3 open cells
         openCell.updateCell(neighs, cellGrid, shape);
         var expected = 1;
-        var actual = openCell.myNextState;
+        var actual = openCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -63,7 +63,7 @@ class PercolationCellTest {
     void updateBlockedCell(){
         blockedCell.updateCell(neighbors, cellGrid, shape);
         var expected = 0;
-        var actual = blockedCell.myNextState;
+        var actual = blockedCell.getMyNextState();
         assertEquals(expected, actual);
     }
 
@@ -71,7 +71,7 @@ class PercolationCellTest {
     void updatePercolatingCell(){
         percolatingCell.updateCell(neighbors, cellGrid, shape);
         var expected = 2;
-        var actual = percolatingCell.myNextState;
+        var actual = percolatingCell.getMyNextState();
         assertEquals(expected, actual);
     }
 

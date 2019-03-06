@@ -35,7 +35,7 @@ public class SegregationCell extends Cell {
         return cellGrid;
     }
 
-    public double findPercentageSame(List<Cell> neighbors){
+    double findPercentageSame(List<Cell> neighbors){
         int same = 0;
         double total = 0;
         for(Cell c: neighbors) {
@@ -49,7 +49,7 @@ public class SegregationCell extends Cell {
         return same/total;
     }
 
-    public List<Cell> findEmptyCells(Cell[][] cellGrid){
+    List<Cell> findEmptyCells(Cell[][] cellGrid){
         List<Cell> res = new ArrayList<>();
         for(int i=0; i<cellGrid.length; i++){
             for(int j=0; j<cellGrid.length; j++){
@@ -61,7 +61,7 @@ public class SegregationCell extends Cell {
         return res;
     }
 
-    public int[] randomEmptyLocation(List<Cell> possibleCells){
+    int[] randomEmptyLocation(List<Cell> possibleCells){
         int[] res = new int[2];
         Random rand = new Random();
         int dex = rand.nextInt(possibleCells.size());

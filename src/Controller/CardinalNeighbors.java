@@ -38,7 +38,7 @@ public class CardinalNeighbors extends Neighbors {
         }
     }
 
-    public List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int myX, int myY){
+    private List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
         for(int i=myX-1; i<myX+1; i++){
@@ -53,7 +53,7 @@ public class CardinalNeighbors extends Neighbors {
         return neighbors;
     }
 
-    public List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int myX, int myY){
+    private List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
         for(int i=myX; i<myX+2; i++){

@@ -20,7 +20,7 @@ public abstract class Neighbors {
         myNeighbors = findNeighbors(myGrid);
     }
 
-    public List<Cell> findNeighbors(Cell[][] cellGrid){
+    List<Cell> findNeighbors(Cell[][] cellGrid){
         if (myCellShape == CellShape.SQUARE) {
             return squareNeighbors(cellGrid, myX, myY);
         }
@@ -35,7 +35,7 @@ public abstract class Neighbors {
     public abstract List<Cell> squareNeighbors(Cell[][] cellGrid, int x, int y);
     public abstract List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y);
     //Same for all neighbor types (Complete, Cardinal, Corner)
-    public List<Cell> hexNeighbors(Cell[][] cellGrid){
+    private List<Cell> hexNeighbors(Cell[][] cellGrid){
         List<Cell> neighbors = new ArrayList<>();
 
         //Even r-horizontal layout (shoves even rows right)
@@ -52,23 +52,23 @@ public abstract class Neighbors {
         return neighbors;
     }
 
-    public List<Cell> getMyNeighbors(){return myNeighbors;}
+    List<Cell> getMyNeighbors(){return myNeighbors;}
 
 
     //Edge check helper methods
-    public int toroidal(int curr, int max){
+    private int toroidal(int curr, int max){
         if(curr >= max){ return 0; }
         else if(curr < 0){ return max - 1; }
         else{ return curr; }
     }
     //Edge check helper method for finite edges (return true if within span of grid)
-    public boolean finite(int loc, int max){
+    private boolean finite(int loc, int max){
         return(loc>=0 && loc<max);
     }
 
 
     //Used for hex shaped cells (eliminate fake neighbors based on even row shift)
-    public boolean goodHex(int r, int c){
+    private boolean goodHex(int r, int c){
         if(myX%2 == 0){//Even rows shifted right
             return((c!=myY-1) || (r != myX-1 && r!=myX+1));
         }
@@ -79,12 +79,12 @@ public abstract class Neighbors {
 
     //Used for triangle shaped cells (determine if upsideDown or rightSideUp based on indices)
     //Must start 0,0 is upside down
-    public boolean upsideDown(){
+    boolean upsideDown(){
         return ((myX%2==0 && myY%2 == 0) || (myX%2 != 0 && myY%2 != 0));
     }
 
     //Called by each shapeNeighbors method on each cell to check for edge cases
-    public Cell edgeCheck(Cell[][] cellGrid, int x, int y){
+    Cell edgeCheck(Cell[][] cellGrid, int x, int y){
         int tempX;
         int tempY;
 

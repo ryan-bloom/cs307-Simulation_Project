@@ -37,7 +37,7 @@ public class PredatorPreyCell extends Cell {
         return cellGrid;
     }
 
-    public Cell[][] fishUpdate(List<Cell> neighbors, Cell[][] cellGrid){
+    private Cell[][] fishUpdate(List<Cell> neighbors, Cell[][] cellGrid){
         myReproductionTime += 1;
         List<Cell> possNext = fillSubNeighbors(neighbors, 0);
         if(!possNext.isEmpty()){
@@ -48,7 +48,7 @@ public class PredatorPreyCell extends Cell {
         return cellGrid;
     }
 
-    public Cell[][] sharkUpdate(List<Cell> neighbors, Cell[][] cellGrid){
+    private Cell[][] sharkUpdate(List<Cell> neighbors, Cell[][] cellGrid){
         myReproductionTime++;
         List<Cell> fishNear = fillSubNeighbors(neighbors, 1);
         List<Cell> emptyNear = fillSubNeighbors(neighbors, 0);
@@ -75,7 +75,7 @@ public class PredatorPreyCell extends Cell {
         return cellGrid;
     }
 
-    public Cell[][] moveCell(Cell nextLocationCell, Cell[][] cellGrid){
+    private Cell[][] moveCell(Cell nextLocationCell, Cell[][] cellGrid){
         Cell temp;
         int prevRow = this.getMyRow();
         int prevCol = this.getMyCol();
@@ -94,20 +94,20 @@ public class PredatorPreyCell extends Cell {
         return cellGrid;
     }
 
-    public Cell randDirection(List<Cell> potentials){
+    private Cell randDirection(List<Cell> potentials){
         Random rand = new Random();
         int dir = rand.nextInt(potentials.size());
         return potentials.get(dir);
     }
 
-    public void newLocation(int r, int c){
+    private void newLocation(int r, int c){
         this.setMyRow(r);
         this.setMyCol(c);
     }
 
-    public void resetReproductionTime(){myReproductionTime = 0;}
+    void resetReproductionTime(){myReproductionTime = 0;}
 
-    public List<Cell> fillSubNeighbors(List<Cell> neighbors, int state){
+    private List<Cell> fillSubNeighbors(List<Cell> neighbors, int state){
         List<Cell> res = new ArrayList<>();
         for(Cell c:neighbors){
             if(c.getMyCurrentState() == state){
@@ -117,6 +117,6 @@ public class PredatorPreyCell extends Cell {
         return res;
     }
 
-    public int getMyReproductionTime(){return myReproductionTime;}
-    public int getMyEnergyLeft(){return myEnergyLeft;}
+    int getMyReproductionTime(){return myReproductionTime;}
+    int getMyEnergyLeft(){return myEnergyLeft;}
 }

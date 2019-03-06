@@ -22,14 +22,14 @@ abstract public class Cell{
 
     public void resetState() { myCurrentState = myNextState; }
     public int getMyCurrentState(){return myCurrentState;}
-    //public int getMyNextState(){return myNextState;}
-    public int getMyRow() { return myRow; }
-    public int getMyCol() { return myCol; }
+    int getMyNextState(){return myNextState;}
+    int getMyRow() { return myRow; }
+    int getMyCol() { return myCol; }
 
-    public void setMyRow(int newRow) {this.myRow = newRow;}
-    public void setMyCol(int newCol) {this.myCol = newCol;}
-    public void setMyCurrentState(int newState) { this.myCurrentState = newState; }
-    public void setMyNextState(int newState) {this.myNextState = newState; }
+    void setMyRow(int newRow) {this.myRow = newRow;}
+    void setMyCol(int newCol) {this.myCol = newCol;}
+    void setMyCurrentState(int newState) { this.myCurrentState = newState; }
+    void setMyNextState(int newState) {this.myNextState = newState; }
 
     //abstract public void updateCell(List<Cell> neighbors, Cell[][] cellGrid);
     abstract public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape);
