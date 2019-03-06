@@ -45,8 +45,11 @@ public class Grid {
         else if(simType.toUpperCase().equals("SEGREGATION")){
             return new SegregationCell(x, y, myData.getStates()[x][y]);
         }
-        else{
+        else if(simType.toUpperCase().equals("PREDATORPREY")){
             return new PredatorPreyCell(x, y, myData.getStates()[x][y]);
+        }
+        else{
+            throw new SimulationException("Simulation type not found");
         }
     }
 

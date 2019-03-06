@@ -31,7 +31,8 @@ import java.util.List;
 
 public class Main extends Application {
 
-    private static final String SIMULATION = "fire";
+
+    private static final String SIMULATION = "Percolation1";
     private static final int ACTUAL_WINDOW_WIDTH = 1000;
     private static final int WINDOW_HEIGHT = 700;
     private static final int WINDOW_WIDTH = 700;
@@ -42,6 +43,7 @@ public class Main extends Application {
 
     private static final Paint BACKGROUND = Color.WHITE;
     private static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
+
 
     //NeighborhoodType
     private static final CellShape CELL_SHAPE = CellShape.SQUARE;
@@ -113,20 +115,18 @@ public class Main extends Application {
             myAnimation.play();
         });
         myStage.show();
-
     }
 
     public Scene setupSeed(int config) {
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
-
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SIMULATION);
         //mySeed = new Data(new double[]{0.4,0.55, 0.05}, 5, 5);
-        mySeed = new Data(myResources.getString("File").split(",")[config - 1]);
+        mySeed = new Data(myResources.getString("File"));
         fillColorsList();
         myGrid = new Grid(mySeed);
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
         cellWidth = WINDOW_WIDTH/mySeed.getWidth();
 
-        myGrid.fillCellGrid(SIMULATION);
+        myGrid.fillCellGrid(myResources.getString("Simulation"));
         Scene initial = new Scene(myGroup, ACTUAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
 
         for (Integer i : cellColors.keySet()) {
