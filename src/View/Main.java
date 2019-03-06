@@ -30,7 +30,7 @@ import java.util.List;
 
 public class Main extends Application {
 
-    private static final String SIMULATION = "GameOfLife";
+    private static final String SIMULATION = "Percolation";
     private static final int ACTUAL_WINDOW_WIDTH = 1000;
     private static final int WINDOW_HEIGHT = 700;
     private static final int WINDOW_WIDTH = 700;
@@ -125,7 +125,7 @@ public class Main extends Application {
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
         cellWidth = WINDOW_WIDTH/mySeed.getWidth();
 
-        myGrid.fillCellGrid(myResources.getString("Simulation"));
+        myGrid.fillCellGrid(SIMULATION);
         Scene initial = new Scene(myGroup, ACTUAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
 
         for (Integer i : cellColors.keySet()) {
