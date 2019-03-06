@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.CellShape;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -25,7 +27,7 @@ public class PredatorPreyCell extends Cell {
     }
 
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
         if(myCurrentState == 1){
             return fishUpdate(neighbors, cellGrid);
         }

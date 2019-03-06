@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.CellShape;
+
 import java.util.List;
 
 public class RPSCell extends Cell{
@@ -16,7 +18,7 @@ public class RPSCell extends Cell{
     }
 
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
         //rock = index 0; paper = index 1; scissor = index 2
         int[] nCounts = {0, 0, 0};
         for(Cell c: neighbors){

@@ -35,7 +35,7 @@ public class Grid {
         var neighbors = new CompleteNeighbors(row, col, myCellGrid, shape, edgeType);
         //var neighbors = new CardinalNeighbors(row, col, myCellGrid, shape, edgeType);
         //var neighbors = new CornerNeighbors(row, col, myCellGrid, shape, edgeType);
-        myCellGrid = myCellGrid[row][col].updateCell(neighbors.getMyNeighbors(), myCellGrid);
+        myCellGrid = myCellGrid[row][col].updateCell(neighbors.getMyNeighbors(), myCellGrid, shape);
         //return myCellGrid[row][col].getMyNextState();
     }
 

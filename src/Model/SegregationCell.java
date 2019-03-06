@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.CellShape;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,7 +21,7 @@ public class SegregationCell extends Cell {
     }
 
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
         if(this.myCurrentState != 0){
             double percSame = findPercentageSame(neighbors);
             if(percSame < THRESHOLD){//this cell is unsatisfied -- moves

@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.CellShape;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ class GameOfLifeCellTest {
     private Cell liveCell;
     private List<Cell> neighbors;
     private Cell[][] cellGrid;
+    private CellShape shape = CellShape.SQUARE;
 
     @BeforeEach
     void setUp() {
@@ -36,7 +38,7 @@ class GameOfLifeCellTest {
     @Test
     void updateCellDeadToAlive() {
         List<Cell> neighs = neighbors.subList(0,4); //3 live, 1 dead
-        deadCell.updateCell(neighs, cellGrid);
+        deadCell.updateCell(neighs, cellGrid, shape);
 
         var expected = 1;
         var actual = deadCell.myNextState;
@@ -45,7 +47,7 @@ class GameOfLifeCellTest {
 
     @Test
     void updateCellDiesOverpopulation(){
-        liveCell.updateCell(neighbors, cellGrid);//Too many live neighbors (5)
+        liveCell.updateCell(neighbors, cellGrid, shape);//Too many live neighbors (5)
 
         var expected = 0;
         var actual = liveCell.myNextState;
@@ -55,7 +57,7 @@ class GameOfLifeCellTest {
     @Test
     void updateCellDiesUnderpopulation(){
         List<Cell> neighs = neighbors.subList(3,8); // 4 dead; 1 live
-        liveCell.updateCell(neighs, cellGrid);
+        liveCell.updateCell(neighs, cellGrid, shape);
 
         var expected = 0;
         var actual = liveCell.myNextState;
@@ -65,7 +67,7 @@ class GameOfLifeCellTest {
     @Test
     void updateCellSurvives(){
         List<Cell> neighs = neighbors.subList(1,5); // 2 live; 2 dead
-        liveCell.updateCell(neighs, cellGrid);
+        liveCell.updateCell(neighs, cellGrid, shape);
 
         var expected = 1;
         var actual = liveCell.myNextState;

@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.CellShape;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ class PercolationCellTest {
     Cell percolatingCell;
     List<Cell> neighbors;
     Cell[][] cellGrid;
+    CellShape shape = CellShape.SQUARE;
 
     @BeforeEach
     void setUp() {
@@ -42,7 +44,7 @@ class PercolationCellTest {
     @Test
     void updateOpenCellToPercolating() {
         List<Cell> neighs = neighbors.subList(4,7); //2 open, 1 percolating
-        openCell.updateCell(neighs, cellGrid);
+        openCell.updateCell(neighs, cellGrid, shape);
         var expected = 2;
         var actual = openCell.myNextState;
         assertEquals(expected, actual);
@@ -51,7 +53,7 @@ class PercolationCellTest {
     @Test
     void updateOpenCellToOpen(){
         List<Cell> neighs = neighbors.subList(0,6); //3 blocked, 3 open cells
-        openCell.updateCell(neighs, cellGrid);
+        openCell.updateCell(neighs, cellGrid, shape);
         var expected = 1;
         var actual = openCell.myNextState;
         assertEquals(expected, actual);
@@ -59,7 +61,7 @@ class PercolationCellTest {
 
     @Test
     void updateBlockedCell(){
-        blockedCell.updateCell(neighbors, cellGrid);
+        blockedCell.updateCell(neighbors, cellGrid, shape);
         var expected = 0;
         var actual = blockedCell.myNextState;
         assertEquals(expected, actual);
@@ -67,7 +69,7 @@ class PercolationCellTest {
 
     @Test
     void updatePercolatingCell(){
-        percolatingCell.updateCell(neighbors, cellGrid);
+        percolatingCell.updateCell(neighbors, cellGrid, shape);
         var expected = 2;
         var actual = percolatingCell.myNextState;
         assertEquals(expected, actual);

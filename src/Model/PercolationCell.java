@@ -1,4 +1,6 @@
 package Model;
+import Controller.CellShape;
+
 import java.util.List;
 
 public class PercolationCell extends Cell {
@@ -13,7 +15,7 @@ public class PercolationCell extends Cell {
     }
 
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
         if (this.myCurrentState == 1){
             for (Cell n : neighbors){
                 if(n.myCurrentState == 2){
