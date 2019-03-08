@@ -1,9 +1,6 @@
 package View;
 
-import Controller.CellShape;
-import Controller.EdgeType;
-import Controller.Grid;
-import Controller.NeighborhoodType;
+import Controller.*;
 import Model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -22,7 +19,6 @@ import javafx.util.Duration;
 import javafx.stage.FileChooser;
 import javafx.event.*;
 import javafx.scene.image.ImageView;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -31,16 +27,13 @@ import java.util.List;
 
 public class Main extends Application {
 
-
-    private static final String SIMULATION = "Percolation1";
+    private static final String SIMULATION = "PredatorPrey1";
     private static final int ACTUAL_WINDOW_WIDTH = 1000;
     private static final int WINDOW_HEIGHT = 700;
     private static final int WINDOW_WIDTH = 700;
     //public static final String STYLESHEET = "styles.css";
-
     private static int FRAMES_PER_SECOND = 6;
     private static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
-
     private static final Paint BACKGROUND = Color.WHITE;
     private static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
 
@@ -121,6 +114,7 @@ public class Main extends Application {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SIMULATION);
         //mySeed = new Data(new double[]{0.4,0.55, 0.05}, 5, 5);
         mySeed = new Data(myResources.getString("File"));
+        //mySeed = new Data(new int[]{15,9,1}, 5, 5);
         fillColorsList();
         myGrid = new Grid(mySeed);
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
@@ -142,6 +136,8 @@ public class Main extends Application {
         colorAllCells();
         initial.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         //seed.getStylesheets().add(STYLESHEET);
+        //FileCreator.writeCsvFile("User_Simulation", myGrid);
+        //FileCreator.writePropertiesFile("User_Simulation", "User_Simulation",  myResources.getString("Simulation"), cellColors);
         return initial;
     }
 

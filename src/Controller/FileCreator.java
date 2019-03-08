@@ -15,13 +15,13 @@ public class FileCreator {
     private static final String EQUALS_DELIMITER = "=";
     private static final String NEW_LINE_SEPARATOR = "\n";
     private static final String DATA_EXTENSION = "data\\";
-    private static final String RESOURCES_EXTENSION = "src\\Resources.";
+    private static final String RESOURCES_EXTENSION = "src\\Resources\\";
 
     public static void writeCsvFile(String fileName, Grid g) {
 
         FileWriter fileWriter = null;
         try {
-            fileWriter = new FileWriter(DATA_EXTENSION + fileName);
+            fileWriter = new FileWriter(DATA_EXTENSION + fileName + ".csv");
             //Add a new line separator after the header
             fileWriter.append(g.getMyRows() + "");
             fileWriter.append(COMMA_DELIMITER);
@@ -51,10 +51,10 @@ public class FileCreator {
         }
     }
 
-    public static void writePropertiesFile(String fileName, String CsvFile, String Simulation, HashMap<Integer, Color> cellColors){
+    public static void writePropertiesFile(String fileName, String CsvFile, String Simulation, Map<Integer, Color> cellColors){
         FileWriter fileWriter = null;
         try{
-            fileWriter = new FileWriter(RESOURCES_EXTENSION + fileName);
+            fileWriter = new FileWriter(RESOURCES_EXTENSION + fileName + ".properties");
             fileWriter.append("Simulation" + EQUALS_DELIMITER + Simulation);
             fileWriter.append(NEW_LINE_SEPARATOR);
             fileWriter.append("Name" + EQUALS_DELIMITER);

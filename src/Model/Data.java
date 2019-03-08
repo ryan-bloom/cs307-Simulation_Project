@@ -1,8 +1,11 @@
 package Model;
 
+import Controller.SimulationException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Data {
@@ -22,7 +25,10 @@ public class Data {
                         states[j][i] = Integer.parseInt(scanner.next().trim());
                     }
                 }
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e){
+                System.out.println("CSV Configuration File is not in correct format");
+                System.exit(0);
+            } catch (NoSuchElementException e){
                 System.out.println("CSV Configuration File is not in correct format");
                 System.exit(0);
             }
@@ -55,22 +61,32 @@ public class Data {
     public Data(int limits[], int height, int width){
         this.height = height;
         this.width = width;
+        //test if less entries in limits than in grid
+        if(getSum(limits)<height*width){
+            throw new SimulationException("Invalid number of cells in grid in configuration");
+        }
         states = new int[height][width];
         for (int i = 0; i<height; i++){
             for(int j = 0; j<width; j++){
-                int rand = (int) Math.random()*limits.length;
-                if(limits[rand]>0) {
-                    states[j][i] = rand;
-                    limits[rand]--;
-                }
+                int state = randomState(limits);
+                states[j][i] = state;
+                limits[state]--;
             }
         }
     }
 
-    public int randomState(int limits[]){
-        int state = (int)Math.random()*limits.length;
-        //if(limits[state]>)
-        return state;
+    private int getSum(int limits[]){
+        int sum = 0;
+        for(int i: limits){
+            sum+=i;
+        }
+        return sum;
+    }
+
+    private int randomState(int limits[]){
+        int state = (int)(Math.random()*limits.length);
+        if(limits[state]>0) return state;
+        else return randomState(limits);
     }
 
     public int getHeight(){
