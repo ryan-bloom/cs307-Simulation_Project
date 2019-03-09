@@ -163,6 +163,8 @@ public class Main extends Application {
                 CELL_SHAPE = CellShape.TRIANGLE;
             } else if (styleResources.getString("CellShape").equalsIgnoreCase("HEXAGON")) {
                 CELL_SHAPE = CellShape.HEXAGON;
+            }else{
+                showPopup(errorResources.getString("ShapeError"));
             }
         }catch(MissingResourceException e){
             showPopup(errorResources.getString("MissingResource"));
@@ -177,6 +179,8 @@ public class Main extends Application {
                 EDGE_TYPE = EdgeType.SEMITOROIDAL;
             } else if (styleResources.getString("EdgeType").equalsIgnoreCase("FINITE")) {
                 EDGE_TYPE = EdgeType.FINITE;
+            } else{
+                showPopup(errorResources.getString("EdgeError"));
             }
         }catch(MissingResourceException e){
             showPopup(errorResources.getString("MissingResource"));
@@ -191,6 +195,8 @@ public class Main extends Application {
                 NEIGHBORHOOD_TYPE = NeighborhoodType.CARDINAL;
             } else if (styleResources.getString("NeighborType").equalsIgnoreCase("CORNER")) {
                 NEIGHBORHOOD_TYPE = NeighborhoodType.CORNER;
+            } else{
+                showPopup(errorResources.getString("NeighborError"));
             }
         }catch(MissingResourceException e){
             showPopup(errorResources.getString("MissingResource"));
