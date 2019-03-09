@@ -25,7 +25,9 @@ Matt Rose: I worked on the configuration portion of the project. I created most 
 2) To help turn ImageView into various shapes: https://stackoverflow.com/questions/20708295/put-a-image-in-a-circle-view
 3) To understand Game Of Life rule changes for triangle and hexagonal grids: https://wpmedia.wolfram.com/uploads/sites/13/2018/02/15-3-4.pdf
 4) To understand enum types further: https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html
-5) All links provided in simulation assignments that described each type of simulation rules (Game of life, Percolation, Fire, RPS, Segregation, Predator Prey)
+5) The error handling lab helped with the pop-up messages and custom exceptions: https://coursework.cs.duke.edu/compsci307_2019spring/lab_exceptions/tree/master
+6) To help understand FileWriter and creating csv and properties files: https://www.geeksforgeeks.org/writing-a-csv-file-in-java-using-opencsv/
+7) All links provided in simulation assignments that described each type of simulation rules (Game of life, Percolation, Fire, RPS, Segregation, Predator Prey)
 
 
 ### Running the Program
@@ -45,7 +47,7 @@ Also, in Main, we used try/catches when initializing every Resource Bundle in ca
 
 There are several CSV files in our data folder if you look, and these are just different configurations for display or testing purposes. The program is designed to start with the first Game of Life file by default, and then the user can change it from there. The format of the CSV file is as follows: the first two entries represent the height and width of the grid in cells, and the values that follow are the initial states of the grid that are read in line by line into a 2D array in Data.
 
-There are also many properties files in the Resources folder. There is ErrorMessages, which contains the messages that accompany each specific error and are displayed in the pop-ups to the user when they occur. There is Style, which contains certain parameters about how the simulation should look (EXPAND ON THIS). There is also SimulationInfo, which gives the number of states for each simulation. In the Simulation States files, there is the state number and the corresponding state. For example in Game of Life, 0 means dead and 1 means alive. Each of the other simulation specific files correspond to a CSV file; for example, Fire1.properties corresponds to setting up Fire_Config_1.csv. 
+There are also many properties files in the Resources folder. There is ErrorMessages, which contains the messages that accompany each specific error and are displayed in the pop-ups to the user when they occur. There is Style, which contains certain parameters about how the simulation should look. There is also SimulationInfo, which gives the number of states for each simulation. In the Simulation States files, there is the state number and the corresponding state. For example in Game of Life, 0 means dead and 1 means alive. Each of the other simulation specific files correspond to a CSV file; for example, Fire1.properties corresponds to setting up Fire_Config_1.csv. 
 
 Finally, User_Simulation.properties and User_Simulation.csv are the files that are created when a user saves a simulation and can be used to load the simulation later.
 
