@@ -1,6 +1,7 @@
 package View;
 
 import Controller.*;
+import Model.Cell;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -34,11 +35,10 @@ public class Main extends Application {
     private static final Paint BACKGROUND = Color.WHITE;
     private static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
 
-
     //NeighborhoodType
-    private static final CellShape CELL_SHAPE = CellShape.SQUARE;
-    private static final EdgeType EDGE_TYPE = EdgeType.TOROIDAL;
-    private static final NeighborhoodType NEIGHBORHOOD_TYPE = NeighborhoodType.COMPLETE;
+    private static CellShape CELL_SHAPE;
+    private static EdgeType EDGE_TYPE;
+    private static NeighborhoodType NEIGHBORHOOD_TYPE;
 
     private Grid myGrid;
     private Data mySeed;
@@ -119,8 +119,9 @@ public class Main extends Application {
 
     public Scene setupSeed(int config) {
         initializeGrid();
-        //mySeed = new Data(new double[]{0.4,0.55, 0.05}, 5, 5);
-        //mySeed = new Data(new int[]{15,9,1}, 5, 5);
+        initializeShape();
+        initializeEdge();
+        initializeNeighbors();
         fillColorsList();
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
         cellWidth = WINDOW_WIDTH/mySeed.getWidth();
@@ -151,6 +152,48 @@ public class Main extends Application {
             showPopup(errorResources.getString("MissingProperties"));
         }catch(SimulationException e){
             showPopup(e.getMessage());
+        }
+    }
+
+    private void initializeShape(){
+        try {
+            if (styleResources.getString("CellShape").equalsIgnoreCase("SQUARE")) {
+                CELL_SHAPE = CellShape.SQUARE;
+            } else if (styleResources.getString("CellShape").equalsIgnoreCase("TRIANGLE")) {
+                CELL_SHAPE = CellShape.TRIANGLE;
+            } else if (styleResources.getString("CellShape").equalsIgnoreCase("HEXAGON")) {
+                CELL_SHAPE = CellShape.HEXAGON;
+            }
+        }catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingResource"));
+        }
+    }
+
+    private void initializeEdge(){
+        try {
+            if (styleResources.getString("EdgeType").equalsIgnoreCase("TOROIDAL")) {
+                EDGE_TYPE = EdgeType.TOROIDAL;
+            } else if (styleResources.getString("EdgeType").equalsIgnoreCase("SEMITOROIDAL")) {
+                EDGE_TYPE = EdgeType.SEMITOROIDAL;
+            } else if (styleResources.getString("EdgeType").equalsIgnoreCase("FINITE")) {
+                EDGE_TYPE = EdgeType.FINITE;
+            }
+        }catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingResource"));
+        }
+    }
+
+    private void initializeNeighbors(){
+        try {
+            if (styleResources.getString("NeighborType").equalsIgnoreCase("COMPLETE")) {
+                NEIGHBORHOOD_TYPE = NeighborhoodType.COMPLETE;
+            } else if (styleResources.getString("NeighborType").equalsIgnoreCase("CARDINAL")) {
+                NEIGHBORHOOD_TYPE = NeighborhoodType.CARDINAL;
+            } else if (styleResources.getString("NeighborType").equalsIgnoreCase("CORNER")) {
+                NEIGHBORHOOD_TYPE = NeighborhoodType.CORNER;
+            }
+        }catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingResource"));
         }
     }
 
