@@ -9,6 +9,7 @@ public class Data {
 
     private int height, width;
     private int[][] states;
+    private int numStates;
 
     public Data(String fileName) {
         try (Scanner scanner = new Scanner(new File(this.getClass().getClassLoader().getResource(fileName).toURI()))){
@@ -18,7 +19,10 @@ public class Data {
             states = new int[height][width];
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
-                    if (scanner.hasNext()) states[j][i] = Integer.parseInt(scanner.next().trim());
+                    if (scanner.hasNext()) {
+                        states[j][i] = Integer.parseInt(scanner.next().trim());
+                        numStates = states[j][i] > numStates ? states[j][i] : numStates;
+                    }
                 }
             }
         } catch (FileNotFoundException e) {
@@ -36,5 +40,8 @@ public class Data {
     }
     public int[][] getStates(){
         return states;
+    }
+    public int getNumStates() {
+        return numStates;
     }
 }

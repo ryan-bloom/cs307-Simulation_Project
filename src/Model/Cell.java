@@ -8,6 +8,15 @@ abstract public class Cell{
     protected int myNextState;
     protected int myRow;
     protected int myCol;
+    protected int myTotalStates;
+
+    public Cell(int row, int col, int state, int numStates) {
+        myRow = row;
+        myCol = col;
+        myCurrentState = state;
+        myNextState = state;
+        myTotalStates = numStates;
+    }
 
     public Cell(int row, int col, int state) {
         myRow = row;
@@ -19,9 +28,20 @@ abstract public class Cell{
     public void resetState() { myCurrentState = myNextState; }
     public int getMyCurrentState(){return myCurrentState;}
     public int getMyNextState(){return myNextState;}
+    public int incrementMyCurrentState() {
+        if (myCurrentState == myTotalStates - 1) {
+            myCurrentState = 0;
+        }
+        else if (myCurrentState < myTotalStates - 1) {
+            myCurrentState++;
+        }
+        myNextState = myCurrentState;
+        return myCurrentState;
+    }
 
     //abstract public void updateCell(List<Cell> neighbors, Cell[][] cellGrid);
     abstract public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid);
+
 
 
     @Override

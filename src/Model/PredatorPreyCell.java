@@ -18,11 +18,12 @@ public class PredatorPreyCell extends Cell {
      * @param col
      * @param state
      */
-    public PredatorPreyCell(int row, int col, int state){
-        super(row, col, state);
+    public PredatorPreyCell(int row, int col, int state, int numStates){
+        super(row, col, state, numStates);
         myReproductionTime = 0;
         myEnergyLeft = ENERGY;
     }
+    public PredatorPreyCell(int row, int col, int state) { super(row, col, state); }
 
     @Override
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {

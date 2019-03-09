@@ -8,9 +8,10 @@ public class PercolationCell extends Cell {
      * @param col
      * @param state
      */
-    public PercolationCell(int row, int col, int state){
-        super(row, col, state);
+    public PercolationCell(int row, int col, int state, int numStates){
+        super(row, col, state, numStates);
     }
+    public PercolationCell(int row, int col, int state) { super(row, col, state); }
 
     @Override
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {

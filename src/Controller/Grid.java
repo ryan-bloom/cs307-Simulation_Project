@@ -21,7 +21,7 @@ public class Grid {
         for (int i = 0; i < myRows; i++) {
             for (int j = 0; j < myCols; j++) {
                 //myCellGrid[i][j] = new GameOfLifeCell(i, j, myData.getStates()[i][j]);
-                myCellGrid[i][j] = new PercolationCell(i, j, myData.getStates()[i][j]);
+                myCellGrid[i][j] = new PercolationCell(i, j, myData.getStates()[i][j], 3);
                 //myCellGrid[i][j] = new RPSCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new FireCell(i, j, myData.getStates()[i][j]);
                 //myCellGrid[i][j] = new SegregationCell(i, j, myData.getStates()[i][j]);
@@ -44,6 +44,7 @@ public class Grid {
 
     //public Cell getCellAt(int row, int col){return myCellGrid[row][col];}
     public int getCellState(int row, int col){ return myCellGrid[row][col].getMyCurrentState(); }
+    public int incrementCellState(int row, int col){ return myCellGrid[row][col].incrementMyCurrentState(); }
     public Cell[][] getCellGrid(){ return myCellGrid; }
     public int getMyRows(){return myRows;}
     public int getMyCols(){return myCols;}
