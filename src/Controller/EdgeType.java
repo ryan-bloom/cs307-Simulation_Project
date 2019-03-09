@@ -2,5 +2,6 @@ package Controller;
 
 public enum EdgeType {
     TOROIDAL,
-    FINITE;
+    FINITE,
+    SEMITOROIDAL;
 }

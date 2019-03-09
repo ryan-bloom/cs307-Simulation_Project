@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.CellShape;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,7 @@ class SegregationCellTest {
     SegregationCell type2Cell;
     List<Cell> neighbors;
     SegregationCell[][] cellGrid;
+    CellShape shape = CellShape.SQUARE;
 
     @BeforeEach
     void setUp() {
@@ -118,13 +120,13 @@ class SegregationCellTest {
         SegregationCell temp = cellGrid[1][1];
 
         var expected1 = 1;
-        var actual1 = temp.myCurrentState;
+        var actual1 = temp.getMyCurrentState();
         assertEquals(expected1, actual1);
 
-        temp.updateCell(neighbors, cellGrid);
+        temp.updateCell(neighbors, cellGrid, shape);
 
         var expected2 = 0;
-        var actual2 = cellGrid[1][1].myCurrentState;
+        var actual2 = cellGrid[1][1].getMyCurrentState();
         assertEquals(expected2, actual2);
     }
 
@@ -134,13 +136,13 @@ class SegregationCellTest {
         SegregationCell temp = cellGrid[0][1];
 
         var expected1 = 2;
-        var actual1 = temp.myCurrentState;
+        var actual1 = temp.getMyCurrentState();
         assertEquals(expected1, actual1);
 
-        temp.updateCell(neighbors, cellGrid);
+        temp.updateCell(neighbors, cellGrid, shape);
 
         var expected2 = 2;
-        var actual2 = cellGrid[0][1].myCurrentState;
+        var actual2 = cellGrid[0][1].getMyCurrentState();
         assertEquals(expected2, actual2);
 
     }

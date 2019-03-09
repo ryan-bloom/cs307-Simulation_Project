@@ -1,4 +1,6 @@
 package Model;
+import Controller.CellShape;
+
 import java.util.List;
 
 public class PercolationCell extends Cell {
@@ -14,12 +16,12 @@ public class PercolationCell extends Cell {
     public PercolationCell(int row, int col, int state) { super(row, col, state); }
 
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
-        if (this.myCurrentState == 1){
+    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
+        if (this.getMyCurrentState() == 1){
             for (Cell n : neighbors){
-                if(n.myCurrentState == 2){
-                    this.myNextState = 2;
-                    cellGrid[myRow][myCol] = this;
+                if(n.getMyCurrentState() == 2){
+                    this.setMyNextState(2);
+                    cellGrid[getMyRow()][getMyCol()] = this;
                 }
             }
         }

@@ -1,9 +1,7 @@
 package View;
 
-import Controller.CellShape;
-import Controller.EdgeType;
-import Controller.Grid;
-import Model.*;
+import Controller.*;
+import Model.Cell;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -28,29 +26,25 @@ import javafx.event.*;
 import javafx.scene.image.ImageView;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.io.File;
-import java.util.List;
 
 public class Main extends Application {
 
-    public static final String SIMULATION = "Percolation";
-    public static final int ACTUAL_WINDOW_WIDTH = 1200;
-    public static final int WINDOW_HEIGHT = 700;
-    public static final int WINDOW_WIDTH = 700;
-    //public static final String STYLESHEET = "styles.css";
+    private static String SIMULATION = "GameOfLife1";
+    private static String USER_FILE = "User_Simulation";
+    private static final int ACTUAL_WINDOW_WIDTH = 1000;
+    private static final int WINDOW_HEIGHT = 700;
+    private static final int WINDOW_WIDTH = 700;
+    private static int FRAMES_PER_SECOND = 6;
+    private static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
+    private static final Paint BACKGROUND = Color.WHITE;
+    private static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
 
-    public static int FRAMES_PER_SECOND = 6;
-    public static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
-
-    public static final Paint BACKGROUND = Color.WHITE;
-    public static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
-    public static final String DATA_EXTENSION = "data\\";
-
-    private static final CellShape CELL_SHAPE = CellShape.SQUARE;
-    private static final EdgeType EDGE_TYPE = EdgeType.FINITE;
+    //NeighborhoodType
+    private static CellShape CELL_SHAPE;
+    private static EdgeType EDGE_TYPE;
+    private static NeighborhoodType NEIGHBORHOOD_TYPE;
 
     private Grid myGrid;
     private PolygonGrid myPolygonGrid;
@@ -58,6 +52,9 @@ public class Main extends Application {
     private Group myGroup;
     private Timeline myAnimation;
     private ResourceBundle myResources;
+    private ResourceBundle styleResources;
+    private ResourceBundle errorResources;
+    private ResourceBundle simulationResources;
     private Stage myStage;
     private ArrayList<XYChart.Series<Number, Number>> mySeries = new ArrayList<>();
     private int startTime = 0;
@@ -65,9 +62,8 @@ public class Main extends Application {
     private int currTime = startTime;
 
 
-
-    private HashMap<Integer, Color> cellColors = new HashMap<>();
-    private HashMap<Integer, Image> cellImages = new HashMap<>();
+    private Map<Integer, Color> cellColors = new HashMap<>();
+    private Map<Integer, Image> cellImages = new HashMap<>();
     private double cellWidth;
     private double cellHeight;
     private boolean isRunning = true;
@@ -85,7 +81,15 @@ public class Main extends Application {
         myGroup = new Group();
         myStage.setScene(setupConfig(1));
         myStage.setTitle(myResources.getString("Simulation"));
-
+        try{
+            myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SIMULATION);
+            styleResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Style");
+            simulationResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "SimulationInfo");
+            errorResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "ErrorMessages");
+            myStage.setTitle(myResources.getString("Simulation"));
+        } catch(MissingResourceException e){
+            showPopup("Properties file not found");
+        }
         var frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step());
         myAnimation = new Timeline();
         myAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -128,17 +132,18 @@ public class Main extends Application {
         myStage.show();
     }
 
-
     public Scene setupConfig(int config) {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
         mySeed = new Data(myResources.getString("File").split(",")[config - 1]);
         System.out.println(myResources.getString("File").split(",")[config - 1]);
         possibleStates = mySeed.getNumStates();
+        initializeGrid();
+        initializeShape();
+        initializeEdge();
+        initializeNeighbors();
         fillColorsList();
-        myGrid = new Grid(mySeed);
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
         cellWidth = WINDOW_WIDTH/mySeed.getWidth();
-        myGrid.fillCellGrid();
         Scene initial = new Scene(myGroup, ACTUAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
 
         for (Integer i : cellColors.keySet()) {
@@ -159,6 +164,66 @@ public class Main extends Application {
         return initial;
     }
 
+    public void initializeGrid(){
+        try {
+            mySeed = new Data(myResources.getString("File"));
+            myGrid = new Grid(mySeed);
+            myGrid.fillCellGrid(myResources.getString("Simulation"));
+        }catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingProperties"));
+        }catch(SimulationException e){
+            showPopup(e.getMessage());
+        }
+    }
+
+    private void initializeShape(){
+        try {
+            if (styleResources.getString("CellShape").equalsIgnoreCase("SQUARE")) {
+                CELL_SHAPE = CellShape.SQUARE;
+            } else if (styleResources.getString("CellShape").equalsIgnoreCase("TRIANGLE")) {
+                CELL_SHAPE = CellShape.TRIANGLE;
+            } else if (styleResources.getString("CellShape").equalsIgnoreCase("HEXAGON")) {
+                CELL_SHAPE = CellShape.HEXAGON;
+            }else{
+                showPopup(errorResources.getString("ShapeError"));
+            }
+        }catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingResource"));
+        }
+    }
+
+    private void initializeEdge(){
+        try {
+            if (styleResources.getString("EdgeType").equalsIgnoreCase("TOROIDAL")) {
+                EDGE_TYPE = EdgeType.TOROIDAL;
+            } else if (styleResources.getString("EdgeType").equalsIgnoreCase("SEMITOROIDAL")) {
+                EDGE_TYPE = EdgeType.SEMITOROIDAL;
+            } else if (styleResources.getString("EdgeType").equalsIgnoreCase("FINITE")) {
+                EDGE_TYPE = EdgeType.FINITE;
+            } else{
+                showPopup(errorResources.getString("EdgeError"));
+            }
+        }catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingResource"));
+        }
+    }
+
+    private void initializeNeighbors(){
+        try {
+            if (styleResources.getString("NeighborType").equalsIgnoreCase("COMPLETE")) {
+                NEIGHBORHOOD_TYPE = NeighborhoodType.COMPLETE;
+            } else if (styleResources.getString("NeighborType").equalsIgnoreCase("CARDINAL")) {
+                NEIGHBORHOOD_TYPE = NeighborhoodType.CARDINAL;
+            } else if (styleResources.getString("NeighborType").equalsIgnoreCase("CORNER")) {
+                NEIGHBORHOOD_TYPE = NeighborhoodType.CORNER;
+            } else{
+                showPopup(errorResources.getString("NeighborError"));
+            }
+        } catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingResource"));
+        }
+    }
+
     public void colorAllCells() {
         for (int i = 0; i < mySeed.getWidth(); i++) {
             for (int j = 0; j < mySeed.getHeight(); j++) {
@@ -172,8 +237,19 @@ public class Main extends Application {
             String value = myResources.getString(s);
             if (s.contains("Color")) {
                 String[] color = value.split(",");
-                cellColors.put(Integer.parseInt(color[0]), Color.valueOf(color[1]));
+                try{
+                    cellColors.put(Integer.parseInt(color[0]), Color.valueOf(color[1]));
+                }catch(IllegalArgumentException e){
+                    showPopup(errorResources.getString("ColorHex"));
+                }
             }
+        }
+        try{
+            if(cellColors.size()<Integer.parseInt(simulationResources.getString(myResources.getString("Simulation")))){
+                showPopup(errorResources.getString("ColorConfiguration"));
+            }
+        }catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingProperties"));
         }
     }
 
@@ -214,7 +290,7 @@ public class Main extends Application {
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
                 //myGrid.updateGridCell(i, j);
-                myGrid.updateGridCell(i, j, CELL_SHAPE, EDGE_TYPE);
+                myGrid.updateGridCell(i, j, CELL_SHAPE, EDGE_TYPE, NEIGHBORHOOD_TYPE);
                 //myGroup.getChildren().add(updateCellView(i, j, myGrid.getCellState(i,j)));
             }
         }
@@ -303,5 +379,30 @@ public class Main extends Application {
             myStage.setScene(setupConfig(Integer.parseInt(code.getName())));
             myAnimation.play();
         }
+        if(code == KeyCode.S){
+            try{
+                FileCreator.writeCsvFile(USER_FILE, myGrid);
+                FileCreator.writePropertiesFile(USER_FILE, USER_FILE,  myResources.getString("Simulation"), cellColors);
+            }catch(SimulationException e){
+                showPopup(e.getMessage());
+            }
+        }
+        if(code == KeyCode.L){
+            myAnimation.stop();
+            try {
+                myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "User_Simulation2");
+            }catch (MissingResourceException e){
+                showPopup(errorResources.getString("LoadingError"));
+            }
+            initializeGrid();
+            myAnimation.play();
+        }
+    }
+
+    public void showPopup(String message) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(errorResources.getString("ErrorTitle"));
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

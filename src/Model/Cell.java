@@ -1,14 +1,18 @@
 package Model;
 
+import Controller.CellShape;
+
 import java.util.List;
 import java.util.Objects;
 
 abstract public class Cell{
-    protected int myCurrentState;
-    protected int myNextState;
-    protected int myRow;
-    protected int myCol;
+
+
     protected int myTotalStates;
+    private int myCurrentState;
+    private int myNextState;
+    private int myRow;
+    private int myCol;
 
     public Cell(int row, int col, int state, int numStates) {
         myRow = row;
@@ -39,8 +43,15 @@ abstract public class Cell{
         return myCurrentState;
     }
 
+    int getMyRow() { return myRow; }
+    int getMyCol() { return myCol; }
+    void setMyRow(int newRow) {this.myRow = newRow;}
+    void setMyCol(int newCol) {this.myCol = newCol;}
+    void setMyCurrentState(int newState) { this.myCurrentState = newState; }
+    void setMyNextState(int newState) {this.myNextState = newState; }
+
     //abstract public void updateCell(List<Cell> neighbors, Cell[][] cellGrid);
-    abstract public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid);
+    abstract public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape);
 
 
 
