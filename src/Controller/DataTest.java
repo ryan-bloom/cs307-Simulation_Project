@@ -1,5 +1,6 @@
-package Model;
+package Controller;
 
+import Controller.Data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

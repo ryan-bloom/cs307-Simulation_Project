@@ -1,7 +1,6 @@
 package View;
 
 import Controller.*;
-import Model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -19,19 +18,17 @@ import javafx.util.Duration;
 import javafx.stage.FileChooser;
 import javafx.event.*;
 import javafx.scene.image.ImageView;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+
+import java.util.*;
 import java.io.File;
-import java.util.List;
 
 public class Main extends Application {
 
-    private static final String SIMULATION = "PredatorPrey1";
+    private static String SIMULATION = "GameOfLife1";
+    private static String USER_FILE = "User_Simulation";
     private static final int ACTUAL_WINDOW_WIDTH = 1000;
     private static final int WINDOW_HEIGHT = 700;
     private static final int WINDOW_WIDTH = 700;
-    //public static final String STYLESHEET = "styles.css";
     private static int FRAMES_PER_SECOND = 6;
     private static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
     private static final Paint BACKGROUND = Color.WHITE;
@@ -48,6 +45,9 @@ public class Main extends Application {
     private Group myGroup;
     private Timeline myAnimation;
     private ResourceBundle myResources;
+    private ResourceBundle styleResources;
+    private ResourceBundle errorResources;
+    private ResourceBundle simulationResources;
     private Stage myStage;
 
     private Map<Integer, Color> cellColors = new HashMap<>();
@@ -66,9 +66,16 @@ public class Main extends Application {
     public void start(Stage stage) {
         myStage = stage;
         myGroup = new Group();
+        try{
+            myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SIMULATION);
+            styleResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Style");
+            simulationResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "SimulationInfo");
+            errorResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "ErrorMessages");
+            myStage.setTitle(myResources.getString("Simulation"));
+        }catch(MissingResourceException e){
+            showPopup("Properties file not found");
+        }
         myStage.setScene(setupSeed(1));
-        myStage.setTitle(myResources.getString("Simulation"));
-
         var frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step());
         myAnimation = new Timeline();
         myAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -111,16 +118,12 @@ public class Main extends Application {
     }
 
     public Scene setupSeed(int config) {
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SIMULATION);
+        initializeGrid();
         //mySeed = new Data(new double[]{0.4,0.55, 0.05}, 5, 5);
-        mySeed = new Data(myResources.getString("File"));
         //mySeed = new Data(new int[]{15,9,1}, 5, 5);
         fillColorsList();
-        myGrid = new Grid(mySeed);
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
         cellWidth = WINDOW_WIDTH/mySeed.getWidth();
-
-        myGrid.fillCellGrid(myResources.getString("Simulation"));
         Scene initial = new Scene(myGroup, ACTUAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
 
         for (Integer i : cellColors.keySet()) {
@@ -136,11 +139,20 @@ public class Main extends Application {
         colorAllCells();
         initial.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         //seed.getStylesheets().add(STYLESHEET);
-        //FileCreator.writeCsvFile("User_Simulation", myGrid);
-        //FileCreator.writePropertiesFile("User_Simulation", "User_Simulation",  myResources.getString("Simulation"), cellColors);
         return initial;
     }
 
+    public void initializeGrid(){
+        try {
+            mySeed = new Data(myResources.getString("File"));
+            myGrid = new Grid(mySeed);
+            myGrid.fillCellGrid(myResources.getString("Simulation"));
+        }catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingProperties"));
+        }catch(SimulationException e){
+            showPopup(e.getMessage());
+        }
+    }
 
     public void colorAllCells() {
         for (int i = 0; i < mySeed.getWidth(); i++) {
@@ -156,12 +168,23 @@ public class Main extends Application {
             String value = myResources.getString(s);
             if(s.contains("Color")) {
                 String[] color = value.split(",");
-                cellColors.put(Integer.parseInt(color[0]), Color.valueOf(color[1]));
+                try{
+                    cellColors.put(Integer.parseInt(color[0]), Color.valueOf(color[1]));
+                }catch(IllegalArgumentException e){
+                    showPopup(errorResources.getString("ColorHex"));
+                }
             }
+        }
+        try{
+            if(cellColors.size()<Integer.parseInt(simulationResources.getString(myResources.getString("Simulation")))){
+                showPopup(errorResources.getString("ColorConfiguration"));
+            }
+        }catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingProperties"));
         }
     }
 
-    public Node updateCellView(int row, int col, int state) {
+     public Node updateCellView(int row, int col, int state) {
         if (useImages) {
             var res = new ImageView(cellImages.get(state));
             res.setFitHeight(cellHeight);
@@ -228,5 +251,30 @@ public class Main extends Application {
             myStage.setScene(setupSeed(Integer.parseInt(code.getName())));
             myAnimation.play();
         }
+        if(code == KeyCode.S){
+            try{
+                FileCreator.writeCsvFile(USER_FILE, myGrid);
+                FileCreator.writePropertiesFile(USER_FILE, USER_FILE,  myResources.getString("Simulation"), cellColors);
+            }catch(SimulationException e){
+                showPopup(e.getMessage());
+            }
+        }
+        if(code == KeyCode.L){
+            myAnimation.stop();
+            try {
+                myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "User_Simulation2");
+            }catch (MissingResourceException e){
+                showPopup(errorResources.getString("LoadingError"));
+            }
+            initializeGrid();
+            myAnimation.play();
+        }
+    }
+
+    public void showPopup(String message) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(errorResources.getString("ErrorTitle"));
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

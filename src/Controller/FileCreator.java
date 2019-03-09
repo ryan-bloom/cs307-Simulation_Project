@@ -4,7 +4,6 @@ import javafx.scene.paint.Color;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -16,8 +15,9 @@ public class FileCreator {
     private static final String NEW_LINE_SEPARATOR = "\n";
     private static final String DATA_EXTENSION = "data\\";
     private static final String RESOURCES_EXTENSION = "src\\Resources\\";
+    private static final String ERROR_MSG = "Error saving your simulation";
 
-    public static void writeCsvFile(String fileName, Grid g) {
+    public static void writeCsvFile(String fileName, Grid g) throws SimulationException {
 
         FileWriter fileWriter = null;
         try {
@@ -26,7 +26,6 @@ public class FileCreator {
             fileWriter.append(g.getMyRows() + "");
             fileWriter.append(COMMA_DELIMITER);
             fileWriter.append(g.getMyCols() + "");
-            fileWriter.append(COMMA_DELIMITER);
             fileWriter.append(NEW_LINE_SEPARATOR);
 
             //Write a new student object list to the CSV file
@@ -37,21 +36,19 @@ public class FileCreator {
                 }
                 fileWriter.append(NEW_LINE_SEPARATOR);
             }
-            } catch (IOException e1) {
-                System.out.println("Error saving your simulation");
-                System.exit(0);
+            } catch (IOException e) {
+                throw new SimulationException(ERROR_MSG);
         } finally {
             try {
                 fileWriter.flush();
                 fileWriter.close();
             } catch (IOException e) {
-                System.out.println("Error saving your simulation");
-                System.exit(0);
+                throw new SimulationException(ERROR_MSG);
             }
         }
     }
 
-    public static void writePropertiesFile(String fileName, String CsvFile, String Simulation, Map<Integer, Color> cellColors){
+    public static void writePropertiesFile(String fileName, String CsvFile, String Simulation, Map<Integer, Color> cellColors) throws SimulationException{
         FileWriter fileWriter = null;
         try{
             fileWriter = new FileWriter(RESOURCES_EXTENSION + fileName + ".properties");
@@ -61,22 +58,20 @@ public class FileCreator {
             fileWriter.append(NEW_LINE_SEPARATOR);
             fileWriter.append("Description" + EQUALS_DELIMITER);
             fileWriter.append(NEW_LINE_SEPARATOR);
-            fileWriter.append("File" + EQUALS_DELIMITER + CsvFile);
+            fileWriter.append("File" + EQUALS_DELIMITER + CsvFile + ".csv");
             fileWriter.append(NEW_LINE_SEPARATOR);
             for(Map.Entry<Integer, Color> entry: cellColors.entrySet()){
                 fileWriter.append("Color" + entry.getKey() + EQUALS_DELIMITER + entry.getKey() + COMMA_DELIMITER + "#" + entry.getValue().toString().substring(2,8).toUpperCase());
                 fileWriter.append(NEW_LINE_SEPARATOR);
             }
         } catch (IOException e) {
-            System.out.println("Error saving your simulation");
-            System.exit(0);
+            throw new SimulationException(ERROR_MSG);
         }finally {
             try {
                 fileWriter.flush();
                 fileWriter.close();
             } catch (IOException e) {
-                System.out.println("Error saving your simulation");
-                System.exit(0);
+                throw new SimulationException(ERROR_MSG);
             }
         }
     }

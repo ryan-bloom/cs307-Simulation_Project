@@ -32,7 +32,7 @@ Matt Rose: Configuration/properties files
 
 View.Main class: ROHAN
 
-Model.Data files needed: MATT
+Controller.Data files needed: MATT
 
 Interesting data files:  
 FILES USED TO START THE PROJECT (CLASSES CONTIANING MAIN) @ROHAN 
