@@ -16,8 +16,11 @@ public abstract class PolygonGrid {
     public abstract void initializeShapes(int rows, int cols, double cellWidth, double cellHeight);
 
     public Double[] getCoordinates(int row, int col) {
+        double[] coordinates = new double[numSides];
+        for (int i = 0; i < numSides; i++) {
+            coordinates[i] = cellViewGrid[row][col].getPoints().indexOf(i);
+        }
         return cellViewGrid[row][col].getPoints().toArray(new Double[numSides]);
+        //return coordinates;
     }
-
-
 }

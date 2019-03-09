@@ -5,6 +5,9 @@ import Model.Cell;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
@@ -141,9 +144,43 @@ public class Main extends Application {
 
     private void setRunButton() {
         Button toRun = new Button("Run simulation");
-        toRun.relocate(WINDOW_WIDTH + 270, 0);
+        toRun.relocate(WINDOW_WIDTH + 400, 0);
         myGroup.getChildren().add(toRun);
+
+        ChoiceBox neighborType = new ChoiceBox(FXCollections.observableArrayList(NeighborhoodType.CARDINAL.toString(), NeighborhoodType.COMPLETE.toString(), NeighborhoodType.CORNER.toString()));
+        neighborType.relocate(WINDOW_WIDTH + 270, 0);
+        ChoiceBox edgeType = new ChoiceBox(FXCollections.observableArrayList(EdgeType.FINITE.toString(), EdgeType.SEMITOROIDAL.toString(), EdgeType.TOROIDAL.toString()));
+        edgeType.relocate(WINDOW_WIDTH + 270, 40);
+        ChoiceBox cellShape = new ChoiceBox(FXCollections.observableArrayList(CellShape.HEXAGON.toString(), CellShape.SQUARE.toString(), CellShape.TRIANGLE.toString()));
+        cellShape.relocate(WINDOW_WIDTH + 270, 80);
+        myGroup.getChildren().addAll(neighborType, edgeType, cellShape);
+
         toRun.setOnAction((ActionEvent event) -> {
+            for (NeighborhoodType nt : NeighborhoodType.values()) {
+                if (neighborType.getValue() != null && neighborType.getValue().equals(nt.toString())) {
+                    NEIGHBORHOOD_TYPE = nt;
+                }
+            }
+            for (EdgeType et : EdgeType.values()) {
+                if (edgeType.getValue() != null && edgeType.getValue().equals(et.toString())) {
+                    EDGE_TYPE = et;
+                }
+            }
+            for (CellShape cs : CellShape.values()) {
+                if (cellShape.getValue() != null && cellShape.getValue().equals(cs.toString())) {
+//                    if (cs != CELL_SHAPE) {
+//                        for (Node n : myGroup.getChildren()) {
+//                            Rectangle r = new Rectangle();
+//                            Polygon p = new Polygon();
+//                            if (n.getClass().equals(r.getClass()) || n.getClass().equals(p.getClass())) {
+//                                myGroup.getChildren().remove(n);
+//                            }
+//                        }
+                        CELL_SHAPE = cs;
+                    }
+                }
+            initializePolygonGrid();
+            colorAllCells();
             myAnimation.play();
         });
     }
@@ -168,10 +205,7 @@ public class Main extends Application {
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
         cellWidth = WINDOW_WIDTH/mySeed.getWidth();
         Scene initial = new Scene(myGroup, ACTUAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
-        if (CELL_SHAPE == CellShape.TRIANGLE || CELL_SHAPE == CellShape.HEXAGON) {
-            myPolygonGrid = CELL_SHAPE == CellShape.TRIANGLE ? new TriangleGrid(WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(),
-                    mySeed.getHeight()) : new HexagonGrid(WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(), mySeed.getHeight());
-        }
+        initializePolygonGrid();
         colorAllCells();
         statesGraph();
         initial.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
@@ -203,6 +237,13 @@ public class Main extends Application {
             }
         }catch(MissingResourceException e){
             showPopup(errorResources.getString("MissingResource"));
+        }
+    }
+
+    private void initializePolygonGrid() {
+        if (CELL_SHAPE == CellShape.TRIANGLE || CELL_SHAPE == CellShape.HEXAGON) {
+            myPolygonGrid = (CELL_SHAPE == CellShape.TRIANGLE) ? new TriangleGrid(WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(),
+                    mySeed.getHeight()) : new HexagonGrid(WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(), mySeed.getHeight());
         }
     }
 
@@ -271,14 +312,18 @@ public class Main extends Application {
         Node nodeToAdd = newCellNode(row, col, state);
         int newState = (state == possibleStates - 1) ? 0 : state + 1;
         nodeToAdd.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                e -> System.out.println("Original state: " + state + " New state: " + newState));//updateCellView(row, col, newState));
+                e -> interactiveStateChange(row, col, newState));//System.out.println("Original state: " + state + " New state: " + newState));//updateCellView(row, col, newState));
         myGroup.getChildren().add(nodeToAdd);
     }
 
+    private void interactiveStateChange(int row, int col, int state) {
+        updateCellView(row, col, state);
+        myGrid.updateCellState(row, col, state);
+    }
     private Node newCellNode(int row, int col, int state) {
         Shape cellShapeView;
         if (CELL_SHAPE == CellShape.HEXAGON || CELL_SHAPE == CellShape.TRIANGLE) {
-            cellShapeView = new Polygon();
+            cellShapeView = new Polygon();//myPolygonGrid.getCoordinates(row, col));
             ((Polygon) cellShapeView).getPoints().addAll(myPolygonGrid.getCoordinates(row, col));
         }
         else {
@@ -330,16 +375,19 @@ public class Main extends Application {
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Number of Cells by State");
         LineChart graph = new LineChart(xAxis, yAxis);
+        String graphStyle = "";
 
-        for (int i = 0; i <= possibleStates; i++) {
+        for (int i = 0; i < possibleStates; i++) {
             XYChart.Series<Number, Number> series = new XYChart.Series<>();
-            series.setName("State " + (i + 1));
+            series.setName("State " + i);
             mySeries.add(series);
             String hexValue = String.format( "#%02X%02X%02X",
-                    (int)( cellColors.get(0).getRed() * 255),
-                    (int)( cellColors.get(0).getGreen() * 255),
-                    (int)( cellColors.get(0).getBlue() * 255) );
+                    (int)( cellColors.get(i).getRed() * 255),
+                    (int)( cellColors.get(i).getGreen() * 255),
+                    (int)( cellColors.get(i).getBlue() * 255) );
+            graphStyle += "CHART_COLOR_" + (i+1) + ":" + hexValue + ";";
         }
+        graph.setStyle(graphStyle.substring(0, graphStyle.length() - 1));
         graph.getData().addAll(mySeries);
         graph.relocate(WINDOW_WIDTH, 300);
         myGroup.getChildren().add(graph);
