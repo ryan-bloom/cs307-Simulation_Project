@@ -13,9 +13,10 @@ public class RPSCell extends Cell{
      * @param col
      * @param state
      */
-    public RPSCell(int row, int col, int state){
-        super(row, col, state);
+    public RPSCell(int row, int col, int state, int numStates){
+        super(row, col, state, numStates);
     }
+    public RPSCell(int row, int col, int state) { super(row, col, state); }
 
     @Override
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
