@@ -11,7 +11,6 @@ public class Data {
 
     private int height, width;
     private int[][] states;
-    private int numStates;
     private ResourceBundle myResources = ResourceBundle.getBundle("Resources.ErrorMessages");
 
     public Data(String fileName) throws SimulationException {
@@ -25,7 +24,6 @@ public class Data {
                     for (int j = 0; j < width; j++) {
                         int state = Integer.parseInt(scanner.next().trim());
                         states[j][i] = state;
-                        numStates = states[j][i] > numStates ? states[j][i] : numStates;
                     }
                 }
             } catch (NumberFormatException e){
@@ -99,5 +97,4 @@ public class Data {
     public int[][] getStates(){
         return states;
     }
-    public int getNumStates() {return numStates; }
 }

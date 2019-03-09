@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.stage.FileChooser;
@@ -33,7 +34,7 @@ public class Main extends Application {
 
     private static String SIMULATION = "GameOfLife1";
     private static String USER_FILE = "User_Simulation";
-    private static final int ACTUAL_WINDOW_WIDTH = 1000;
+    private static final int ACTUAL_WINDOW_WIDTH = 1300;
     private static final int WINDOW_HEIGHT = 700;
     private static final int WINDOW_WIDTH = 700;
     private static int FRAMES_PER_SECOND = 6;
@@ -94,10 +95,13 @@ public class Main extends Application {
         myAnimation = new Timeline();
         myAnimation.setCycleCount(Timeline.INDEFINITE);
         myAnimation.getKeyFrames().add(frame);
+        setCustomViewControls();
+        setRunButton();
+        myStage.show();
+    }
 
+    private void setCustomViewControls() {
         final ToggleGroup cellGroup = new ToggleGroup();
-//        cellViewToggles("Color", cellGroup, 0, 500).setSelected(true);
-//        cellViewToggles("Image", cellGroup, 50, 500);
         ToggleButton imageToggle = new ToggleButton("Image");
         imageToggle.setToggleGroup(cellGroup);
         imageToggle.relocate(WINDOW_WIDTH + 150, 0);
@@ -106,46 +110,7 @@ public class Main extends Application {
         colorToggle.setToggleGroup(cellGroup);
         colorToggle.relocate(WINDOW_WIDTH + 210, 0);
         myGroup.getChildren().addAll(imageToggle, colorToggle);
-
-        Button toRun = new Button("Run simulation");
-        toRun.relocate(WINDOW_WIDTH + 270, 0);
-        myGroup.getChildren().add(toRun);
-        toRun.setOnAction((ActionEvent event) -> {
-            if (imageToggle.isSelected()) {
-                useImages = true;
-                final FileChooser fileChooser = new FileChooser();
-                fileChooser.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("All Images", "*.*"),
-                        new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                        new FileChooser.ExtensionFilter("PNG", "*.png")
-                );
-                List<File> imageFiles = fileChooser.showOpenMultipleDialog(stage);
-                if (imageFiles != null) {
-                    for (int i = 0; i < imageFiles.size(); i++) {
-                        Image image = new Image(imageFiles.get(i).toURI().toString());
-                        cellImages.put(i, image);
-                    }
-                }
-            }
-            myAnimation.play();
-        });
-        myStage.show();
-    }
-
-    public Scene setupConfig(int config) {
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Matt" + SIMULATION);
-        mySeed = new Data(myResources.getString("File").split(",")[config - 1]);
-        System.out.println(myResources.getString("File").split(",")[config - 1]);
-        possibleStates = mySeed.getNumStates();
-        initializeGrid();
-        initializeShape();
-        initializeEdge();
-        initializeNeighbors();
-        fillColorsList();
-        cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
-        cellWidth = WINDOW_WIDTH/mySeed.getWidth();
-        Scene initial = new Scene(myGroup, ACTUAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
-
+        imageToggle.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> chooseCustomImages());
         for (Integer i : cellColors.keySet()) {
             final ColorPicker colorPicker = new ColorPicker(cellColors.get(i));
             colorPicker.setOnAction((ActionEvent t) -> {
@@ -155,12 +120,61 @@ public class Main extends Application {
             colorPicker.relocate(700, 30 * i);
             myGroup.getChildren().add(colorPicker);
         }
-        //myPolygonGrid = new TriangleGrid(WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(), mySeed.getHeight());
-        myPolygonGrid = new HexagonGrid(WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(), mySeed.getHeight());
+    }
+
+    private void chooseCustomImages() {
+        useImages = true;
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Images", "*.*"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("PNG", "*.png")
+        );
+        List<File> imageFiles = fileChooser.showOpenMultipleDialog(myStage);
+        if (imageFiles != null) {
+            for (int i = 0; i < imageFiles.size(); i++) {
+                Image image = new Image(imageFiles.get(i).toURI().toString());
+                cellImages.put(i, image);
+            }
+        }
+    }
+
+    private void setRunButton() {
+        Button toRun = new Button("Run simulation");
+        toRun.relocate(WINDOW_WIDTH + 270, 0);
+        myGroup.getChildren().add(toRun);
+        toRun.setOnAction((ActionEvent event) -> {
+            myAnimation.play();
+        });
+    }
+
+    public Scene setupConfig(int config) {
+        try{
+            myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SIMULATION);
+            styleResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Style");
+            simulationResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "SimulationInfo");
+            possibleStates = Integer.parseInt(simulationResources.getString(myResources.getString("Simulation")));
+            errorResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "ErrorMessages");
+            myStage.setTitle(myResources.getString("Simulation"));
+        } catch(MissingResourceException e){
+            showPopup("Properties file not found");
+        }
+
+        initializeGrid();
+        initializeShape();
+        initializeEdge();
+        initializeNeighbors();
+        fillColorsList();
+        cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
+        cellWidth = WINDOW_WIDTH/mySeed.getWidth();
+        Scene initial = new Scene(myGroup, ACTUAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
+        if (CELL_SHAPE == CellShape.TRIANGLE || CELL_SHAPE == CellShape.HEXAGON) {
+            myPolygonGrid = CELL_SHAPE == CellShape.TRIANGLE ? new TriangleGrid(WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(),
+                    mySeed.getHeight()) : new HexagonGrid(WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(), mySeed.getHeight());
+        }
         colorAllCells();
         statesGraph();
         initial.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        //seed.getStylesheets().add(STYLESHEET);
         return initial;
     }
 
@@ -184,7 +198,7 @@ public class Main extends Application {
                 CELL_SHAPE = CellShape.TRIANGLE;
             } else if (styleResources.getString("CellShape").equalsIgnoreCase("HEXAGON")) {
                 CELL_SHAPE = CellShape.HEXAGON;
-            }else{
+            } else{
                 showPopup(errorResources.getString("ShapeError"));
             }
         }catch(MissingResourceException e){
@@ -255,33 +269,30 @@ public class Main extends Application {
 
     public void updateCellView(int row, int col, int state) {
         Node nodeToAdd = newCellNode(row, col, state);
+        int newState = (state == possibleStates - 1) ? 0 : state + 1;
         nodeToAdd.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                e -> updateCellView(row, col, myGrid.incrementCellState(row, col)));
+                e -> System.out.println("Original state: " + state + " New state: " + newState));//updateCellView(row, col, newState));
         myGroup.getChildren().add(nodeToAdd);
     }
 
     private Node newCellNode(int row, int col, int state) {
-        Node cellView;
-        if (useImages) {
-            cellView = new ImageView(cellImages.get(state));
-            ((ImageView) cellView).setFitHeight(cellHeight);
-            ((ImageView) cellView).setFitHeight(cellHeight);
-            ((ImageView) cellView).setFitWidth(cellWidth);
-            ((ImageView) cellView).setX(row * cellWidth);
-            ((ImageView) cellView).setY(col * cellHeight);
-        } else {
-            //cellView = new Rectangle(row * cellWidth, col * cellHeight, cellWidth, cellHeight);
-            cellView = new Polygon();
-            ((Polygon) cellView).getPoints().addAll(myPolygonGrid.getCoordinates(row, col));
-            for (Double d : myPolygonGrid.getCoordinates(row, col)) {
-                System.out.print(d + ",");
-            }
-            var color = cellColors.get(state);
-            System.out.println("row: " + row + "col: " + col);
-            System.out.println(state);
-            ((Polygon) cellView).setFill(color);
+        Shape cellShapeView;
+        if (CELL_SHAPE == CellShape.HEXAGON || CELL_SHAPE == CellShape.TRIANGLE) {
+            cellShapeView = new Polygon();
+            ((Polygon) cellShapeView).getPoints().addAll(myPolygonGrid.getCoordinates(row, col));
         }
-        return cellView;
+        else {
+            cellShapeView = new Rectangle(row * cellWidth, col * cellHeight, cellWidth, cellHeight);
+        }
+        if (useImages) {
+            ImageView cellImageView = new ImageView(cellImages.get(state));
+            cellImageView.setClip(cellShapeView);
+            return cellImageView;
+        } else {
+            var color = cellColors.get(state);
+            cellShapeView.setFill(color);
+        }
+        return cellShapeView;
     }
 
     private void step() {
@@ -330,15 +341,8 @@ public class Main extends Application {
                     (int)( cellColors.get(0).getBlue() * 255) );
         }
         graph.getData().addAll(mySeries);
-
-        String hexValue = String.format( "#%02X%02X%02X",
-                (int)( cellColors.get(0).getRed() * 255),
-                (int)( cellColors.get(0).getGreen() * 255),
-                (int)( cellColors.get(0).getBlue() * 255) );
-        graph.setStyle("COLOR1:" + hexValue);
         graph.relocate(WINDOW_WIDTH, 300);
         myGroup.getChildren().add(graph);
-
     }
 
 
@@ -356,17 +360,14 @@ public class Main extends Application {
 
         // Increase & decrease simulation speed
         if (code == KeyCode.UP) {
-            System.out.println("UP");
             myAnimation.setRate(myAnimation.getRate() + 1.0);
         }
         if (code == KeyCode.DOWN) {
-            System.out.println("DOWN");
             myAnimation.setRate(myAnimation.getRate() - 1.0);
         }
 
         // Individual steps
         if (code == KeyCode.RIGHT) {
-            System.out.println("RIGHT ARROW KEY");
             if (!isRunning) {
                 step();
             }
