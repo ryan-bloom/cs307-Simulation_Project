@@ -70,7 +70,10 @@ public class Grid {
         myCellGrid[row][col].resetState();
     }
     public int getCellState(int row, int col){ return myCellGrid[row][col].getMyCurrentState(); }
-    public int incrementCellState(int row, int col){ return myCellGrid[row][col].incrementMyCurrentState(); }
+    public void updateCellState(int row, int col, int newState){
+        myCellGrid[row][col].setMyCurrentState(newState);
+        myCellGrid[row][col].setMyNextState(newState);
+    }
     public Cell[][] getCellGrid(){ return myCellGrid; }
     public int getMyRows(){return myRows;}
     public int getMyCols(){return myCols;}
