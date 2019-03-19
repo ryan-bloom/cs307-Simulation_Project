@@ -19,9 +19,9 @@ class FireCellTest {
 
     @BeforeEach
     void setUp() {
-        emptyCell = new FireCell(1, 1, 0);
-        treeCell = new FireCell(1, 1, 1);
-        burningCell = new FireCell(1, 1, 2);
+        emptyCell = new FireCell(1, 1, 0, 3);
+        treeCell = new FireCell(1, 1, 1, 3);
+        burningCell = new FireCell(1, 1, 2, 3);
         neighbors = new ArrayList<>();
         cellGrid = new Cell[5][5];
     }

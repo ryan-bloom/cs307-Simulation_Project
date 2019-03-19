@@ -1,6 +1,7 @@
 package Model;
 
 import Controller.CellShape;
+import Controller.Grid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,10 @@ public class SegregationCell extends Cell {
      * @param col
      * @param state
      */
-    public SegregationCell(int row, int col, int state){
-        super(row, col, state);
+    public SegregationCell(int row, int col, int state, int numStates){
+        super(row, col, state, numStates);
     }
+    //public SegregationCell(int row, int col, int state) { super(row, col, state, 3); }
 
     /**
      * Implements segregation simulation rules
@@ -29,18 +31,30 @@ public class SegregationCell extends Cell {
      * @return
      */
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
+    public List<Cell> updateCell(List<Cell> neighbors, Grid cellGrid, CellShape shape) {
+        List<Cell> tempNewCells = new ArrayList<>();
         if(this.getMyCurrentState() != 0){
             double percSame = findPercentageSame(neighbors);
             if(percSame < THRESHOLD){//this cell is unsatisfied -- moves
-                var newLoc = randomEmptyLocation(findEmptyCells(cellGrid));
-                cellGrid[newLoc[0]][newLoc[1]].setMyNextState(this.getMyCurrentState());
-                cellGrid[newLoc[0]][newLoc[1]].setMyCurrentState(this.getMyCurrentState());
-                cellGrid[getMyRow()][getMyCol()].setMyCurrentState(0);
-                cellGrid[getMyRow()][getMyCol()].setMyNextState(0);
+                var newLoc = randomEmptyLocation(findEmptyCells(cellGrid.getMyRows(), cellGrid.getMyCols(), cellGrid));
+                Cell newCell = cellGrid.getCellAt(newLoc[0], newLoc[1]);
+                newCell.setMyCurrentState(this.getMyCurrentState());
+                newCell.setMyNextState(this.getMyNextState());
+
+                Cell oldCell = cellGrid.getCellAt(getMyRow(), getMyCol());
+                oldCell.setMyCurrentState(0);
+                oldCell.setMyNextState(0);
+
+                tempNewCells.add(newCell);
+                tempNewCells.add(oldCell);
+                //cellGrid[newLoc[0]][newLoc[1]].setMyNextState(this.getMyCurrentState());
+                //cellGrid[newLoc[0]][newLoc[1]].setMyCurrentState(this.getMyCurrentState());
+                //cellGrid[getMyRow()][getMyCol()].setMyCurrentState(0);
+                //cellGrid[getMyRow()][getMyCol()].setMyNextState(0);
             }
         }
-        return cellGrid;
+        return tempNewCells;
+        //return cellGrid;
     }
 
     /**
@@ -65,15 +79,16 @@ public class SegregationCell extends Cell {
 
     /**
      * Helper method finds empty cell location if this cell is unhappy
-     * @param cellGrid
+     * @param rows
+     * @param cols
      * @return
      */
-    List<Cell> findEmptyCells(Cell[][] cellGrid){
+    List<Cell> findEmptyCells(int rows, int cols, Grid cellGrid){
         List<Cell> res = new ArrayList<>();
-        for(int i=0; i<cellGrid.length; i++){
-            for(int j=0; j<cellGrid.length; j++){
-                if(cellGrid[i][j].getMyCurrentState() == 0){
-                    res.add(cellGrid[i][j]);
+        for(int i=0; i<rows; i++){
+            for(int j=0; j<cols; j++){
+                if(cellGrid.getCellAt(i, j).getMyCurrentState() == 0){
+                    res.add(cellGrid.getCellAt(i, j));
                 }
             }
         }

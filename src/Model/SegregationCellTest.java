@@ -1,6 +1,8 @@
 package Model;
 
 import Controller.CellShape;
+import Controller.Data;
+import Controller.Grid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,29 +16,31 @@ class SegregationCellTest {
     SegregationCell type1Cell;
     SegregationCell type2Cell;
     List<Cell> neighbors;
-    SegregationCell[][] cellGrid;
+    //SegregationCell[][] cellGrid;
+    Grid cellGrid;
     CellShape shape = CellShape.SQUARE;
 
     @BeforeEach
     void setUp() {
-        emptyCell = new SegregationCell(0, 0, 0);
-        type1Cell = new SegregationCell(0, 1, 1);
-        type2Cell = new SegregationCell(0, 2, 2);
+        emptyCell = new SegregationCell(0, 0, 0, 3);
+        type1Cell = new SegregationCell(0, 1, 1, 3);
+        type2Cell = new SegregationCell(0, 2, 2, 3);
         neighbors = new ArrayList<>();
-        cellGrid = new SegregationCell[5][5];
+        //cellGrid = new SegregationCell[5][5];
+        Data dat = new Data("Segregation_Config_1.csv");
     }
 
     void happyType2andEmptysetUp(){
         for(int i=0; i<5; i++){
             for(int j=0; j<5; j++){
                 if(i==0 || j==0 || i==4 || j==4){
-                    cellGrid[i][j] = new SegregationCell(i, j, 2);
+                    cellGrid[i][j] = new SegregationCell(i, j, 2, 3);
                 }
                 else if(i==1 && j==1){
-                    cellGrid[i][j] = new SegregationCell(i, j, 1);
+                    cellGrid[i][j] = new SegregationCell(i, j, 1, 3);
                 }
                 else{
-                    cellGrid[i][j] = new SegregationCell(i, j, 0);
+                    cellGrid[i][j] = new SegregationCell(i, j, 0, 3);
                 }
             }
         }

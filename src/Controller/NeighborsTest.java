@@ -25,7 +25,7 @@ class NeighborsTest {
     void fillGrid(){
         for(int i=0; i<10; i++){
             for(int j=0; j<10; j++){
-                myCellGrid[i][j] = new GameOfLifeCell(i, j, 1);
+                myCellGrid[i][j] = new GameOfLifeCell(i, j, 1, 2);
             }
         }
     }

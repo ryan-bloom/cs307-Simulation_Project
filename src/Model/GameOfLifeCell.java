@@ -1,6 +1,8 @@
 package Model;
 import Controller.CellShape;
+import Controller.Grid;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,9 +14,10 @@ public class GameOfLifeCell extends Cell {
      * @param col
      * @param state
      */
-    public GameOfLifeCell(int row, int col, int state){
-        super(row, col, state);
+    public GameOfLifeCell(int row, int col, int state, int numStates){
+        super(row, col, state, numStates);
     }
+    //public GameOfLifeCell(int row, int col, int state) { super(row, col, state); }
 
     /**
      * Update method splits into 3 update methods
@@ -26,7 +29,8 @@ public class GameOfLifeCell extends Cell {
      * @return
      */
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
+    public List<Cell> updateCell(List<Cell> neighbors, Grid cellGrid, CellShape shape) {
+        List<Cell> temp = new ArrayList<>();
         int liveCount = getLiveCount(neighbors);
         if(shape == CellShape.SQUARE){
             squareUpdate(liveCount);
@@ -38,8 +42,10 @@ public class GameOfLifeCell extends Cell {
             triUpdate(liveCount);
         }
         //Set the cell at this location to this (with newly updated states)
-        cellGrid[getMyRow()][getMyCol()] = this;
-        return cellGrid;
+        temp.add(this);
+        return temp;
+        //cellGrid[getMyRow()][getMyCol()] = this;
+        //return cellGrid;
     }
 
     /**

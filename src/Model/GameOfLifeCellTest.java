@@ -17,18 +17,18 @@ class GameOfLifeCellTest {
 
     @BeforeEach
     void setUp() {
-        deadCell = new GameOfLifeCell(1, 1, 0);
-        liveCell = new GameOfLifeCell(1, 1, 1);
+        deadCell = new GameOfLifeCell(1, 1, 0, 2);
+        liveCell = new GameOfLifeCell(1, 1, 1, 2);
         neighbors = new ArrayList<>();
         cellGrid = new Cell[5][5];
         Cell temp;
         for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
                 if(i==0 || j==2){ //live cells
-                    temp = new GameOfLifeCell(i, j, 1);
+                    temp = new GameOfLifeCell(i, j, 1, 2);
                 }
                 else{
-                    temp = new GameOfLifeCell(i, j, 0);
+                    temp = new GameOfLifeCell(i, j, 0, 2);
                 }
                 neighbors.add(temp);
             }
@@ -76,14 +76,14 @@ class GameOfLifeCellTest {
 
     @Test
     void cellEquals(){
-        Cell c1 = new GameOfLifeCell(1, 1, 1);
+        Cell c1 = new GameOfLifeCell(1, 1, 1, 2);
         var actual = liveCell.equals(c1);
         assertTrue(actual);
     }
 
     @Test
     void cellDoesNotEqual(){
-        Cell c1 = new GameOfLifeCell(1, 2, 0);
+        Cell c1 = new GameOfLifeCell(1, 2, 0, 2);
         var actual = liveCell.equals(c1);
         assertFalse(actual);
     }

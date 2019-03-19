@@ -3,6 +3,7 @@ package Model;
 import Controller.CellShape;
 import Controller.Grid;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FireCell extends Cell {
@@ -14,9 +15,10 @@ public class FireCell extends Cell {
      * @param col
      * @param state
      */
-    public FireCell(int row, int col, int state){
-        super(row, col, state);
+    public FireCell(int row, int col, int state, int numStates){
+        super(row, col, state, numStates);
     }
+    //public FireCell(int row, int col, int state) { super(row, col, state); }
 
     /**
      * update method implements fire simulation rules
@@ -26,7 +28,8 @@ public class FireCell extends Cell {
      * @return
      */
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
+    public List<Cell> updateCell(List<Cell> neighbors, Grid cellGrid, CellShape shape) {
+        List<Cell> temp = new ArrayList<>();
         //Empty stays empty and burning goes to empty always (o/w check neighbors)
         if(getMyCurrentState() == 1){
             for(Cell c: neighbors){
@@ -39,8 +42,10 @@ public class FireCell extends Cell {
         else{
             setMyNextState(0);
         }
+        temp.add(this);
+        return temp;
         //Grid.setCellAt(getMyRow(), getMyCol(), this);
-        cellGrid[getMyRow()][getMyCol()] = this;
-        return cellGrid;
+        //cellGrid[getMyRow()][getMyCol()] = this;
+        //return cellGrid;
     }
 }

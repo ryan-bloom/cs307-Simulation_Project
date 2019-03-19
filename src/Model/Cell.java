@@ -1,15 +1,17 @@
 package Model;
 
 import Controller.CellShape;
+import Controller.Grid;
 
 import java.util.List;
 import java.util.Objects;
 
 abstract public class Cell {
 
+
+    protected int myTotalStates;
     private int myCurrentState;
     private int myNextState;
-
     private int myRow;
     private int myCol;
 
@@ -19,11 +21,12 @@ abstract public class Cell {
      * @param col
      * @param state
      */
-    public Cell(int row, int col, int state) {
+    public Cell(int row, int col, int state, int numStates) {
         myRow = row;
         myCol = col;
         myCurrentState = state;
         myNextState = state;
+        myTotalStates = numStates;
     }
 
     /**
@@ -38,12 +41,12 @@ abstract public class Cell {
 
     //Getters and setters for variables (package private because used in concrete subclasses)
     int getMyNextState(){return myNextState;}
-    int getMyRow() { return myRow; }
-    int getMyCol() { return myCol; }
+    public int getMyRow() { return myRow; }
+    public int getMyCol() { return myCol; }
     void setMyRow(int newRow) {this.myRow = newRow;}
     void setMyCol(int newCol) {this.myCol = newCol;}
-    void setMyCurrentState(int newState) { this.myCurrentState = newState; }
-    void setMyNextState(int newState) {this.myNextState = newState; }
+    public void setMyCurrentState(int newState) { this.myCurrentState = newState; }
+    public void setMyNextState(int newState) {this.myNextState = newState; }
 
     /**
      * Abstract method differs per cell type
@@ -53,8 +56,7 @@ abstract public class Cell {
      * @param shape
      * @return
      */
-    abstract public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape);
-
+    abstract public List<Cell> updateCell(List<Cell> neighbors, Grid cellGrid, CellShape shape);
 
     /**
      * Equals method checks if this cell equals another in question

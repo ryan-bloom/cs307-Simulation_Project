@@ -1,7 +1,9 @@
 package Model;
 
 import Controller.CellShape;
+import Controller.Grid;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RPSCell extends Cell{
@@ -14,9 +16,10 @@ public class RPSCell extends Cell{
      * @param col
      * @param state
      */
-    public RPSCell(int row, int col, int state){
-        super(row, col, state);
+    public RPSCell(int row, int col, int state, int numStates){
+        super(row, col, state, numStates);
     }
+    //public RPSCell(int row, int col, int state) { super(row, col, state); }
 
     /**
      * Update method implements rps rules
@@ -27,7 +30,8 @@ public class RPSCell extends Cell{
      * @return
      */
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
+    public List<Cell> updateCell(List<Cell> neighbors, Grid cellGrid, CellShape shape) {
+        List<Cell> tempNew = new ArrayList<>();
         //rock = index 0; paper = index 1; scissor = index 2 in nCounts array
         int[] nCounts = {0, 0, 0};
         for(Cell c: neighbors){
@@ -38,10 +42,11 @@ public class RPSCell extends Cell{
                 //Assumption --> first enemy neighbor checked >= THRESHOLD wins
                 if(temp >= THRESHOLD){
                     this.setMyNextState(tempState);
-                    cellGrid[getMyRow()][getMyCol()] = this;
+                    tempNew.add(this);
+                    //cellGrid[getMyRow()][getMyCol()] = this;
                 }
             }
         }
-        return cellGrid;
+        return tempNew;
     }
 }

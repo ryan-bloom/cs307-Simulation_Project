@@ -2,6 +2,8 @@ package Controller;
 
 import Model.*;
 
+import java.util.List;
+
 public class Grid {
     private Data myData;
     private Cell[][] myCellGrid;
@@ -43,29 +45,36 @@ public class Grid {
      */
     public void updateGridCell(int row, int col, CellShape shape, EdgeType edgeType, NeighborhoodType neighborhoodType){
         Neighbors n = neighborhoodPicker(row, col, shape, edgeType, neighborhoodType);
-        //myCellGrid[row][col] = myCellGrid[row][col].updateCell(n.getMyNeighbors(), myCellGrid, shape);
-        myCellGrid = myCellGrid[row][col].updateCell(n.getMyNeighbors(), myCellGrid, shape);
+        List<Cell> newCells = myCellGrid[row][col].updateCell(n.getMyNeighbors(), this, shape);
+        for(Cell c:newCells){
+            myCellGrid[c.getMyRow()][c.getMyCol()] = c;
+        }
+        //myCellGrid[row][col] = myCellGrid[row][col].updateCell(n.getMyNeighbors(), this, shape);
+        //myCellGrid = myCellGrid[row][col].updateCell(n.getMyNeighbors(), myCellGrid, shape);
     }
 
     //Helper method initializes correct cell simulation type
     private Cell simCellPicker(String simType, int x, int y){
         if(simType.toUpperCase().equals("GAMEOFLIFE")){
-            return new GameOfLifeCell(x, y, myData.getStates()[x][y]);
+            return new GameOfLifeCell(x, y, myData.getStates()[x][y], 2);
         }
         else if(simType.toUpperCase().equals("PERCOLATION")){
-            return new PercolationCell(x, y, myData.getStates()[x][y]);
+            return new PercolationCell(x, y, myData.getStates()[x][y], 3);
         }
         else if(simType.toUpperCase().equals("FIRE")){
-            return new FireCell(x, y, myData.getStates()[x][y]);
+            return new FireCell(x, y, myData.getStates()[x][y], 3);
         }
         else if(simType.toUpperCase().equals("RPS")){
-            return new RPSCell(x, y, myData.getStates()[x][y]);
+            return new RPSCell(x, y, myData.getStates()[x][y], 3);
         }
         else if(simType.toUpperCase().equals("SEGREGATION")){
-            return new SegregationCell(x, y, myData.getStates()[x][y]);
+            return new SegregationCell(x, y, myData.getStates()[x][y], 3);
+        }
+        else if(simType.toUpperCase().equals("PREDATORPREY")){
+            return new PredatorPreyCell(x, y, myData.getStates()[x][y], 3);
         }
         else{
-            return new PredatorPreyCell(x, y, myData.getStates()[x][y]);
+            throw new SimulationException("Simulation type not found");
         }
     }
 
@@ -103,6 +112,11 @@ public class Grid {
      * getter
      * @return cell grid
      */
+    public void updateCellState(int row, int col, int newState){
+        myCellGrid[row][col].setMyCurrentState(newState);
+        myCellGrid[row][col].setMyNextState(newState);
+    }
+
     public Cell[][] getCellGrid(){ return myCellGrid; }
 
     /**
