@@ -18,6 +18,7 @@ public class Grid {
         myData = dat;
         myRows = myData.getHeight();
         myCols = myData.getWidth();
+        myCellGrid = new Cell[myRows][myCols];
     }
 
     /**
@@ -26,7 +27,7 @@ public class Grid {
      * @param simType
      */
     public void fillCellGrid(String simType){
-        myCellGrid = new Cell[myRows][myCols];
+        //myCellGrid = new Cell[myRows][myCols];
         for (int i = 0; i < myRows; i++) {
             for (int j = 0; j < myCols; j++) {
                 myCellGrid[i][j] = simCellPicker(simType, i, j);

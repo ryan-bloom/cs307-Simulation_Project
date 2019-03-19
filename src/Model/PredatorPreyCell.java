@@ -65,7 +65,11 @@ public class PredatorPreyCell extends Cell {
             Cell nextLoc = randDirection(possNext);
             return moveCell(nextLoc);
         }
-        return updatedCells;
+        else{
+            updatedCells.add(this);
+            return updatedCells;
+        }
+        //return updatedCells;
     }
 
     /**
@@ -96,9 +100,6 @@ public class PredatorPreyCell extends Cell {
                 this.setMyCurrentState(0);
                 tempNewCells.add(this);
                 return tempNewCells;
-                //cellGrid[getMyRow()][getMyCol()].setMyNextState(0);
-                //cellGrid[getMyRow()][getMyCol()].setMyCurrentState(0);
-                //return cellGrid;
             }
             else if(!emptyNear.isEmpty()){
                 Cell nextLoc = randDirection(emptyNear);
@@ -120,20 +121,22 @@ public class PredatorPreyCell extends Cell {
         int prevCol = this.getMyCol();
         int nxtRow = nextLocationCell.getMyRow();
         int nxtCol = nextLocationCell.getMyCol();
-        if(this.myReproductionTime >= GESTATION_PERIOD){
-            this.resetReproductionTime();
-            temp = new PredatorPreyCell(prevRow, prevCol, this.getMyCurrentState(), 3);
+        this.newLocation(nxtRow, nxtCol);
+        if(this.myReproductionTime < GESTATION_PERIOD){
+            temp = new PredatorPreyCell(prevRow, prevCol, 0, 3);
+            //this.newLocation(nxtRow, nxtCol);
+            tempList.add(this);
+            tempList.add(temp);
+            return tempList;
         }
         else{
-            temp = new PredatorPreyCell(prevRow, prevCol, 0, 3);
+            temp = new PredatorPreyCell(prevRow, prevCol, this.getMyCurrentState(), 3);
+            this.resetReproductionTime();
+            //this.newLocation(nxtRow, nxtCol);
+            tempList.add(this);
+            tempList.add(temp);
+            return tempList;
         }
-        this.newLocation(nxtRow, nxtCol);
-        tempList.add(this);
-        tempList.add(temp);
-        return tempList;
-        //cellGrid[nxtRow][nxtCol] = this;
-        //cellGrid[prevRow][prevCol] = temp;
-        //return cellGrid;
     }
 
     //Helper method randomly selects which neighboring cell to move to
@@ -150,7 +153,7 @@ public class PredatorPreyCell extends Cell {
     }
 
     //After reach gestation period must reset time to 0 for fish and sharks
-    void resetReproductionTime(){myReproductionTime = 0;}
+    void resetReproductionTime(){this.myReproductionTime = 0;}
 
     //Gets empty/fish neighboring cells
     private List<Cell> fillSubNeighbors(List<Cell> neighbors, int state){

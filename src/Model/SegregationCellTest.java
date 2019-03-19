@@ -28,7 +28,8 @@ class SegregationCellTest {
         neighbors = new ArrayList<>();
         //cellGrid = new SegregationCell[5][5];
         //5 by 5 grid in config_2
-        Data dat = new Data("Segregation_Config_2.csv");
+        Data dat = new Data("Segregation_Config_3.csv");
+        cellGrid = new Grid(dat);
     }
 
     void happyType2andEmptysetUp(){

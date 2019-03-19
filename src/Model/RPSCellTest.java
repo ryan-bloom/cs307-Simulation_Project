@@ -67,9 +67,10 @@ class RPSCellTest {
     void scissorToRockTie(){
         for(int i=0; i<4; i++){
             //Order matters here
-            neighbors.add(rockCell);
             neighbors.add(paperCell);
+            neighbors.add(rockCell);
         }
+
         scissorCell.updateCell(neighbors, cellGrid, shape);
 
         var expected =0;
@@ -81,8 +82,8 @@ class RPSCellTest {
     void scissorToPaperTie(){
         for(int i=0; i<4; i++){
             //Order matters here
-            neighbors.add(paperCell);
             neighbors.add(rockCell);
+            neighbors.add(paperCell);
         }
         scissorCell.updateCell(neighbors, cellGrid, shape);
 
