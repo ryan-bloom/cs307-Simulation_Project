@@ -93,4 +93,24 @@ class GameOfLifeCellTest {
         var actual = liveCell.equals(c1);
         assertFalse(actual);
     }
+
+    @Test
+    void hexCellDeadToAlive(){
+        List<Cell> neighs = neighbors.subList(1,4);//2 live
+        deadCell.updateCell(neighs, cellGrid, CellShape.HEXAGON);
+
+        var expected = 1;
+        var actual = deadCell.getMyNextState();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void triCellStaysAlive(){
+        List<Cell> neighs = neighbors.subList(1,4);//2 live
+        liveCell.updateCell(neighs, cellGrid, CellShape.TRIANGLE);
+
+        var expected = 1;
+        var actual = liveCell.getMyNextState();
+        assertEquals(expected, actual);
+    }
 }
