@@ -12,6 +12,14 @@ public abstract class Neighbors {
     private EdgeType myEdgeType;
     private CellShape myCellShape;
 
+    /**
+     * Constructor needs cellShape and edgeType as well as cellGrid to loop through and find neighbors
+     * @param x
+     * @param y
+     * @param myGrid
+     * @param cellShape
+     * @param edgeType
+     */
     public Neighbors(int x, int y, Cell[][] myGrid, CellShape cellShape, EdgeType edgeType){
         myX = x;
         myY = y;
@@ -20,6 +28,11 @@ public abstract class Neighbors {
         myNeighbors = findNeighbors(myGrid);
     }
 
+    /**
+     * calls correct helper method to find right neighbors based on CellShape
+     * @param cellGrid
+     * @return
+     */
     List<Cell> findNeighbors(Cell[][] cellGrid){
         if (myCellShape == CellShape.SQUARE) {
             return squareNeighbors(cellGrid, myX, myY);
@@ -32,9 +45,24 @@ public abstract class Neighbors {
         }
     }
 
+    /**
+     * Abstract squareNeighbors and triNeighbors in each of 3 concrete subclasses
+     * Loops through cellGrid and fills neighbors array accordingly
+     * @param cellGrid
+     * @param x
+     * @param y
+     * @return list of cell neighbors for this cell
+     */
     public abstract List<Cell> squareNeighbors(Cell[][] cellGrid, int x, int y);
     public abstract List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y);
     //Same for all neighbor types (Complete, Cardinal, Corner)
+
+    /**
+     * hexNeighbors in abstract class not in concrete subclasses because same for all 3 types of neighborshoods
+     * Complete, Cardinal, Corner all have same hex neighbors (still calls edgeCheck helper method)
+     * @param cellGrid
+     * @return list of neighbors for this cell
+     */
     private List<Cell> hexNeighbors(Cell[][] cellGrid){
         List<Cell> neighbors = new ArrayList<>();
 
@@ -52,22 +80,26 @@ public abstract class Neighbors {
         return neighbors;
     }
 
+    /**
+     * Getter returns list of neighbors
+     * @return
+     */
     List<Cell> getMyNeighbors(){return myNeighbors;}
 
 
-    //Edge check helper methods
+    //Edge check helper method (if edgeType is toroidal)
+    //Also used for semiToroidal edgeTypes in edgeCheck method
     private int toroidal(int curr, int max){
         if(curr >= max){ return 0; }
         else if(curr < 0){ return max - 1; }
         else{ return curr; }
     }
-    //Edge check helper method for finite edges (return true if within span of grid)
+    //Edge check helper method if edgeType is finite (return true if within span of grid)
     private boolean finite(int loc, int max){
         return(loc>=0 && loc<max);
     }
 
-
-    //Used for hex shaped cells (eliminate fake neighbors based on even row shift)
+    //Used for hex shaped cells (eliminate neighbors included in the loop but not actually touching current cell based on even row shift)
     private boolean goodHex(int r, int c){
         if(myX%2 == 0){//Even rows shifted right
             return((c!=myY-1) || (r != myX-1 && r!=myX+1));
@@ -78,33 +110,41 @@ public abstract class Neighbors {
     }
 
     //Used for triangle shaped cells (determine if upsideDown or rightSideUp based on indices)
-    //Must start 0,0 is upside down
+    //Must: 0,0 is upside down
     boolean upsideDown(){
         return ((myX%2==0 && myY%2 == 0) || (myX%2 != 0 && myY%2 != 0));
     }
 
-    //Called by each shapeNeighbors method on each cell to check for edge cases
+    /**
+     * Called by each shapeNeighbors method on each cell checking edge cases
+     * 3 different posibilities (toroidal, finite, semitoroidal -- use helper methods above)
+     * @param cellGrid
+     * @param x
+     * @param y
+     * @return
+     */
     Cell edgeCheck(Cell[][] cellGrid, int x, int y){
         int tempX;
         int tempY;
 
-        //toroidal
+        //toroidal -- loop to other side of grid always
         if(myEdgeType == EdgeType.TOROIDAL){
             tempX = toroidal(x, cellGrid.length);
             tempY = toroidal(y, cellGrid[0].length);
             return cellGrid[tempX][tempY];
         }
-        //finite
+
+        //finite -- never loop to other side of grid
         else if(myEdgeType == EdgeType.FINITE && finite(x, cellGrid.length) && finite(y, cellGrid[0].length)){
             return cellGrid[x][y];
         }
         //Semi toroidal -- corners don't overflow, only direct cardinal overflow
+        //Yes left right and top bottom overflow
         else if(myEdgeType == EdgeType.SEMITOROIDAL){
             tempX = toroidal(x, cellGrid.length);
             tempY = toroidal(y, cellGrid[0].length);
-            //Corner flip -- not allowed
+            //Corner flip -- not allowed (one temp must be same as original - no change)
             if(tempX == x || tempY == y){
-                //System.out.println(tempX + " " + tempY);
                 return cellGrid[tempX][tempY];
             }
         }

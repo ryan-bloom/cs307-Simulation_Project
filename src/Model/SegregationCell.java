@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Random;
 
 public class SegregationCell extends Cell {
-    //private static final Color[] COLORS = {Color.WHITE, Color.RED, Color.BLUE};
-    private static final double THRESHOLD = 0.7; //30% for satisfaction
+    private static final double THRESHOLD = 0.7; //70% for satisfaction = more segregation
 
     /**
+     * Constructor sets cell of 1 of 3 states
      * 0 = empty; 1 = red; 2 = blue
      * @param row
      * @param col
@@ -20,6 +20,14 @@ public class SegregationCell extends Cell {
         super(row, col, state);
     }
 
+    /**
+     * Implements segregation simulation rules
+     * uses helper methods to determine if cell is "happy" and if not -- moves to empty location
+     * @param neighbors
+     * @param cellGrid
+     * @param shape
+     * @return
+     */
     @Override
     public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid, CellShape shape) {
         if(this.getMyCurrentState() != 0){
@@ -35,6 +43,12 @@ public class SegregationCell extends Cell {
         return cellGrid;
     }
 
+    /**
+     * Helper method gets number of similar neighbors
+     * Used in update method to compare to threshold and determine if cell should move
+     * @param neighbors
+     * @return
+     */
     double findPercentageSame(List<Cell> neighbors){
         int same = 0;
         double total = 0;
@@ -49,6 +63,11 @@ public class SegregationCell extends Cell {
         return same/total;
     }
 
+    /**
+     * Helper method finds empty cell location if this cell is unhappy
+     * @param cellGrid
+     * @return
+     */
     List<Cell> findEmptyCells(Cell[][] cellGrid){
         List<Cell> res = new ArrayList<>();
         for(int i=0; i<cellGrid.length; i++){
@@ -61,6 +80,12 @@ public class SegregationCell extends Cell {
         return res;
     }
 
+    /**
+     * Helper method randomly selects one of the open locations found by helper method above
+     * Allows cell to randomly jump to empty locations
+     * @param possibleCells
+     * @return
+     */
     int[] randomEmptyLocation(List<Cell> possibleCells){
         int[] res = new int[2];
         Random rand = new Random();

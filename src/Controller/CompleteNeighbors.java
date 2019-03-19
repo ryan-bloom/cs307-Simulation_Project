@@ -7,10 +7,27 @@ import java.util.List;
 
 public class CompleteNeighbors extends Neighbors {
 
+    /**
+     * Constructor for complete neighbors subclass
+     * Gets full set of neighbors (cardinal and corner)
+     * @param x
+     * @param y
+     * @param grid
+     * @param shape
+     * @param edgeType
+     */
     public CompleteNeighbors(int x, int y, Cell[][] grid, CellShape shape, EdgeType edgeType) {
         super(x, y, grid, shape, edgeType);
     }
 
+    /**
+     * Get all neighbors for square cells
+     * Use edgeCheck helper method in cell abstract class
+     * @param cellGrid
+     * @param myX
+     * @param myY
+     * @return array of cells that are this cell's neighbors
+     */
     @Override
     public List<Cell> squareNeighbors(Cell[][] cellGrid, int myX, int myY) {
         List<Cell> neighbors = new ArrayList<>();
@@ -30,6 +47,13 @@ public class CompleteNeighbors extends Neighbors {
 
     //HEX NEIGHBORS SAME FOR COMPLETE CARDINAL AND CORNER THEREFORE METHOD IN ABSTRACT NEIGHBORS CLASS
 
+    /**
+     * Use upsideDown and rightSideUp helper methods because triangle orientation impacts neighbors
+     * @param cellGrid
+     * @param x
+     * @param y
+     * @return array of cells that are this cell's neighbors
+     */
     @Override
     public List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y){
         if(upsideDown()){//upside down triangle - 5,4,3
@@ -40,6 +64,15 @@ public class CompleteNeighbors extends Neighbors {
         }
     }
 
+    /**
+     * Finds upsideDown triangle neighbors looping through rows and columns
+     * Checks if location should be counted based on r,c indices
+     * Uses edgeCheck helper method
+     * @param cellGrid
+     * @param myX
+     * @param myY
+     * @return array of cells that are this cell's neighbors
+     */
     private List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
@@ -57,6 +90,15 @@ public class CompleteNeighbors extends Neighbors {
         return neighbors;
     }
 
+    /**
+     * Finds right side up triangle neighbors
+     * loops through rows and columns checking if location should be included
+     * Uses edgeCheck helper method
+     * @param cellGrid
+     * @param myX
+     * @param myY
+     * @return array of cells that are this cell's neighbors
+     */
     private List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
