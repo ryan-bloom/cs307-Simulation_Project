@@ -1,6 +1,8 @@
 package Model;
 
 import Controller.CellShape;
+import Controller.Data;
+import Controller.Grid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +16,8 @@ class FireCellTest {
     private Cell treeCell;
     private Cell burningCell;
     private List<Cell> neighbors;
-    private Cell[][] cellGrid;
+    //private Cell[][] cellGrid;
+    private Grid cellGrid;
     private CellShape shape = CellShape.SQUARE;
 
     @BeforeEach
@@ -23,7 +26,9 @@ class FireCellTest {
         treeCell = new FireCell(1, 1, 1, 3);
         burningCell = new FireCell(1, 1, 2, 3);
         neighbors = new ArrayList<>();
-        cellGrid = new Cell[5][5];
+        //cellGrid = new Cell[5][5];
+        Data dat = new Data("Fire_Config_2.csv");
+        cellGrid = new Grid(dat);
     }
 
     @Test

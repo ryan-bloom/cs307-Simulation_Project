@@ -27,20 +27,24 @@ class SegregationCellTest {
         type2Cell = new SegregationCell(0, 2, 2, 3);
         neighbors = new ArrayList<>();
         //cellGrid = new SegregationCell[5][5];
-        Data dat = new Data("Segregation_Config_1.csv");
+        //5 by 5 grid in config_2
+        Data dat = new Data("Segregation_Config_2.csv");
     }
 
     void happyType2andEmptysetUp(){
         for(int i=0; i<5; i++){
             for(int j=0; j<5; j++){
                 if(i==0 || j==0 || i==4 || j==4){
-                    cellGrid[i][j] = new SegregationCell(i, j, 2, 3);
+                    cellGrid.setCellAt(i, j, new SegregationCell(i, j, 2, 3));
+                    //cellGrid[i][j] = new SegregationCell(i, j, 2, 3);
                 }
                 else if(i==1 && j==1){
-                    cellGrid[i][j] = new SegregationCell(i, j, 1, 3);
+                    cellGrid.setCellAt(i, j, new SegregationCell(i, j, 1, 3));
+                    //cellGrid[i][j] = new SegregationCell(i, j, 1, 3);
                 }
                 else{
-                    cellGrid[i][j] = new SegregationCell(i, j, 0, 3);
+                    cellGrid.setCellAt(i, j, new SegregationCell(i, j, 0, 3));
+                    //cellGrid[i][j] = new SegregationCell(i, j, 0, 3);
                 }
             }
         }
@@ -49,7 +53,8 @@ class SegregationCellTest {
                 if(i!=1 || j!= 1){
                     //neighbors array has only type2 cells;
                     //specifically neighbors or cellType1 in location 1,1
-                    neighbors.add(cellGrid[i][j]);
+                    //neighbors.add(cellGrid[i][j]);
+                    neighbors.add(cellGrid.getCellAt(i, j));
                 }
             }
         }
@@ -81,7 +86,7 @@ class SegregationCellTest {
     void findEmptyCellsInGrid() {
         happyType2andEmptysetUp();
         //8 empty cells in this setup
-        List<Cell> empties = type1Cell.findEmptyCells(cellGrid);
+        List<Cell> empties = type1Cell.findEmptyCells(cellGrid.getMyRows(), cellGrid.getMyCols(), cellGrid);
 
         var expected = 8;
         var actual = empties.size();
@@ -92,7 +97,7 @@ class SegregationCellTest {
     void randomCellSelector(){
         happyType2andEmptysetUp();
         //8 empty cells in this setup
-        List<Cell> empties = type1Cell.findEmptyCells(cellGrid);
+        List<Cell> empties = type1Cell.findEmptyCells(cellGrid.getMyRows(), cellGrid.getMyCols(), cellGrid);
         int[] newLoc = type1Cell.randomEmptyLocation(empties);
         List<Integer> possRC = new ArrayList<>();
         for(int i=1; i<4; i++){
@@ -109,7 +114,7 @@ class SegregationCellTest {
     void randomCellSelector2(){
         happyType2andEmptysetUp();
         //8 empty cells in this setup
-        List<Cell> empties = type1Cell.findEmptyCells(cellGrid);
+        List<Cell> empties = type1Cell.findEmptyCells(cellGrid.getMyRows(), cellGrid.getMyCols(), cellGrid);
         int[] newLoc = type1Cell.randomEmptyLocation(empties);
 
         int newR = newLoc[0];
@@ -121,7 +126,7 @@ class SegregationCellTest {
     @Test
     void updateUnhappyType1(){
         happyType2andEmptysetUp();
-        SegregationCell temp = cellGrid[1][1];
+        Cell temp = cellGrid.getCellAt(1,1);
 
         var expected1 = 1;
         var actual1 = temp.getMyCurrentState();
@@ -130,14 +135,14 @@ class SegregationCellTest {
         temp.updateCell(neighbors, cellGrid, shape);
 
         var expected2 = 0;
-        var actual2 = cellGrid[1][1].getMyCurrentState();
+        var actual2 = cellGrid.getCellAt(1,1).getMyCurrentState();
         assertEquals(expected2, actual2);
     }
 
     @Test
     void updateHappyType2(){
         happyType2andEmptysetUp();
-        SegregationCell temp = cellGrid[0][1];
+        Cell temp = cellGrid.getCellAt(0,1);
 
         var expected1 = 2;
         var actual1 = temp.getMyCurrentState();
@@ -146,7 +151,7 @@ class SegregationCellTest {
         temp.updateCell(neighbors, cellGrid, shape);
 
         var expected2 = 2;
-        var actual2 = cellGrid[0][1].getMyCurrentState();
+        var actual2 = cellGrid.getCellAt(0,1).getMyCurrentState();
         assertEquals(expected2, actual2);
 
     }

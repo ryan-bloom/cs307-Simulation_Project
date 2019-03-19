@@ -1,6 +1,8 @@
 package Model;
 
 import Controller.CellShape;
+import Controller.Data;
+import Controller.Grid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -13,7 +15,8 @@ class PercolationCellTest {
     Cell openCell;
     Cell percolatingCell;
     List<Cell> neighbors;
-    Cell[][] cellGrid;
+    //Cell[][] cellGrid;
+    Grid cellGrid;
     CellShape shape = CellShape.SQUARE;
 
     @BeforeEach
@@ -22,7 +25,9 @@ class PercolationCellTest {
         openCell = new PercolationCell(1, 1, 1, 3);
         percolatingCell = new PercolationCell(1, 1, 2, 3);
         neighbors = new ArrayList<>();
-        cellGrid = new Cell[5][5];
+        Data dat = new Data("Percolation_Config_1.csv");
+        cellGrid = new Grid(dat);
+        //cellGrid = new Cell[5][5];
 
         Cell temp;
         for(int i=0; i<3; i++){

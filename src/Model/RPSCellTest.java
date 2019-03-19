@@ -1,6 +1,8 @@
 package Model;
 
 import Controller.CellShape;
+import Controller.Data;
+import Controller.Grid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +17,8 @@ class RPSCellTest {
     private Cell paperCell;
     private Cell scissorCell;
     private List<Cell> neighbors;
-    private Cell[][] cellGrid;
+    //private Cell[][] cellGrid;
+    private Grid cellGrid;
     private CellShape shape = CellShape.SQUARE;
 
 
@@ -25,7 +28,9 @@ class RPSCellTest {
         paperCell = new RPSCell(1, 1, 1, 3);
         scissorCell = new RPSCell(1, 1, 2,3);
         neighbors = new ArrayList<>();
-        cellGrid = new Cell[5][5];
+        Data dat = new Data("RPS_Config_2.csv");
+        cellGrid = new Grid(dat);
+        //cellGrid = new Cell[5][5];
     }
 
     @Test

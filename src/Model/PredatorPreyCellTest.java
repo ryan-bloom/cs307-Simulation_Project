@@ -27,6 +27,7 @@ class PredatorPreyCellTest {
         sharkCell = new PredatorPreyCell(0, 2, 2, 3);
         neighbors = new ArrayList<>();
         //cellGrid = new PredatorPreyCell[5][5];
+        //5 by 5 grid in config_2.csv
         Data dat = new Data("PredatorPrey_Config_2.csv");
         cellGrid = new Grid(dat);
     }

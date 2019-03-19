@@ -1,6 +1,8 @@
 package Model;
 
 import Controller.CellShape;
+import Controller.Data;
+import Controller.Grid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -12,7 +14,8 @@ class GameOfLifeCellTest {
     private Cell deadCell;
     private Cell liveCell;
     private List<Cell> neighbors;
-    private Cell[][] cellGrid;
+    //private Cell[][] cellGrid;
+    Grid cellGrid;
     private CellShape shape = CellShape.SQUARE;
 
     @BeforeEach
@@ -20,7 +23,10 @@ class GameOfLifeCellTest {
         deadCell = new GameOfLifeCell(1, 1, 0, 2);
         liveCell = new GameOfLifeCell(1, 1, 1, 2);
         neighbors = new ArrayList<>();
-        cellGrid = new Cell[5][5];
+        //cellGrid = new Cell[5][5];
+        Data dat = new Data("GameOfLife_Config_1.csv");
+        cellGrid = new Grid(dat);
+
         Cell temp;
         for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
