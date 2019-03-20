@@ -7,6 +7,19 @@ import java.util.List;
 
 
 public class GameOfLifeCell extends Cell {
+    //Rule numbers vary for cell shapes
+    private static final int SQUARE_REVIVE = 3;
+    private static final int SQUARE_SURVIVE1 = 2;
+    private static final int SQUARE_SURVIVE2 = 3;
+
+    private static final int HEX_REVIVE = 2;
+    private static final int HEX_SURVIVE1 = 3;
+    private static final int HEX_SURVIVE2 = 5;
+
+    private static final int TRI_REVIVE = 3;
+    private static final int TRI_SURVIVE1 = 2;
+    private static final int TRI_SURVIVE2 = 7;
+
     /**
      * Constructor uses super to set cell and states (2 possible)
      * 0 = dead; 1 = alive
@@ -33,67 +46,29 @@ public class GameOfLifeCell extends Cell {
         List<Cell> temp = new ArrayList<>();
         int liveCount = getLiveCount(neighbors);
         if(shape == CellShape.SQUARE){
-            squareUpdate(liveCount);
+            allUpdate(liveCount, SQUARE_REVIVE, SQUARE_SURVIVE1, SQUARE_SURVIVE2);
         }
         else if(shape == CellShape.HEXAGON){
-            hexUpdate(liveCount);
+            allUpdate(liveCount, HEX_REVIVE, HEX_SURVIVE1, HEX_SURVIVE2);
         }
         else{
-            triUpdate(liveCount);
+            allUpdate(liveCount, TRI_REVIVE, TRI_SURVIVE1, TRI_SURVIVE2);
         }
         //Set the cell at this location to this (with newly updated states)
         temp.add(this);
         return temp;
-        //cellGrid[getMyRow()][getMyCol()] = this;
-        //return cellGrid;
     }
 
-    /**
-     * rules for square cells implemented here (3/2,3)
-     * @param liveCount
-     */
-    private void squareUpdate(int liveCount){
+    private void allUpdate(int liveCount, int revive, int survive1, int survive2){
         if(this.getMyCurrentState() == 1){
-            if(liveCount < 2 || liveCount >= 4){
-                this.setMyNextState(0);
+            if(liveCount == survive1 || liveCount == survive2){
+                this.setMyNextState(1);
             }
             else{
-                this.setMyNextState(1);
+                this.setMyNextState(0);
             }
         }
-        else if(liveCount == 3) {
-            this.setMyNextState(1);
-        }
-    }
-
-    /**
-     * rules for hex cells implemented here (2/3,5)
-     * @param liveCount
-     */
-    private void hexUpdate(int liveCount){
-        if(this.getMyCurrentState() == 1){
-            if(liveCount == 3 || liveCount == 5){
-                this.setMyNextState(1);
-            }
-            else{ this.setMyNextState(0); }
-        }
-        else if(liveCount == 2){
-            this.setMyNextState(1);
-        }
-    }
-
-    /**
-     * rules for triangle cells implemented here (3/2,7)
-     * @param liveCount
-     */
-    private void triUpdate(int liveCount){
-        if(this.getMyCurrentState() == 1){
-            if(liveCount == 2 || liveCount == 7){
-                this.setMyNextState(1);
-            }
-            else{this.setMyNextState(0);}
-        }
-        else if(liveCount == 3){
+        else if(liveCount == revive) {
             this.setMyNextState(1);
         }
     }

@@ -65,8 +65,12 @@ abstract public class Cell {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Cell)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o.getClass() == this.getClass())){
+            return false;
+        }
         Cell cell = (Cell) o;
         return myCurrentState == cell.myCurrentState &&
                 myRow == cell.myRow &&

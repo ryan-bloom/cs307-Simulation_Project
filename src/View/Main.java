@@ -35,7 +35,7 @@ import java.io.File;
 
 public class Main extends Application {
 
-    private static String SIMULATION = "PredatorPrey1";
+    private static String SIMULATION = "GameOfLife2";
     private static String USER_FILE = "User_Simulation";
     private static final int ACTUAL_WINDOW_WIDTH = 1300;
     private static final int WINDOW_HEIGHT = 700;
