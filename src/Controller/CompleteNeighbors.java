@@ -6,6 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompleteNeighbors extends Neighbors {
+    private final static int LOWER_BOUND_SQUARE = 1;
+    private final static int UPPER_BOUND_SQUARE = 2;
+
+    private final static int LOWER_BOUND_TRI = 1;
+    private final static int MID_BOUND_TRI = 2;
+    private final static int UPPER_BOUND_TRI = 3;
+
 
     /**
      * Constructor for complete neighbors subclass
@@ -32,8 +39,8 @@ public class CompleteNeighbors extends Neighbors {
     public List<Cell> squareNeighbors(Cell[][] cellGrid, int myX, int myY) {
         List<Cell> neighbors = new ArrayList<>();
 
-        for (int i = myX - 1; i < myX + 2; i++) {
-            for (int j = myY - 1; j < myY + 2; j++) {
+        for (int i = myX - LOWER_BOUND_SQUARE; i < myX + UPPER_BOUND_SQUARE; i++) {
+            for (int j = myY - LOWER_BOUND_SQUARE; j < myY + UPPER_BOUND_SQUARE; j++) {
                 if (i != myX || j != myY) {
                     Cell temp = edgeCheck(cellGrid, i, j);
                     if (temp != null) {
@@ -45,25 +52,6 @@ public class CompleteNeighbors extends Neighbors {
         return neighbors;
     }
 
-    //HEX NEIGHBORS SAME FOR COMPLETE CARDINAL AND CORNER THEREFORE METHOD IN ABSTRACT NEIGHBORS CLASS
-
-    /**
-     * Use upsideDown and rightSideUp helper methods because triangle orientation impacts neighbors
-     * @param cellGrid
-     * @param x
-     * @param y
-     * @return array of cells that are this cell's neighbors
-     */
-    @Override
-    public List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y){
-        if(upsideDown()){//upside down triangle - 5,4,3
-            return upsideDownNeighbors(cellGrid, x, y);
-        }
-        else{
-            return rightSideUpNeighbors(cellGrid, x, y);
-        }
-    }
-
     /**
      * Finds upsideDown triangle neighbors looping through rows and columns
      * Checks if location should be counted based on r,c indices
@@ -73,11 +61,12 @@ public class CompleteNeighbors extends Neighbors {
      * @param myY
      * @return array of cells that are this cell's neighbors
      */
-    private List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int myX, int myY){
+    @Override
+    public List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
-        for(int i=myX-1; i<myX+2; i++){
-            for(int j=myY-2; j<myY+3; j++){
+        for(int i=myX-LOWER_BOUND_TRI; i<myX+MID_BOUND_TRI; i++){
+            for(int j=myY-MID_BOUND_TRI; j<myY+UPPER_BOUND_TRI; j++){
                 if((i!=myX || j!=myY) && (i!=myX+1 || (j!=myY-2 && j!=myY+2))){
                     Cell temp = edgeCheck(cellGrid, i, j);
                     if(temp!=null){
@@ -99,11 +88,12 @@ public class CompleteNeighbors extends Neighbors {
      * @param myY
      * @return array of cells that are this cell's neighbors
      */
-    private List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int myX, int myY){
+    @Override
+    public List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
-        for(int i=myX-1; i<myX+2; i++){
-            for(int j=myY-2; j<myY+3; j++){
+        for(int i=myX-LOWER_BOUND_TRI; i<myX+MID_BOUND_TRI; i++){
+            for(int j=myY-MID_BOUND_TRI; j<myY+UPPER_BOUND_TRI; j++){
                 if((i!=myX || j!=myY) && (i!=myX-1 ||(j!=myY-2 && j!=myY+2))){
                     Cell temp = edgeCheck(cellGrid, i, j);
                     if(temp!=null){

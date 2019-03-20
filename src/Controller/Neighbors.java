@@ -54,7 +54,19 @@ public abstract class Neighbors {
      * @return list of cell neighbors for this cell
      */
     public abstract List<Cell> squareNeighbors(Cell[][] cellGrid, int x, int y);
-    public abstract List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y);
+    //public abstract List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y);
+
+    public List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y) {
+        if(upsideDown()){
+            return upsideDownNeighbors(cellGrid, x, y);
+        }
+        else{
+            return rightSideUpNeighbors(cellGrid, x, y);
+        }
+    }
+
+    public abstract List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int x, int y);
+    public abstract List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int x, int y);
     //Same for all neighbor types (Complete, Cardinal, Corner)
 
     /**
@@ -84,15 +96,24 @@ public abstract class Neighbors {
      * Getter returns list of neighbors
      * @return
      */
-    List<Cell> getMyNeighbors(){return myNeighbors;}
+    List<Cell> getMyNeighbors(){
+        List<Cell> copy = myNeighbors;
+        return copy;
+    }
 
 
     //Edge check helper method (if edgeType is toroidal)
     //Also used for semiToroidal edgeTypes in edgeCheck method
     private int toroidal(int curr, int max){
-        if(curr >= max){ return 0; }
-        else if(curr < 0){ return max - 1; }
-        else{ return curr; }
+        if(curr >= max){
+            return 0;
+        }
+        else if(curr < 0){
+            return max - 1;
+        }
+        else{
+            return curr;
+        }
     }
     //Edge check helper method if edgeType is finite (return true if within span of grid)
     private boolean finite(int loc, int max){
@@ -111,7 +132,7 @@ public abstract class Neighbors {
 
     //Used for triangle shaped cells (determine if upsideDown or rightSideUp based on indices)
     //Must: 0,0 is upside down
-    boolean upsideDown(){
+    private boolean upsideDown(){
         return ((myX%2==0 && myY%2 == 0) || (myX%2 != 0 && myY%2 != 0));
     }
 
