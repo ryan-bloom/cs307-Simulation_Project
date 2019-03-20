@@ -107,7 +107,9 @@ public class Grid {
      * @param col
      * @return
      */
-    public int getCellState(int row, int col){ return myCellGrid[row][col].getMyCurrentState(); }
+    public int getCellState(int row, int col){
+        return myCellGrid[row][col].getMyCurrentState();
+    }
 
     /**
      * getter
@@ -122,13 +124,17 @@ public class Grid {
      * getter
      * @return number of rows in grid
      */
-    public int getMyRows(){return myRows;}
+    public int getMyRows(){
+        return myRows;
+    }
 
     /**
      * getter
      * @return number of columns in grid
      */
-    public int getMyCols(){return myCols;}
+    public int getMyCols(){
+        return myCols;
+    }
 
     public Cell getCellAt(int row, int col){
         return myCellGrid[row][col];
