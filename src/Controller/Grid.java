@@ -80,15 +80,19 @@ public class Grid {
     }
 
     //Helper method called by update to get correct neighborhood for cell
+    //Pass in "this" instead of myCellGrid
     private Neighbors neighborhoodPicker(int x, int y, CellShape shape, EdgeType edgeType, NeighborhoodType neighborhoodType){
         if(neighborhoodType == NeighborhoodType.COMPLETE){
-            return new CompleteNeighbors(x, y, myCellGrid, shape, edgeType);
+            //return new CompleteNeighbors(x, y, myCellGrid, shape, edgeType);
+            return new CompleteNeighbors(x, y, this, shape, edgeType);
         }
         else if(neighborhoodType == NeighborhoodType.CARDINAL){
-            return new CardinalNeighbors(x, y, myCellGrid, shape, edgeType);
+            //return new CardinalNeighbors(x, y, myCellGrid, shape, edgeType);
+            return new CardinalNeighbors(x, y, this, shape, edgeType);
         }
         else{ //Corner neighborhoodType
-            return new CornerNeighbors(x, y, myCellGrid, shape, edgeType);
+            //return new CornerNeighbors(x, y, myCellGrid, shape, edgeType);
+            return new CornerNeighbors(x, y, this, shape, edgeType);
         }
     }
 
@@ -135,11 +139,9 @@ public class Grid {
     public int getMyCols(){
         return myCols;
     }
-
     public Cell getCellAt(int row, int col){
         return myCellGrid[row][col];
     }
-
     public void setCellAt(int row, int col, Cell cell){
         myCellGrid[row][col] = cell;
     }

@@ -20,7 +20,7 @@ public abstract class Neighbors {
      * @param cellShape
      * @param edgeType
      */
-    public Neighbors(int x, int y, Cell[][] myGrid, CellShape cellShape, EdgeType edgeType){
+    public Neighbors(int x, int y, Grid myGrid, CellShape cellShape, EdgeType edgeType){
         myX = x;
         myY = y;
         myEdgeType = edgeType;
@@ -33,7 +33,7 @@ public abstract class Neighbors {
      * @param cellGrid
      * @return
      */
-    List<Cell> findNeighbors(Cell[][] cellGrid){
+    List<Cell> findNeighbors(Grid cellGrid){
         if (myCellShape == CellShape.SQUARE) {
             return squareNeighbors(cellGrid, myX, myY);
         }
@@ -53,10 +53,9 @@ public abstract class Neighbors {
      * @param y
      * @return list of cell neighbors for this cell
      */
-    public abstract List<Cell> squareNeighbors(Cell[][] cellGrid, int x, int y);
-    //public abstract List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y);
+    public abstract List<Cell> squareNeighbors(Grid cellGrid, int x, int y);
 
-    public List<Cell> triNeighbors(Cell[][] cellGrid, int x, int y) {
+    public List<Cell> triNeighbors(Grid cellGrid, int x, int y) {
         if(upsideDown()){
             return upsideDownNeighbors(cellGrid, x, y);
         }
@@ -65,9 +64,8 @@ public abstract class Neighbors {
         }
     }
 
-    public abstract List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int x, int y);
-    public abstract List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int x, int y);
-    //Same for all neighbor types (Complete, Cardinal, Corner)
+    public abstract List<Cell> upsideDownNeighbors(Grid cellGrid, int x, int y);
+    public abstract List<Cell> rightSideUpNeighbors(Grid cellGrid, int x, int y);
 
     /**
      * hexNeighbors in abstract class not in concrete subclasses because same for all 3 types of neighborshoods
@@ -75,7 +73,7 @@ public abstract class Neighbors {
      * @param cellGrid
      * @return list of neighbors for this cell
      */
-    private List<Cell> hexNeighbors(Cell[][] cellGrid){
+    private List<Cell> hexNeighbors(Grid cellGrid){
         List<Cell> neighbors = new ArrayList<>();
 
         //Even r-horizontal layout (shoves even rows right)
@@ -144,29 +142,29 @@ public abstract class Neighbors {
      * @param y
      * @return
      */
-    Cell edgeCheck(Cell[][] cellGrid, int x, int y){
+    Cell edgeCheck(Grid cellGrid, int x, int y){
         int tempX;
         int tempY;
 
         //toroidal -- loop to other side of grid always
         if(myEdgeType == EdgeType.TOROIDAL){
-            tempX = toroidal(x, cellGrid.length);
-            tempY = toroidal(y, cellGrid[0].length);
-            return cellGrid[tempX][tempY];
+            tempX = toroidal(x, cellGrid.getMyRows());
+            tempY = toroidal(y, cellGrid.getMyCols());
+            return cellGrid.getCellAt(tempX, tempY);
         }
 
         //finite -- never loop to other side of grid
-        else if(myEdgeType == EdgeType.FINITE && finite(x, cellGrid.length) && finite(y, cellGrid[0].length)){
-            return cellGrid[x][y];
+        else if(myEdgeType == EdgeType.FINITE && finite(x, cellGrid.getMyRows()) && finite(y, cellGrid.getMyCols())){
+            return cellGrid.getCellAt(x,y);
         }
         //Semi toroidal -- corners don't overflow, only direct cardinal overflow
         //Yes left right and top bottom overflow
         else if(myEdgeType == EdgeType.SEMITOROIDAL){
-            tempX = toroidal(x, cellGrid.length);
-            tempY = toroidal(y, cellGrid[0].length);
+            tempX = toroidal(x, cellGrid.getMyRows());
+            tempY = toroidal(y, cellGrid.getMyCols());
             //Corner flip -- not allowed (one temp must be same as original - no change)
             if(tempX == x || tempY == y){
-                return cellGrid[tempX][tempY];
+                return cellGrid.getCellAt(tempX, tempY);
             }
         }
         return null;
