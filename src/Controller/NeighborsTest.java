@@ -14,18 +14,20 @@ class NeighborsTest {
     CornerNeighbors myCornerNeighbors;
     CompleteNeighbors myCompleteNeighbors;
     CardinalNeighbors myCardinalNeighbors;
-    Cell[][] myCellGrid;
+    //Cell[][] myCellGrid;
+    Grid myCellGrid;
 
     @BeforeEach
     void setUpSquares() {
-        myCellGrid = new Cell[10][10];
+        Data dat = new Data("GameOfLife_Config_2.csv");
+        myCellGrid = new Grid(dat);
         fillGrid();
     }
 
     void fillGrid(){
         for(int i=0; i<10; i++){
             for(int j=0; j<10; j++){
-                myCellGrid[i][j] = new GameOfLifeCell(i, j, 1, 2);
+                myCellGrid.setCellAt(i, j, new GameOfLifeCell(i, j, 1, 2));
             }
         }
     }

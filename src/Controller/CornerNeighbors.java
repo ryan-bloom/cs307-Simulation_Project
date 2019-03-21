@@ -22,7 +22,7 @@ public class CornerNeighbors extends Neighbors {
      * @param shape
      * @param edgeType
      */
-    public CornerNeighbors(int x, int y, Cell[][] grid, CellShape shape, EdgeType edgeType){
+    public CornerNeighbors(int x, int y, Grid grid, CellShape shape, EdgeType edgeType){
         super(x, y, grid, shape, edgeType);
     }
 
@@ -34,7 +34,7 @@ public class CornerNeighbors extends Neighbors {
      * @return array of cells that are this cell's neighbors
      */
     @Override
-    public List<Cell> squareNeighbors(Cell[][] cellGrid, int myX, int myY){
+    public List<Cell> squareNeighbors(Grid cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
         for (int i = myX - LOWER_BOUND_SQUARE; i < myX + UPPER_BOUND_SQUARE; i++) {
@@ -58,7 +58,7 @@ public class CornerNeighbors extends Neighbors {
      * @return array of cells that are this cell's neighbors
      */
     @Override
-    public List<Cell> upsideDownNeighbors(Cell[][] cellGrid, int myX, int myY){
+    public List<Cell> upsideDownNeighbors(Grid cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
         for(int i=myX-LOWER_BOUND_TRI; i<myX+MID_BOUND_TRI; i++){
@@ -84,7 +84,7 @@ public class CornerNeighbors extends Neighbors {
      * @return array of cells that are this cell's neighbors
      */
     @Override
-    public List<Cell> rightSideUpNeighbors(Cell[][] cellGrid, int myX, int myY){
+    public List<Cell> rightSideUpNeighbors(Grid cellGrid, int myX, int myY){
         List<Cell> neighbors = new ArrayList<>();
 
         for(int i=myX-LOWER_BOUND_TRI; i<myX+MID_BOUND_TRI; i++){
