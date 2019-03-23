@@ -4,8 +4,6 @@ import Controller.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -32,7 +30,6 @@ import java.io.File;
 
 public class Main extends Application {
 
-    private static String SIMULATION = "GameOfLife1";
     private static final int ACTUAL_WINDOW_WIDTH = 1300;
     private static final int WINDOW_HEIGHT = 700;
     private static final int WINDOW_WIDTH = 700;
@@ -63,13 +60,12 @@ public class Main extends Application {
     private int currTime = startTime;
 
     //GUI Text Strings
-    private String INITIAL_SIM;
-    private String USER_FILE;
-    private String IMAGE;
-    private String COLOR;
-    private String RUNSIM;
-    private String TIME;
-    private String NUMCELLS;
+    private String User_File;
+    private String ImageText;
+    private String ColorText;
+    private String RunSim;
+    private String Time;
+    private String NumCells;
 
 
     private Map<Integer, Color> cellColors = new HashMap<>();
@@ -101,10 +97,10 @@ public class Main extends Application {
 
     private void setCustomViewControls() {
         final ToggleGroup cellGroup = new ToggleGroup();
-        ToggleButton imageToggle = new ToggleButton(IMAGE);
+        ToggleButton imageToggle = new ToggleButton(ImageText);
         imageToggle.setToggleGroup(cellGroup);
         imageToggle.relocate(WINDOW_WIDTH + 150, 0);
-        ToggleButton colorToggle = new ToggleButton(COLOR);
+        ToggleButton colorToggle = new ToggleButton(ColorText);
         colorToggle.setSelected(true);
         colorToggle.setToggleGroup(cellGroup);
         colorToggle.relocate(WINDOW_WIDTH + 210, 0);
@@ -139,7 +135,7 @@ public class Main extends Application {
     }
 
     private void setRunButton() {
-        Button toRun = new Button(RUNSIM);
+        Button toRun = new Button(RunSim);
         toRun.relocate(WINDOW_WIDTH + 400, 0);
         myGroup.getChildren().add(toRun);
 
@@ -183,12 +179,12 @@ public class Main extends Application {
 
     public Scene setupConfig(int config) {
         try{
-            myResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, SIMULATION));
+            textResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "GUIText"));
             styleResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "Style"));
+            myResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, styleResources.getString("InitialSimulation")));
             simulationResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "SimulationInfo"));
             possibleStates = Integer.parseInt(simulationResources.getString(myResources.getString("Simulation")));
             errorResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "ErrorMessages"));
-            textResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "GUIText"));
             myStage.setTitle(myResources.getString("Simulation"));
         } catch(MissingResourceException e){
             showPopup("Properties file not found");
@@ -223,13 +219,12 @@ public class Main extends Application {
 
     public void initializeGUIText(){
         try{
-            INITIAL_SIM = textResources.getString("InitialSimulation");
-            USER_FILE = textResources.getString("UserFile");
-            IMAGE = textResources.getString("Image");
-            COLOR = textResources.getString("Color");
-            RUNSIM = textResources.getString("RunSimulation");
-            TIME = textResources.getString("Time");
-            NUMCELLS = textResources.getString("NumCells");
+            User_File = textResources.getString("UserFile");
+            ImageText = textResources.getString("Image");
+            ColorText = textResources.getString("Color");
+            RunSim = textResources.getString("RunSimulation");
+            Time = textResources.getString("Time");
+            NumCells = textResources.getString("NumCells");
         }catch(MissingResourceException e){
             showPopup(errorResources.getString("MissingProperties"));
         }
@@ -301,7 +296,7 @@ public class Main extends Application {
     public void fillColorsList() {
         for(String s: myResources.keySet()){
             String value = myResources.getString(s);
-            if (s.contains(COLOR)) {
+            if (s.contains(ColorText)) {
                 String[] color = value.split(",");
                 try{
                     cellColors.put(Integer.parseInt(color[0]), Color.valueOf(color[1]));
@@ -382,9 +377,9 @@ public class Main extends Application {
 
     private void statesGraph() {
         NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel(TIME);
+        xAxis.setLabel(Time);
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel(NUMCELLS);
+        yAxis.setLabel(NumCells);
         LineChart graph = new LineChart(xAxis, yAxis);
         String graphStyle = "";
 
@@ -440,8 +435,8 @@ public class Main extends Application {
         }
         if(code == KeyCode.S){
             try{
-                FileCreator.writeCsvFile(USER_FILE, myGrid);
-                FileCreator.writePropertiesFile(USER_FILE, USER_FILE,  myResources.getString("Simulation"), cellColors);
+                FileCreator.writeCsvFile(User_File, myGrid);
+                FileCreator.writePropertiesFile(User_File, User_File,  myResources.getString("Simulation"), cellColors);
             }catch(SimulationException e){
                 showPopup(e.getMessage());
             }
