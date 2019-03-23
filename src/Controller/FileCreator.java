@@ -21,7 +21,7 @@ public class FileCreator {
 
         FileWriter fileWriter = null;
         try {
-            fileWriter = new FileWriter(DATA_EXTENSION + fileName + ".csv");
+            fileWriter = new FileWriter(String.format("%s%s%s", DATA_EXTENSION, fileName, ".csv"));
             //Add a new line separator after the header
             fileWriter.append(g.getMyRows() + "");
             fileWriter.append(COMMA_DELIMITER);
@@ -38,41 +38,45 @@ public class FileCreator {
             }
             } catch (IOException e) {
                 throw new SimulationException(ERROR_MSG);
-        } finally {
-            try {
-                fileWriter.flush();
-                fileWriter.close();
-            } catch (IOException e) {
+            } catch (NullPointerException e){
                 throw new SimulationException(ERROR_MSG);
-            }
+        } finally {
+            closeWriter(fileWriter);
         }
     }
 
     public static void writePropertiesFile(String fileName, String CsvFile, String Simulation, Map<Integer, Color> cellColors) throws SimulationException{
         FileWriter fileWriter = null;
         try{
-            fileWriter = new FileWriter(RESOURCES_EXTENSION + fileName + ".properties");
-            fileWriter.append("Simulation" + EQUALS_DELIMITER + Simulation);
+            fileWriter = new FileWriter(String.format("%s%s%s", RESOURCES_EXTENSION, fileName, ".properties"));
+            fileWriter.append(String.format("%s%s%s", "Simulation", EQUALS_DELIMITER,  Simulation));
             fileWriter.append(NEW_LINE_SEPARATOR);
-            fileWriter.append("Name" + EQUALS_DELIMITER);
+            fileWriter.append(String.format("%s%s", "Name", EQUALS_DELIMITER));
             fileWriter.append(NEW_LINE_SEPARATOR);
-            fileWriter.append("Description" + EQUALS_DELIMITER);
+            fileWriter.append(String.format("%s%s", "Description", EQUALS_DELIMITER));
             fileWriter.append(NEW_LINE_SEPARATOR);
-            fileWriter.append("File" + EQUALS_DELIMITER + CsvFile + ".csv");
+            fileWriter.append(String.format("%s%s%s%s", "File",  EQUALS_DELIMITER, CsvFile, ".csv"));
             fileWriter.append(NEW_LINE_SEPARATOR);
             for(Map.Entry<Integer, Color> entry: cellColors.entrySet()){
-                fileWriter.append("Color" + entry.getKey() + EQUALS_DELIMITER + entry.getKey() + COMMA_DELIMITER + "#" + entry.getValue().toString().substring(2,8).toUpperCase());
+                fileWriter.append(String.format("%s%s%s%s%s#%s", "Color", entry.getKey(), EQUALS_DELIMITER, entry.getKey(), COMMA_DELIMITER, entry.getValue().toString().substring(2,8).toUpperCase()));
                 fileWriter.append(NEW_LINE_SEPARATOR);
             }
         } catch (IOException e) {
             throw new SimulationException(ERROR_MSG);
-        }finally {
-            try {
-                fileWriter.flush();
-                fileWriter.close();
-            } catch (IOException e) {
-                throw new SimulationException(ERROR_MSG);
-            }
+        } catch (NullPointerException e){
+            throw new SimulationException(ERROR_MSG);
+        } finally {
+            closeWriter(fileWriter);
+        }
+    }
+    private static void closeWriter(FileWriter fileWriter){
+        try {
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new SimulationException(ERROR_MSG);
+        } catch (NullPointerException e){
+            throw new SimulationException(ERROR_MSG);
         }
     }
 }

@@ -56,23 +56,23 @@ public class Grid {
 
     //Helper method initializes correct cell simulation type
     private Cell simCellPicker(String simType, int x, int y){
-        if(simType.equalsIgnoreCase("GAMEOFLIFE")){
-            return new GameOfLifeCell(x, y, myData.getStates()[x][y], 2);
+        if(simType.toUpperCase().equals("GAMEOFLIFE")){
+            return new GameOfLifeCell(x, y, myData.getStateAt(x, y));
         }
-        else if(simType.equalsIgnoreCase("PERCOLATION")){
-            return new PercolationCell(x, y, myData.getStates()[x][y], 3);
+        else if(simType.toUpperCase().equals("PERCOLATION")){
+            return new PercolationCell(x, y, myData.getStateAt(x, y));
         }
-        else if(simType.equalsIgnoreCase("FIRE")){
-            return new FireCell(x, y, myData.getStates()[x][y], 3);
+        else if(simType.toUpperCase().equals("FIRE")){
+            return new FireCell(x, y, myData.getStateAt(x, y));
         }
-        else if(simType.equalsIgnoreCase("RPS")){
-            return new RPSCell(x, y, myData.getStates()[x][y], 3);
+        else if(simType.toUpperCase().equals("RPS")){
+            return new RPSCell(x, y, myData.getStateAt(x, y));
         }
-        else if(simType.equalsIgnoreCase("SEGREGATION")){
-            return new SegregationCell(x, y, myData.getStates()[x][y], 3);
+        else if(simType.toUpperCase().equals("SEGREGATION")){
+            return new SegregationCell(x, y, myData.getStateAt(x, y));
         }
-        else if(simType.equalsIgnoreCase("PREDATORPREY")){
-            return new PredatorPreyCell(x, y, myData.getStates()[x][y], 3);
+        else if(simType.toUpperCase().equals("PREDATORPREY")){
+            return new PredatorPreyCell(x, y, myData.getStateAt(x, y));
         }
         else{
             throw new SimulationException("Simulation type not found");
