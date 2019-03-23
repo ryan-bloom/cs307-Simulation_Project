@@ -1,7 +1,6 @@
 package View;
 
 import Controller.*;
-import Model.Cell;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -28,15 +27,12 @@ import javafx.util.Duration;
 import javafx.stage.FileChooser;
 import javafx.event.*;
 import javafx.scene.image.ImageView;
-
-import java.lang.reflect.Array;
 import java.util.*;
 import java.io.File;
 
 public class Main extends Application {
 
     private static String SIMULATION = "GameOfLife1";
-    private static String USER_FILE = "User_Simulation";
     private static final int ACTUAL_WINDOW_WIDTH = 1300;
     private static final int WINDOW_HEIGHT = 700;
     private static final int WINDOW_WIDTH = 700;
@@ -59,11 +55,21 @@ public class Main extends Application {
     private ResourceBundle styleResources;
     private ResourceBundle errorResources;
     private ResourceBundle simulationResources;
+    private ResourceBundle textResources;
     private Stage myStage;
     private ArrayList<XYChart.Series<Number, Number>> mySeries = new ArrayList<>();
     private int startTime = 0;
     private int endTime = 100;
     private int currTime = startTime;
+
+    //GUI Text Strings
+    private String INITIAL_SIM;
+    private String USER_FILE;
+    private String IMAGE;
+    private String COLOR;
+    private String RUNSIM;
+    private String TIME;
+    private String NUMCELLS;
 
 
     private Map<Integer, Color> cellColors = new HashMap<>();
@@ -84,16 +90,6 @@ public class Main extends Application {
         myStage = stage;
         myGroup = new Group();
         myStage.setScene(setupConfig(1));
-        myStage.setTitle(myResources.getString("Simulation"));
-        try{
-            myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SIMULATION);
-            styleResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Style");
-            simulationResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "SimulationInfo");
-            errorResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "ErrorMessages");
-            myStage.setTitle(myResources.getString("Simulation"));
-        } catch(MissingResourceException e){
-            showPopup("Properties file not found");
-        }
         var frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step());
         myAnimation = new Timeline();
         myAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -105,10 +101,10 @@ public class Main extends Application {
 
     private void setCustomViewControls() {
         final ToggleGroup cellGroup = new ToggleGroup();
-        ToggleButton imageToggle = new ToggleButton("Image");
+        ToggleButton imageToggle = new ToggleButton(IMAGE);
         imageToggle.setToggleGroup(cellGroup);
         imageToggle.relocate(WINDOW_WIDTH + 150, 0);
-        ToggleButton colorToggle = new ToggleButton("Color");
+        ToggleButton colorToggle = new ToggleButton(COLOR);
         colorToggle.setSelected(true);
         colorToggle.setToggleGroup(cellGroup);
         colorToggle.relocate(WINDOW_WIDTH + 210, 0);
@@ -143,7 +139,7 @@ public class Main extends Application {
     }
 
     private void setRunButton() {
-        Button toRun = new Button("Run simulation");
+        Button toRun = new Button(RUNSIM);
         toRun.relocate(WINDOW_WIDTH + 400, 0);
         myGroup.getChildren().add(toRun);
 
@@ -187,19 +183,20 @@ public class Main extends Application {
 
     public Scene setupConfig(int config) {
         try{
-            myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SIMULATION);
-            styleResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Style");
-            simulationResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "SimulationInfo");
+            myResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, SIMULATION));
+            styleResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "Style"));
+            simulationResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "SimulationInfo"));
             possibleStates = Integer.parseInt(simulationResources.getString(myResources.getString("Simulation")));
-            errorResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "ErrorMessages");
+            errorResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "ErrorMessages"));
+            textResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "GUIText"));
             myStage.setTitle(myResources.getString("Simulation"));
         } catch(MissingResourceException e){
             showPopup("Properties file not found");
         }
-
         initializeGrid();
         initializeShape();
         initializeEdge();
+        initializeGUIText();
         initializeNeighbors();
         fillColorsList();
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
@@ -221,6 +218,20 @@ public class Main extends Application {
             showPopup(errorResources.getString("MissingProperties"));
         }catch(SimulationException e){
             showPopup(e.getMessage());
+        }
+    }
+
+    public void initializeGUIText(){
+        try{
+            INITIAL_SIM = textResources.getString("InitialSimulation");
+            USER_FILE = textResources.getString("UserFile");
+            IMAGE = textResources.getString("Image");
+            COLOR = textResources.getString("Color");
+            RUNSIM = textResources.getString("RunSimulation");
+            TIME = textResources.getString("Time");
+            NUMCELLS = textResources.getString("NumCells");
+        }catch(MissingResourceException e){
+            showPopup(errorResources.getString("MissingProperties"));
         }
     }
 
@@ -290,7 +301,7 @@ public class Main extends Application {
     public void fillColorsList() {
         for(String s: myResources.keySet()){
             String value = myResources.getString(s);
-            if (s.contains("Color")) {
+            if (s.contains(COLOR)) {
                 String[] color = value.split(",");
                 try{
                     cellColors.put(Integer.parseInt(color[0]), Color.valueOf(color[1]));
@@ -371,9 +382,9 @@ public class Main extends Application {
 
     private void statesGraph() {
         NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel("Time");
+        xAxis.setLabel(TIME);
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Number of Cells by State");
+        yAxis.setLabel(NUMCELLS);
         LineChart graph = new LineChart(xAxis, yAxis);
         String graphStyle = "";
 
@@ -385,14 +396,13 @@ public class Main extends Application {
                     (int)( cellColors.get(i).getRed() * 255),
                     (int)( cellColors.get(i).getGreen() * 255),
                     (int)( cellColors.get(i).getBlue() * 255) );
-            graphStyle += "CHART_COLOR_" + (i+1) + ":" + hexValue + ";";
+            graphStyle = String.format("%s%s%s%s%s%s", graphStyle, "CHART_COLOR_", (i+1), ":", hexValue, ";");
         }
         graph.setStyle(graphStyle.substring(0, graphStyle.length() - 1));
         graph.getData().addAll(mySeries);
         graph.relocate(WINDOW_WIDTH, 300);
         myGroup.getChildren().add(graph);
     }
-
 
     private void handleKeyInput(KeyCode code) {
         if (code == KeyCode.P) {
@@ -439,7 +449,7 @@ public class Main extends Application {
         if(code == KeyCode.L){
             myAnimation.stop();
             try {
-                myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "User_Simulation2");
+                myResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "User_Simulation2"));
             }catch (MissingResourceException e){
                 showPopup(errorResources.getString("LoadingError"));
             }

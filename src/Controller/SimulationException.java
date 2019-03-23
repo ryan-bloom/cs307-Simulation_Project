@@ -13,5 +13,4 @@ public class SimulationException extends RuntimeException {
     public SimulationException (Throwable cause, String message, Object values) {
         super(String.format(message, values), cause);
     }
-
 }
