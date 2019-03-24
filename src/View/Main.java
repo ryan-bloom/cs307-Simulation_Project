@@ -30,18 +30,29 @@ import java.io.File;
 
 public class Main extends Application {
 
-    private static final int ACTUAL_WINDOW_WIDTH = 1300;
+    private static final int TOTAL_WINDOW_WIDTH = 1300;
     private static final int WINDOW_HEIGHT = 700;
-    private static final int WINDOW_WIDTH = 700;
+    private static final int GRID_WINDOW_WIDTH = 700;
     private static int FRAMES_PER_SECOND = 6;
     private static double SECOND_DELAY = 3.0 / FRAMES_PER_SECOND;
     private static final Paint BACKGROUND = Color.WHITE;
     private static final String DEFAULT_RESOURCE_PACKAGE = "Resources.";
 
-    //NeighborhoodType
-    private static CellShape CELL_SHAPE;
-    private static EdgeType EDGE_TYPE;
-    private static NeighborhoodType NEIGHBORHOOD_TYPE;
+    private static final double GRID_BEHAVIOUR_BUTTON_OFFSET = 270;
+    private static final double GRID_BEHAVIOUR_BUTTON_VERTICAL_OFFSET = 40;
+    private static final double RUN_BUTTON_OFFSET = 400;
+    private static final double GRAPH_OFFSET = 300;
+    private static final double IMAGE_BUTTON_OFFSET = 150;
+    private static final double COLOR_TOGGLE_OFFSET = 210;
+    private static final double COLOR_PICKER_OFFSET = 700;
+    private static final double COLOR_PICKER_VERTICAL_OFFSET = 30;
+    private static final double RGB_TRANSLATION = 255;
+    private static final int initialStartTime = 0;
+    private static final int initialEndTime = 100;
+
+    private CellShape CELL_SHAPE;
+    private EdgeType EDGE_TYPE;
+    private NeighborhoodType NEIGHBORHOOD_TYPE;
 
     private Grid myGrid;
     private PolygonGrid myPolygonGrid;
@@ -55,8 +66,9 @@ public class Main extends Application {
     private ResourceBundle textResources;
     private Stage myStage;
     private ArrayList<XYChart.Series<Number, Number>> mySeries = new ArrayList<>();
-    private int startTime = 0;
-    private int endTime = 100;
+
+    private int startTime = initialStartTime;
+    private int endTime = initialEndTime;
     private int currTime = startTime;
 
     //GUI Text Strings
@@ -67,14 +79,12 @@ public class Main extends Application {
     private String Time;
     private String NumCells;
 
-
     private Map<Integer, Color> cellColors = new HashMap<>();
     private Map<Integer, Image> cellImages = new HashMap<>();
     private double cellWidth;
     private double cellHeight;
     private boolean isRunning = true;
     private boolean useImages = false;
-    private int[] stateCounts;
     private int possibleStates;
 
 
@@ -99,11 +109,11 @@ public class Main extends Application {
         final ToggleGroup cellGroup = new ToggleGroup();
         ToggleButton imageToggle = new ToggleButton(ImageText);
         imageToggle.setToggleGroup(cellGroup);
-        imageToggle.relocate(WINDOW_WIDTH + 150, 0);
+        imageToggle.relocate(GRID_WINDOW_WIDTH + IMAGE_BUTTON_OFFSET, 0);
         ToggleButton colorToggle = new ToggleButton(ColorText);
         colorToggle.setSelected(true);
         colorToggle.setToggleGroup(cellGroup);
-        colorToggle.relocate(WINDOW_WIDTH + 210, 0);
+        colorToggle.relocate(GRID_WINDOW_WIDTH + COLOR_TOGGLE_OFFSET, 0);
         myGroup.getChildren().addAll(imageToggle, colorToggle);
         imageToggle.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> chooseCustomImages());
         for (Integer i : cellColors.keySet()) {
@@ -112,7 +122,7 @@ public class Main extends Application {
                 cellColors.put(i, colorPicker.getValue());
                 colorAllCells();
             });
-            colorPicker.relocate(700, 30 * i);
+            colorPicker.relocate(COLOR_PICKER_OFFSET, COLOR_PICKER_VERTICAL_OFFSET * i);
             myGroup.getChildren().add(colorPicker);
         }
     }
@@ -136,15 +146,15 @@ public class Main extends Application {
 
     private void setRunButton() {
         Button toRun = new Button(RunSim);
-        toRun.relocate(WINDOW_WIDTH + 400, 0);
+        toRun.relocate(GRID_WINDOW_WIDTH + RUN_BUTTON_OFFSET, 0);
         myGroup.getChildren().add(toRun);
 
         ChoiceBox neighborType = new ChoiceBox(FXCollections.observableArrayList(NeighborhoodType.CARDINAL.toString(), NeighborhoodType.COMPLETE.toString(), NeighborhoodType.CORNER.toString()));
-        neighborType.relocate(WINDOW_WIDTH + 270, 0);
+        neighborType.relocate(GRID_WINDOW_WIDTH + GRID_BEHAVIOUR_BUTTON_OFFSET, 0);
         ChoiceBox edgeType = new ChoiceBox(FXCollections.observableArrayList(EdgeType.FINITE.toString(), EdgeType.SEMITOROIDAL.toString(), EdgeType.TOROIDAL.toString()));
-        edgeType.relocate(WINDOW_WIDTH + 270, 40);
+        edgeType.relocate(GRID_WINDOW_WIDTH + GRID_BEHAVIOUR_BUTTON_OFFSET, GRID_BEHAVIOUR_BUTTON_VERTICAL_OFFSET);
         ChoiceBox cellShape = new ChoiceBox(FXCollections.observableArrayList(CellShape.HEXAGON.toString(), CellShape.SQUARE.toString(), CellShape.TRIANGLE.toString()));
-        cellShape.relocate(WINDOW_WIDTH + 270, 80);
+        cellShape.relocate(GRID_WINDOW_WIDTH + GRID_BEHAVIOUR_BUTTON_OFFSET, edgeType.getLayoutY() + GRID_BEHAVIOUR_BUTTON_VERTICAL_OFFSET);
         myGroup.getChildren().addAll(neighborType, edgeType, cellShape);
 
         toRun.setOnAction((ActionEvent event) -> {
@@ -196,8 +206,8 @@ public class Main extends Application {
         initializeNeighbors();
         fillColorsList();
         cellHeight = WINDOW_HEIGHT/mySeed.getHeight();
-        cellWidth = WINDOW_WIDTH/mySeed.getWidth();
-        Scene initial = new Scene(myGroup, ACTUAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
+        cellWidth = GRID_WINDOW_WIDTH/mySeed.getWidth();
+        Scene initial = new Scene(myGroup, TOTAL_WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND);
         initializePolygonGrid();
         colorAllCells();
         statesGraph();
@@ -248,8 +258,8 @@ public class Main extends Application {
 
     private void initializePolygonGrid() {
         if (CELL_SHAPE == CellShape.TRIANGLE || CELL_SHAPE == CellShape.HEXAGON) {
-            myPolygonGrid = (CELL_SHAPE == CellShape.TRIANGLE) ? new TriangleGrid(WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(),
-                    mySeed.getHeight()) : new HexagonGrid(WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(), mySeed.getHeight());
+            myPolygonGrid = (CELL_SHAPE == CellShape.TRIANGLE) ? new TriangleGrid(GRID_WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(),
+                    mySeed.getHeight()) : new HexagonGrid(GRID_WINDOW_WIDTH, WINDOW_HEIGHT, mySeed.getWidth(), mySeed.getHeight());
         }
     }
 
@@ -347,7 +357,7 @@ public class Main extends Application {
     }
 
     private void step() {
-        stateCounts = new int[cellColors.size()];
+        int[] stateCounts = new int[cellColors.size()];
         // updates colors and states of all cells
         for (int i = 0; i < myGrid.getMyRows(); i++) {
             for (int j = 0; j < myGrid.getMyCols(); j++) {
@@ -388,14 +398,14 @@ public class Main extends Application {
             series.setName("State " + i);
             mySeries.add(series);
             String hexValue = String.format( "#%02X%02X%02X",
-                    (int)( cellColors.get(i).getRed() * 255),
-                    (int)( cellColors.get(i).getGreen() * 255),
-                    (int)( cellColors.get(i).getBlue() * 255) );
+                    (int)( cellColors.get(i).getRed() * RGB_TRANSLATION),
+                    (int)( cellColors.get(i).getGreen() * RGB_TRANSLATION),
+                    (int)( cellColors.get(i).getBlue() * RGB_TRANSLATION));
             graphStyle = String.format("%s%s%s%s%s%s", graphStyle, "CHART_COLOR_", (i+1), ":", hexValue, ";");
         }
         graph.setStyle(graphStyle.substring(0, graphStyle.length() - 1));
         graph.getData().addAll(mySeries);
-        graph.relocate(WINDOW_WIDTH, 300);
+        graph.relocate(GRID_WINDOW_WIDTH, GRAPH_OFFSET);
         myGroup.getChildren().add(graph);
     }
 
@@ -420,10 +430,8 @@ public class Main extends Application {
         }
 
         // Individual steps
-        if (code == KeyCode.RIGHT) {
-            if (!isRunning) {
-                step();
-            }
+        if (code == KeyCode.RIGHT && (!isRunning)) {
+            step();
         }
 
         // Override load different initial config

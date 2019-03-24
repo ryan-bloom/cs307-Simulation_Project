@@ -30,7 +30,7 @@ public class GameOfLifeCell extends Cell {
     public GameOfLifeCell(int row, int col, int state, int numStates){
         super(row, col, state, numStates);
     }
-    //public GameOfLifeCell(int row, int col, int state) { super(row, col, state); }
+    public GameOfLifeCell(int row, int col, int state) { super(row, col, state); }
 
     /**
      * Update method splits into 3 update methods

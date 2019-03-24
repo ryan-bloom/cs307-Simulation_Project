@@ -21,12 +21,16 @@ abstract public class Cell {
      * @param col
      * @param state
      */
-    public Cell(int row, int col, int state, int numStates) {
+    public Cell(int row, int col, int state) {
         myRow = row;
         myCol = col;
         myCurrentState = state;
         myNextState = state;
+    }
+    public Cell(int row, int col, int state, int numStates) {
+        this(row, col, state);
         myTotalStates = numStates;
+
     }
 
     /**

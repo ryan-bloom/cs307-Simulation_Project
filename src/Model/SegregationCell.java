@@ -20,7 +20,7 @@ public class SegregationCell extends Cell {
     public SegregationCell(int row, int col, int state, int numStates){
         super(row, col, state, numStates);
     }
-    //public SegregationCell(int row, int col, int state) { super(row, col, state, 3); }
+    public SegregationCell(int row, int col, int state) { super(row, col, state, 3); }
 
     /**
      * Implements segregation simulation rules

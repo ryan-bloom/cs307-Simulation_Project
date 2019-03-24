@@ -4,7 +4,6 @@ package View;
 import javafx.scene.shape.Polygon;
 
 public class TriangleGrid extends PolygonGrid {
-    private static final int NUMBER_OF_SIDES = 3;
 
     public TriangleGrid(double windowWidth, double windowHeight, int rows, int cols) {
         super(rows, cols, 3);
