@@ -1,6 +1,8 @@
 package Model;
 
 import Controller.CellShape;
+import Controller.Data;
+import Controller.Grid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,17 +17,20 @@ class RPSCellTest {
     private Cell paperCell;
     private Cell scissorCell;
     private List<Cell> neighbors;
-    private Cell[][] cellGrid;
+    //private Cell[][] cellGrid;
+    private Grid cellGrid;
     private CellShape shape = CellShape.SQUARE;
 
 
     @BeforeEach
     void setUp() {
-        rockCell = new RPSCell(1, 1, 0);
-        paperCell = new RPSCell(1, 1, 1);
-        scissorCell = new RPSCell(1, 1, 2);
+        rockCell = new RPSCell(1, 1, 0, 3);
+        paperCell = new RPSCell(1, 1, 1, 3);
+        scissorCell = new RPSCell(1, 1, 2,3);
         neighbors = new ArrayList<>();
-        cellGrid = new Cell[5][5];
+        Data dat = new Data("RPS_Config_2.csv");
+        cellGrid = new Grid(dat);
+        //cellGrid = new Cell[5][5];
     }
 
     @Test
@@ -62,9 +67,10 @@ class RPSCellTest {
     void scissorToRockTie(){
         for(int i=0; i<4; i++){
             //Order matters here
-            neighbors.add(rockCell);
             neighbors.add(paperCell);
+            neighbors.add(rockCell);
         }
+
         scissorCell.updateCell(neighbors, cellGrid, shape);
 
         var expected =0;
@@ -76,8 +82,8 @@ class RPSCellTest {
     void scissorToPaperTie(){
         for(int i=0; i<4; i++){
             //Order matters here
-            neighbors.add(paperCell);
             neighbors.add(rockCell);
+            neighbors.add(paperCell);
         }
         scissorCell.updateCell(neighbors, cellGrid, shape);
 
