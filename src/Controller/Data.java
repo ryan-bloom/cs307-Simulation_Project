@@ -13,24 +13,23 @@ public class Data {
     private int[][] states;
     private ResourceBundle myResources = ResourceBundle.getBundle("Resources.ErrorMessages");
 
-    public Data(String fileName) throws SimulationException {
-        try (Scanner scanner = new Scanner(new File(this.getClass().getClassLoader().getResource(fileName).toURI()))){
+    public Data(String fileName) {
+        try {
+            Scanner scanner = new Scanner(new File(this.getClass().getClassLoader().getResource(fileName).toURI()));
             scanner.useDelimiter(",|\\n");
-            try{
-                height = Integer.parseInt(scanner.next().trim());
-                width = Integer.parseInt(scanner.next().trim());
-                states = new int[height][width];
-                for (int i = 0; i < height; i++) {
-                    for (int j = 0; j < width; j++) {
-                        int state = Integer.parseInt(scanner.next().trim());
-                        states[j][i] = state;
-                    }
+            height = Integer.parseInt(scanner.next().trim());
+            width = Integer.parseInt(scanner.next().trim());
+            states = new int[height][width];
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    int state = Integer.parseInt(scanner.next().trim());
+                    states[j][i] = state;
                 }
-            } catch (NumberFormatException e){
-                throw new SimulationException(myResources.getString("CSVParse"));
-            } catch (NoSuchElementException e){
-                throw new SimulationException(myResources.getString("CSVStates"));
             }
+        } catch (NumberFormatException e){
+            throw new SimulationException(myResources.getString("CSVParse"));
+        } catch (NoSuchElementException e){
+            throw new SimulationException(myResources.getString("CSVStates"));
         } catch (FileNotFoundException e) {
             throw new SimulationException(myResources.getString("NoFile"));
         } catch (URISyntaxException e) {
@@ -43,6 +42,9 @@ public class Data {
     public Data (double prob[], int height, int width){
         this.height = height;
         this.width = width;
+        if(getDoubleSum(prob)!=1){
+            throw new SimulationException(myResources.getString("ProbabilityError"));
+        }
         states = new int[height][width];
         for(int i = 0; i<height; i++){
             for(int j = 0; j<width; j++){
@@ -61,7 +63,7 @@ public class Data {
         this.height = height;
         this.width = width;
         //test if less entries in limits than in grid
-        if(getSum(limits)<height*width){
+        if(getIntSum(limits)<height*width){
             throw new SimulationException(myResources.getString("InvalidCells"));
         }
         states = new int[height][width];
@@ -74,9 +76,17 @@ public class Data {
         }
     }
 
-    private int getSum(int limits[]){
+    private int getIntSum(int limits[]){
         int sum = 0;
         for(int i: limits){
+            sum+=i;
+        }
+        return sum;
+    }
+
+    private int getDoubleSum(double prob[]){
+        int sum = 0;
+        for(double i: prob){
             sum+=i;
         }
         return sum;
@@ -94,7 +104,7 @@ public class Data {
     public int getWidth() {
         return width;
     }
-    public int[][] getStates(){
-        return states;
+    public int getStateAt(int i, int j){
+        return states[i][j];
     }
 }
