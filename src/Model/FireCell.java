@@ -18,7 +18,7 @@ public class FireCell extends Cell {
     public FireCell(int row, int col, int state, int numStates){
         super(row, col, state, numStates);
     }
-    //public FireCell(int row, int col, int state) { super(row, col, state); }
+    public FireCell(int row, int col, int state) { super(row, col, state); }
 
     /**
      * update method implements fire simulation rules

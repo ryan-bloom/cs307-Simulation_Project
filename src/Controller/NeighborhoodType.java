@@ -5,3 +5,5 @@ public enum NeighborhoodType {
     CARDINAL,
     CORNER;
 }
+
+

@@ -94,7 +94,7 @@ public abstract class Neighbors {
      * Getter returns list of neighbors
      * @return
      */
-    List<Cell> getMyNeighbors(){
+    public List<Cell> getMyNeighbors(){
         List<Cell> copy = myNeighbors;
         return copy;
     }

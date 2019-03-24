@@ -16,7 +16,7 @@ public class PercolationCell extends Cell {
     public PercolationCell(int row, int col, int state, int numStates){
         super(row, col, state, numStates);
     }
-    //public PercolationCell(int row, int col, int state) { super(row, col, state); }
+    public PercolationCell(int row, int col, int state) { super(row, col, state); }
 
     /**
      * Implement rules for percolation simulation

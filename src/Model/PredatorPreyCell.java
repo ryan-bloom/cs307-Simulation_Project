@@ -28,7 +28,7 @@ public class PredatorPreyCell extends Cell {
         myReproductionTime = 0;
         myEnergyLeft = ENERGY;
     }
-    //public PredatorPreyCell(int row, int col, int state) { super(row, col, state, 3); }
+    public PredatorPreyCell(int row, int col, int state) { super(row, col, state, 3); }
 
     /**
      * Uses helper methods to update cell depending on if current cell is shark or fish
