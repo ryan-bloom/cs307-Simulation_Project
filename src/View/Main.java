@@ -159,7 +159,7 @@ public class Main extends Application {
             for (NeighborhoodType nt : NeighborhoodType.values()) {
                 if (neighborType.getValue() != null && neighborType.getValue().equals(nt.toString())) {
                     NEIGHBORHOOD_TYPE = nt;
-                }
+                }   
             }
             for (EdgeType et : EdgeType.values()) {
                 if (edgeType.getValue() != null && edgeType.getValue().equals(et.toString())) {
