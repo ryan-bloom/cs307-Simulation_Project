@@ -2,7 +2,6 @@ package View;
 
 import javafx.scene.shape.Polygon;
 
-
 public abstract class PolygonGrid {
 
     protected Polygon[][] cellViewGrid;
@@ -15,12 +14,12 @@ public abstract class PolygonGrid {
 
     public abstract void initializeShapes(int rows, int cols, double cellWidth, double cellHeight);
 
-    public Double[] getCoordinates(int row, int col) {
-        double[] coordinates = new double[numSides];
-        for (int i = 0; i < numSides; i++) {
-            coordinates[i] = cellViewGrid[row][col].getPoints().indexOf(i);
+    public double[] getCoordinates(int row, int col) {
+        Double[] coordinates = cellViewGrid[row][col].getPoints().toArray(new Double[2 * numSides]);
+        double[] convertedCoordinates = new double[2 * numSides];
+        for (int i = 0; i < numSides * 2; i++) {
+            convertedCoordinates[i] = coordinates[i].doubleValue();
         }
-        return cellViewGrid[row][col].getPoints().toArray(new Double[numSides]);
-        //return coordinates;
+        return convertedCoordinates;
     }
 }

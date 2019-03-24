@@ -56,6 +56,7 @@ public class Main extends Application {
 
     private Grid myGrid;
     private PolygonGrid myPolygonGrid;
+    private ArrayList<Node> AllCellViews = new ArrayList<>();
     private Data mySeed;
     private Group myGroup;
     private Timeline myAnimation;
@@ -170,14 +171,6 @@ public class Main extends Application {
             }
             for (CellShape cs : CellShape.values()) {
                 if (cellShape.getValue() != null && cellShape.getValue().equals(cs.toString())) {
-//                    if (cs != CELL_SHAPE) {
-//                        for (Node n : myGroup.getChildren()) {
-//                            Rectangle r = new Rectangle();
-//                            Polygon p = new Polygon();
-//                            if (n.getClass().equals(r.getClass()) || n.getClass().equals(p.getClass())) {
-//                                myGroup.getChildren().remove(n);
-//                            }
-//                        }
                         CELL_SHAPE = cs;
                     }
                 }
@@ -296,6 +289,7 @@ public class Main extends Application {
     }
 
     public void colorAllCells() {
+        myGroup.getChildren().removeAll(AllCellViews);
         for (int i = 0; i < mySeed.getWidth(); i++) {
             for (int j = 0; j < mySeed.getHeight(); j++) {
                 updateCellView(i, j, myGrid.getCellState(i, j));
@@ -330,6 +324,7 @@ public class Main extends Application {
         nodeToAdd.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 e -> interactiveStateChange(row, col, newState));//System.out.println("Original state: " + state + " New state: " + newState));//updateCellView(row, col, newState));
         myGroup.getChildren().add(nodeToAdd);
+        AllCellViews.add(nodeToAdd);
     }
 
     private void interactiveStateChange(int row, int col, int state) {
@@ -339,8 +334,7 @@ public class Main extends Application {
     private Node newCellNode(int row, int col, int state) {
         Shape cellShapeView;
         if (CELL_SHAPE == CellShape.HEXAGON || CELL_SHAPE == CellShape.TRIANGLE) {
-            cellShapeView = new Polygon();//myPolygonGrid.getCoordinates(row, col));
-            ((Polygon) cellShapeView).getPoints().addAll(myPolygonGrid.getCoordinates(row, col));
+            cellShapeView = new Polygon(myPolygonGrid.getCoordinates(row, col));
         }
         else {
             cellShapeView = new Rectangle(row * cellWidth, col * cellHeight, cellWidth, cellHeight);
