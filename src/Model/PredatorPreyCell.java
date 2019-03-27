@@ -1,127 +1,172 @@
 package Model;
 
+import Controller.CellShape;
+import Controller.Grid;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class PredatorPreyCell extends Cell {
     private static final int GESTATION_PERIOD = 6;
-    private static final int ENERGY = 5;
+    private static final int ENERGY = 2;
     private static final int FISH_ENERGY = 1;
 
     private int myReproductionTime;
     private int myEnergyLeft;
 
     /**
+     * Uses super to set cell and states
      * 0 = empty; 1 = fish; 2 = shark
+     * Also sets reproductionTime to 0 and energyLeft to ENERGY variable (only for pred-prey cells)
      * @param row
      * @param col
      * @param state
      */
-    public PredatorPreyCell(int row, int col, int state){
-        super(row, col, state);
+    public PredatorPreyCell(int row, int col, int state, int numStates){
+        super(row, col, state, numStates);
         myReproductionTime = 0;
         myEnergyLeft = ENERGY;
     }
+    public PredatorPreyCell(int row, int col, int state) { super(row, col, state, 3); }
 
+    /**
+     * Uses helper methods to update cell depending on if current cell is shark or fish
+     * @param neighbors
+     * @param cellGrid
+     * @param shape
+     * @return
+     */
     @Override
-    public Cell[][] updateCell(List<Cell> neighbors, Cell[][] cellGrid) {
-        //System.out.println("HERE FIRST");
-        if(this.myCurrentState == 1){
+    public List<Cell> updateCell(List<Cell> neighbors, Grid cellGrid, CellShape shape) {
+        List<Cell> tempUpdatedCells = new ArrayList<>();
+        if(getMyCurrentState() == 1){
             return fishUpdate(neighbors, cellGrid);
         }
-        else if(this.myCurrentState == 2){
+        else if(getMyCurrentState() == 2){
             return sharkUpdate(neighbors, cellGrid);
         }
-        return cellGrid;
+        return tempUpdatedCells;
     }
 
-    public Cell[][] fishUpdate(List<Cell> neighbors, Cell[][] cellGrid){
+    /**
+     * If current cell is fish -- this helper method is used
+     * @param neighbors
+     * @param cellGrid
+     * @return
+     */
+    private List<Cell> fishUpdate(List<Cell> neighbors, Grid cellGrid){
+        List<Cell> updatedCells = new ArrayList<>();
+        //Survived another round (increase reproductionTime)
         myReproductionTime += 1;
         List<Cell> possNext = fillSubNeighbors(neighbors, 0);
+        //Find empty surrounding neighbors and go there
         if(!possNext.isEmpty()){
             Cell nextLoc = randDirection(possNext);
-            //System.out.println("HERE");
-            return moveCell(nextLoc, cellGrid);
+            return moveCell(nextLoc);
         }
-        return cellGrid;
+        else{
+            updatedCells.add(this);
+            return updatedCells;
+        }
+        //return updatedCells;
     }
 
-    public Cell[][] sharkUpdate(List<Cell> neighbors, Cell[][] cellGrid){
+    /**
+     * If current cell is shark use this update method
+     * @param neighbors
+     * @param cellGrid
+     * @return
+     */
+    private List<Cell> sharkUpdate(List<Cell> neighbors, Grid cellGrid){
+        List<Cell> tempNewCells = new ArrayList<>();
         myReproductionTime++;
+        //Separate neighbor cells b/w empty and fish because go fish first
         List<Cell> fishNear = fillSubNeighbors(neighbors, 1);
         List<Cell> emptyNear = fillSubNeighbors(neighbors, 0);
 
+        //Fish isn't empty -- pick random place and eat that fish
         if(!fishNear.isEmpty()){
             Cell nextLoc = randDirection(fishNear);
             myEnergyLeft += FISH_ENERGY;
-            cellGrid = moveCell(nextLoc, cellGrid);
-            return cellGrid;
+            tempNewCells = moveCell(nextLoc);
+            return tempNewCells;
         }
         else{
             //Lose energy if no fish to eat
             myEnergyLeft--;
             if(myEnergyLeft <= 0){
-                cellGrid[myRow][myCol].myNextState = 0;
-                cellGrid[myRow][myCol].myCurrentState = 0;
-                return cellGrid;
+                this.setMyNextState(0);
+                this.setMyCurrentState(0);
+                tempNewCells.add(this);
+                return tempNewCells;
             }
             else if(!emptyNear.isEmpty()){
                 Cell nextLoc = randDirection(emptyNear);
-                cellGrid = moveCell(nextLoc, cellGrid);
+                tempNewCells = moveCell(nextLoc);
             }
         }
-        return cellGrid;
+        return tempNewCells;
     }
 
-    public Cell[][] moveCell(Cell nextLocationCell, Cell[][] cellGrid){
+    /**
+     * Called by both fish and shark update methods (moves current cell to newly/randomly selected neighbor)
+     * @param nextLocationCell
+     * @return
+     */
+    private List<Cell> moveCell(Cell nextLocationCell){
+        List<Cell> tempList = new ArrayList<>();
         Cell temp;
-        int prevRow = this.myRow;
-        int prevCol = this.myCol;
-        int nxtRow = nextLocationCell.myRow;
-        int nxtCol = nextLocationCell.myCol;
-        //System.out.println("OLD LOCATION: " + prevRow + ", " + prevCol);
-        //System.out.println("NEW LOCATION: " + nxtRow + ", " + nxtCol);
-        if(this.myReproductionTime >= GESTATION_PERIOD){
-            this.resetReproductionTime();
-            temp = new PredatorPreyCell(prevRow, prevCol, this.myCurrentState);
-            //System.out.println(temp.myRow + " " + temp.myCol);
+        int prevRow = this.getMyRow();
+        int prevCol = this.getMyCol();
+        int nxtRow = nextLocationCell.getMyRow();
+        int nxtCol = nextLocationCell.getMyCol();
+        this.newLocation(nxtRow, nxtCol);
+        if(this.myReproductionTime < GESTATION_PERIOD){
+            temp = new PredatorPreyCell(prevRow, prevCol, 0, 3);
+            //this.newLocation(nxtRow, nxtCol);
+            tempList.add(this);
+            tempList.add(temp);
+            return tempList;
         }
         else{
-            temp = new PredatorPreyCell(prevRow, prevCol, 0);
+            temp = new PredatorPreyCell(prevRow, prevCol, this.getMyCurrentState(), 3);
+            this.resetReproductionTime();
+            //this.newLocation(nxtRow, nxtCol);
+            tempList.add(this);
+            tempList.add(temp);
+            return tempList;
         }
-        this.newLocation(nxtRow, nxtCol);
-        //this.myNextState = this.myCurrentState;
-        cellGrid[nxtRow][nxtCol] = this;
-        cellGrid[prevRow][prevCol] = temp;
-        return cellGrid;
     }
 
-    public Cell randDirection(List<Cell> potentials){
+    //Helper method randomly selects which neighboring cell to move to
+    private Cell randDirection(List<Cell> potentials){
         Random rand = new Random();
         int dir = rand.nextInt(potentials.size());
         return potentials.get(dir);
     }
 
-    public void newLocation(int r, int c){
-        this.myRow = r;
-        this.myCol = c;
+    //Sets row/col after moving to new location
+    private void newLocation(int r, int c){
+        this.setMyRow(r);
+        this.setMyCol(c);
     }
 
-    public void resetReproductionTime(){myReproductionTime = 0;}
+    //After reach gestation period must reset time to 0 for fish and sharks
+    void resetReproductionTime(){this.myReproductionTime = 0;}
 
-    public List<Cell> fillSubNeighbors(List<Cell> neighbors, int state){
-        //System.out.println("MY LOCATION: " + myRow + " " + myCol);
+    //Gets empty/fish neighboring cells
+    private List<Cell> fillSubNeighbors(List<Cell> neighbors, int state){
         List<Cell> res = new ArrayList<>();
         for(Cell c:neighbors){
-            if((c.myRow == this.myRow || c.myCol == this.myCol) && c.myCurrentState == state){
+            if(c.getMyCurrentState() == state){
                 res.add(c);
-                //System.out.println(c.myRow + " " + c.myCol);
             }
         }
         return res;
     }
 
-    public int getMyReproductionTime(){return myReproductionTime;}
-    public int getMyEnergyLeft(){return myEnergyLeft;}
+    //Getters for reproduction time and energyLeft
+    int getMyReproductionTime(){return myReproductionTime;}
+    int getMyEnergyLeft(){return myEnergyLeft;}
 }
