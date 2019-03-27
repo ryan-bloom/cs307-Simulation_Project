@@ -22,7 +22,7 @@ public class Main extends Application {
 
     public static final String SIMULATION = "Percolation";
 =======
-    
+
     public static final String SIMULATION = "GameOfLife";
 >>>>>>> 7dd51f222a0dc3ad169a25bf01b7be6241628f0e
     public static final int WINDOW_HEIGHT = 700;
