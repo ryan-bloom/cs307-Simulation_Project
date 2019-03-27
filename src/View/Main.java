@@ -30,8 +30,6 @@ import java.io.File;
 
 public class Main extends Application {
 
-
-    public static final String SIMULATION = "GameOfLife";
     private static final int TOTAL_WINDOW_WIDTH = 1300;
     private static final int WINDOW_HEIGHT = 700;
     private static final int GRID_WINDOW_WIDTH = 700;
