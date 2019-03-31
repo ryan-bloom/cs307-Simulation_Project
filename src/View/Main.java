@@ -93,6 +93,10 @@ public class Main extends Application {
         launch(args);
     }
 
+    /**
+     * starts the JFX animation and stage
+     * @param stage
+     */
     public void start(Stage stage) {
         myStage = stage;
         myGroup = new Group();
@@ -106,6 +110,9 @@ public class Main extends Application {
         myStage.show();
     }
 
+    /**
+     * Creates the buttons to customize the view of the cells
+     */
     private void setCustomViewControls() {
         final ToggleGroup cellGroup = new ToggleGroup();
         ToggleButton imageToggle = new ToggleButton(ImageText);
@@ -128,6 +135,9 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Creates image file choosing pop ups if the user has selected the image toggle
+     */
     private void chooseCustomImages() {
         useImages = true;
         final FileChooser fileChooser = new FileChooser();
@@ -145,6 +155,9 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Creates the run button and on click checks all the grid parameters and sets them accordingly, redrawing the stage.
+     */
     private void setRunButton() {
         Button toRun = new Button(RunSim);
         toRun.relocate(GRID_WINDOW_WIDTH + RUN_BUTTON_OFFSET, 0);
@@ -180,7 +193,11 @@ public class Main extends Application {
         });
     }
 
-    public Scene setupConfig(int config) {
+    /**
+     * Creates the initial configuration for the simulation, gathers all data necessary to run the simulation.
+     * @return
+     */
+    public Scene setupConfig() {
         try{
             textResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "GUIText"));
             styleResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "Style"));
@@ -288,6 +305,9 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Re-draws all the cells in the simulation.
+     */
     public void colorAllCells() {
         myGroup.getChildren().removeAll(AllCellViews);
         for (int i = 0; i < mySeed.getWidth(); i++) {
@@ -318,6 +338,12 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Redraws the cell at the row and col specified, with the image assocaited to the state specified. Provides on-click redrawing as well.
+     * @param row row of cell
+     * @param col col of cell
+     * @param state state to draw the cell in
+     */
     public void updateCellView(int row, int col, int state) {
         Node nodeToAdd = newCellNode(row, col, state);
         int newState = (state == possibleStates - 1) ? 0 : state + 1;
@@ -331,6 +357,14 @@ public class Main extends Application {
         updateCellView(row, col, state);
         myGrid.updateCellState(row, col, state);
     }
+
+    /**
+     * constructs the appropriate JFX object in the right position to draw onto the stage
+     * @param row
+     * @param col
+     * @param state
+     * @return
+     */
     private Node newCellNode(int row, int col, int state) {
         Shape cellShapeView;
         if (CELL_SHAPE == CellShape.HEXAGON || CELL_SHAPE == CellShape.TRIANGLE) {
@@ -350,6 +384,9 @@ public class Main extends Application {
         return cellShapeView;
     }
 
+    /**
+     * Main step of the animation, runs the simulation and counts the states for the live graph.
+     */
     private void step() {
         int[] stateCounts = new int[cellColors.size()];
         // updates colors and states of all cells
@@ -379,6 +416,9 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * creates the graph that displays the change in the number of states over time
+     */
     private void statesGraph() {
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel(Time);
