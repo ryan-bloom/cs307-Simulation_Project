@@ -13,6 +13,11 @@ public class Data {
     private int[][] states;
     private ResourceBundle myResources = ResourceBundle.getBundle("Resources.ErrorMessages");
 
+    /**
+     * Constructs a Data object with height, width, and states based on the name of a CSV file
+     * @param fileName
+     */
+
     public Data(String fileName) {
         try {
             Scanner scanner = new Scanner(new File(this.getClass().getClassLoader().getResource(fileName).toURI()));
@@ -39,6 +44,13 @@ public class Data {
         }
     }
 
+    /**
+     * Constructs a Data object based on an array of probabilities for each state, and the height and width of the array
+     * @param prob
+     * @param height
+     * @param width
+     */
+
     public Data (double prob[], int height, int width){
         this.height = height;
         this.width = width;
@@ -58,6 +70,13 @@ public class Data {
             }
         }
     }
+
+    /**
+     * Constructs a Data object based on certain numbers of cells for each state, and the height and width of the array
+     * @param limits
+     * @param height
+     * @param width
+     */
 
     public Data(int limits[], int height, int width) throws SimulationException{
         this.height = height;
@@ -98,12 +117,25 @@ public class Data {
         else return randomState(limits);
     }
 
+    /**
+     * Returns the height of the array
+     */
     public int getHeight(){
         return height;
     }
+
+    /**
+     * Returns the width of the array
+     */
     public int getWidth() {
         return width;
     }
+
+    /**
+     * Returns the value stored at a certain point (i, j) in the array
+     * @param i
+     * @param j
+     */
     public int getStateAt(int i, int j){
         return states[i][j];
     }

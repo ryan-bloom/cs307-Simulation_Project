@@ -446,7 +446,7 @@ public class Main extends Application {
         if(code == KeyCode.L){
             myAnimation.stop();
             try {
-                myResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "User_Simulation2"));
+                myResources = ResourceBundle.getBundle(String.format("%s%s", DEFAULT_RESOURCE_PACKAGE, "User_Simulation"));
             }catch (MissingResourceException e){
                 showPopup(errorResources.getString("LoadingError"));
             }

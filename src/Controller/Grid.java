@@ -56,22 +56,22 @@ public class Grid {
 
     //Helper method initializes correct cell simulation type
     private Cell simCellPicker(String simType, int x, int y){
-        if(simType.toUpperCase().equals("GAMEOFLIFE")){
+        if(simType.equalsIgnoreCase("GAMEOFLIFE")){
             return new GameOfLifeCell(x, y, myData.getStateAt(x, y));
         }
-        else if(simType.toUpperCase().equals("PERCOLATION")){
+        else if(simType.equalsIgnoreCase("PERCOLATION")){
             return new PercolationCell(x, y, myData.getStateAt(x, y));
         }
-        else if(simType.toUpperCase().equals("FIRE")){
+        else if(simType.equalsIgnoreCase("FIRE")){
             return new FireCell(x, y, myData.getStateAt(x, y));
         }
-        else if(simType.toUpperCase().equals("RPS")){
+        else if(simType.equalsIgnoreCase("RPS")){
             return new RPSCell(x, y, myData.getStateAt(x, y));
         }
-        else if(simType.toUpperCase().equals("SEGREGATION")){
+        else if(simType.equalsIgnoreCase("SEGREGATION")){
             return new SegregationCell(x, y, myData.getStateAt(x, y));
         }
-        else if(simType.toUpperCase().equals("PREDATORPREY")){
+        else if(simType.equalsIgnoreCase("PREDATORPREY")){
             return new PredatorPreyCell(x, y, myData.getStateAt(x, y));
         }
         else{

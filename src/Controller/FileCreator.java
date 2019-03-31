@@ -17,6 +17,11 @@ public class FileCreator {
     private static final String RESOURCES_EXTENSION = "src\\Resources\\";
     private static final String ERROR_MSG = "Error saving your simulation";
 
+    /**
+     * Writes a CSV file name fileName based on a Grid whose state values it stores
+     * @param fileName
+     * @param g
+     */
     public static void writeCsvFile(String fileName, Grid g) throws SimulationException {
 
         FileWriter fileWriter = null;
@@ -45,6 +50,15 @@ public class FileCreator {
         }
     }
 
+    /**
+     * Writes a properties file named filename that references a CSV file, the simulation represented and the colors
+     * in the GUI display
+     * @param fileName
+     * @param CsvFile
+     * @param Simulation
+     * @param cellColors
+     */
+
     public static void writePropertiesFile(String fileName, String CsvFile, String Simulation, Map<Integer, Color> cellColors) throws SimulationException{
         FileWriter fileWriter = null;
         try{
@@ -69,6 +83,7 @@ public class FileCreator {
             closeWriter(fileWriter);
         }
     }
+
     private static void closeWriter(FileWriter fileWriter){
         try {
             fileWriter.flush();
